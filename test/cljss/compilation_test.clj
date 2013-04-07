@@ -63,8 +63,7 @@
            (parse-rule)
            (decorate-rule default-decorator)
            (flatten-rule)
-           first
-           definitive-selector))
+           first))
 
 
 (m/fact "We can compile a rule"

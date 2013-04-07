@@ -4,20 +4,6 @@
   (:use cljss.data))
 
 
-(defn make-definitive-selector [r]
-  (let [r-sel (:selector r)
-        ancestors-sels (mapv :selector (:ancestors r))]
-    (reduce sel/combine 
-            (conj ancestors-sels r-sel))))
-
-(defn definitive-selector 
-  "Give a rule its final selector wich is a the combination
-  of its ancestors and its own."
-  [r]
-  (-> r
-      (assoc :selector (make-definitive-selector r))
-      (dissoc :ancestors)))
-
 (defn compile-seq-then-join [v compile-fn c]
   (->> v
        (map compile-fn)

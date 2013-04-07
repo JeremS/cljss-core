@@ -50,6 +50,7 @@
   [r {:keys [f env]}]
   (dr r f env))
 
+
 (def depth-decorator
   "Attach to a rule its depth, level in which
   it is embeded."
@@ -59,31 +60,21 @@
            (update-in env [:depth] inc)))
    {:depth 0}))
 
-(def ancestors-decorator
-  "Attach to a rule its chain of ancestors."
+(def combine-selector-decorator
+  "This decorator is used to combine the selector of sub rules
+  with those of its ancestors"
   (decorator
-   (fn [r {ps :ancestors :as env}]
-     (list (assoc r :ancestors ps)
-           (update-in env [:ancestors] 
-                      conj (assoc r :sub-rules []))))
+   (fn [{sel :selector :as r} 
+        {ancs :ancestors :as env}]
+     (let [new-ancs (conj ancs sel)
+           new-sel (reduce sel/combine new-ancs)]
+       (list (assoc r :selector new-sel)
+             (assoc-in env [:ancestors] new-ancs))))
    {:ancestors []}))
 
 
 (def default-decorator
-  (chain-decorators ancestors-decorator depth-decorator))
-
-
-(defn- dr [r f env]
-  (let [[new-r new-env] (f r env)
-        new-sub-rules (map #(dr % f  new-env)
-                          (:sub-rules r))]
-    (assoc new-r 
-      :sub-rules new-sub-rules)))
-
-(defn decorate-rule 
-  "Given a rule and a decorator, decorate the rule and its sub rules"
-  [r {:keys [f env]}]
-  (dr r f env))
+  (chain-decorators combine-selector-decorator depth-decorator))
 
 
 (defn flatten-rule 
