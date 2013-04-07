@@ -4,21 +4,40 @@
   (:use cljss.data))
 
 
-(defn compile-seq-then-join [v compile-fn c]
-  (->> v
-       (map compile-fn)
-       (string/join c)))
-
 
 (defprotocol CssSelector
-  (compile-as-selector [this]))
+  (compile-as-selector [this]
+    "Compile a value considered a selector to a string."))
 
-(defn compile-path-sel [sel]
+(defprotocol CssPropertyName
+  (compile-as-property-name [this]
+    "Compile a value considered a property name to a string."))
+
+(defprotocol CssPropertyValue
+  (compile-as-property-value [this]
+    "Compile a value considered a property value to a string."))
+
+
+
+
+(defn compile-seq-then-join
+  "Compile each value of a collection using compile-fn,
+  then join the results with the string s."
+  [vs compile-fn s]
+  (->> v
+       (map compile-fn)
+       (string/join s)))
+
+(defn compile-path-sel
+  "Compile a path like selector."
+  [sel]
   (compile-seq-then-join sel 
                          compile-as-selector
                          \space))
 
-(defn compile-set-sel [sel]
+(defn compile-set-sel
+  "Compile a set selector."
+  [sel]
   (compile-seq-then-join sel 
                          compile-as-selector
                          ", "))
@@ -39,10 +58,6 @@
     (compile-set-sel this)))
 
 
-(defprotocol CssPropertyName
-  (compile-as-property-name [this]))
-
-
 (extend-protocol CssPropertyName
   clojure.lang.Keyword
   (compile-as-property-name [this] (name this))
@@ -51,11 +66,9 @@
   (compile-as-property-name [this] this))
 
 
-(defprotocol CssPropertyValue
-  (compile-as-property-value [this]))
-
-
-(defn compile-seq-property-value [s]
+(defn compile-seq-property-valu
+  "Compile a collection representing a property's value."
+  [s]
   (compile-seq-then-join s
                          compile-as-property-value 
                          \space))
