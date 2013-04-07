@@ -90,3 +90,11 @@
   [rs]
   (mapcat #(flatten-rule % 0) rs))
 
+(defn precompile-rule 
+  "Decorate a rule then flattens it."
+  [r]
+  (-> r
+      (decorate-rule default-decorator)
+      (flatten-rule)))
+
+
