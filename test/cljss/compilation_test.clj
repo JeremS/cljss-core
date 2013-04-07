@@ -119,8 +119,7 @@
 
 
 (def r (-> [:div :color :blue
-                 :border ["1px" :solid :black]
-                 :width "100px"]
+                 :border ["1px" :solid :black]]
            (parse-rule)
            (decorate-rule default-decorator)
            (flatten-rule)
