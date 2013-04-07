@@ -61,16 +61,15 @@
    {:depth 0}))
 
 (def combine-selector-decorator
-  "This decorator is used to combine the selector of sub rules
-  with those of its ancestors"
+  "This decorator is used to combine the selectors of sub rules
+  with those of their ancestors"
   (decorator
    (fn [{sel :selector :as r} 
-        {ancs :ancestors :as env}]
-     (let [new-ancs (conj ancs sel)
-           new-sel (reduce sel/combine new-ancs)]
+        {parent-sel :parent-sel :as env}]
+     (let [new-sel (sel/combine parent-sel sel)]
        (list (assoc r :selector new-sel)
-             (assoc-in env [:ancestors] new-ancs))))
-   {:ancestors []}))
+             (assoc-in env [:parent-sel] new-sel))))
+   {:parent-sel []}))
 
 
 (def default-decorator
