@@ -24,7 +24,7 @@
   "Compile each value of a collection using compile-fn,
   then join the results with the string s."
   [vs compile-fn s]
-  (->> v
+  (->> vs
        (map compile-fn)
        (string/join s)))
 
@@ -66,7 +66,7 @@
   (compile-as-property-name [this] this))
 
 
-(defn compile-seq-property-valu
+(defn compile-seq-property-value
   "Compile a collection representing a property's value."
   [s]
   (compile-seq-then-join s
