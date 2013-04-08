@@ -1,23 +1,7 @@
 (ns cljss.compilation
   (:require [cljss.selectors :as sel]
             [clojure.string :as string])
-  (:use cljss.data))
-
-
-
-(defprotocol CssSelector
-  (compile-as-selector [this]
-    "Compile a value considered a selector to a string."))
-
-(defprotocol CssPropertyName
-  (compile-as-property-name [this]
-    "Compile a value considered a property name to a string."))
-
-(defprotocol CssPropertyValue
-  (compile-as-property-value [this]
-    "Compile a value considered a property value to a string."))
-
-
+  (:use cljss.compilation.protocols))
 
 
 (defn compile-seq-then-join
@@ -42,6 +26,14 @@
                          compile-as-selector
                          ", "))
 
+(defn compile-seq-property-value
+  "Compile a collection representing a property's value."
+  [s]
+  (compile-seq-then-join s
+                         compile-as-property-value 
+                         \space))
+
+
 (extend-protocol CssSelector
   String
   (compile-as-selector [this] this)
@@ -65,13 +57,6 @@
   String
   (compile-as-property-name [this] this))
 
-
-(defn compile-seq-property-value
-  "Compile a collection representing a property's value."
-  [s]
-  (compile-seq-then-join s
-                         compile-as-property-value 
-                         \space))
 
 
 (extend-protocol CssPropertyValue
