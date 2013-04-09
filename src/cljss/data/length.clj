@@ -1,8 +1,14 @@
 (ns cljss.data.length
   (:refer-clojure :exclude [rem + - * /])
-  (:use clojure.algo.generic.arithmetic))
+  (:use cljss.compilation.protocols
+        clojure.algo.generic.arithmetic))
 
-(defrecord Length [l u])
+
+(defrecord Length [l u]
+  CssPropertyValue
+  (compile-as-property-value [_]
+    (str l (name u))))
+
 
 (defn make-length [l u]
   {:pre [(number? l) 
@@ -32,6 +38,7 @@
 (def-length-ctr in)
 (def-length-ctr pt)
 (def-length-ctr pc)
+
 
 (defn type-error [u1 u2]
   (str "Can't operate on units" u1 \space u2))

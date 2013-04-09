@@ -1,5 +1,6 @@
 (ns cljss.compilation.protocols)
 
+
 (defprotocol CssSelector
   (compile-as-selector [this]
     "Compile a value considered a selector to a string."))

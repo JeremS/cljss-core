@@ -2,6 +2,7 @@
   (:refer-clojure :exclude [rem + - * /])
   (:require [midje.sweet :as m])
   (:use cljss.data.length
+        cljss.compilation.protocols
         clojure.algo.generic.arithmetic))
 
 
@@ -24,3 +25,8 @@
 
 (m/fact "we can divide a length"
         (/ (em 100) 10) => (em 10))
+
+
+(m/fact "We can compile lengths"
+        (compile-as-property-value (px 10)) => "10px"
+        (compile-as-property-value (em -50)) => "-50em")

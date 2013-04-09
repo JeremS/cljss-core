@@ -4,8 +4,7 @@
         cljss.parse
         cljss.compilation
         cljss.compilation.protocols
-        cljss.compilation.precompilation
-        [clojure.pprint :only (pprint)]))
+        cljss.compilation.precompilation))
 
 
 
