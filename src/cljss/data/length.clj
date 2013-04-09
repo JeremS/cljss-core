@@ -15,10 +15,10 @@
          (or (symbol? u) (keyword u) (string? u))]}
   (Length. l (keyword u)))
 
+
 (defmacro def-length-ctr [unit]
   `(defn ~unit [l#]
      (make-length l# '~unit)))
-
 
 (def-length-ctr em)
 (def-length-ctr rem)
@@ -38,6 +38,7 @@
 (def-length-ctr in)
 (def-length-ctr pt)
 (def-length-ctr pc)
+
 
 
 (defn type-error [u1 u2]
