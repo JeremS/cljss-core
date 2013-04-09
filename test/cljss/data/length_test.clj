@@ -21,3 +21,6 @@
 (m/fact "we can multiply a length"
         (* (em 100) 10) => (em 1000)
         (* 10 (em 100)) => (em 1000))
+
+(m/fact "we can divide a length"
+        (/ (em 100) 10) => (em 10))
