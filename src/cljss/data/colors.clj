@@ -2,8 +2,7 @@
   (:refer-clojure :exclude [rem + - * /])
   (:use cljss.compilation.protocols
         clojure.algo.generic.arithmetic
-        [cljss.data.length :only (%)]
-        (midje.sweet)))
+        midje.sweet))
 
 
 (defrecord RGBa [r g b a]
