@@ -9,22 +9,20 @@
 (def depth-decorator
   "Attach to a rule its depth, level in which
   it is embeded."
-  (decorator 
+  (decorator {:depth 0}
    (fn [r {d :depth :as env}]
      (list (assoc r :depth d)
-           (update-in env [:depth] inc)))
-   {:depth 0}))
+           (update-in env [:depth] inc)))))
 
 (def combine-selector-decorator
   "This decorator is used to combine the selectors of sub rules
   with those of their ancestors"
-  (decorator
+  (decorator {:parent-sel []}
    (fn [{sel :selector :as r} 
         {parent-sel :parent-sel :as env}]
      (let [new-sel (sel/combine parent-sel sel)]
        (list (assoc r :selector new-sel)
-             (assoc-in env [:parent-sel] new-sel))))
-   {:parent-sel []}))
+             (assoc-in env [:parent-sel] new-sel))))))
 
 
 (def default-decorator

@@ -1,18 +1,20 @@
 (ns cljss.precompilation.decorator)
 
-(defrecord Decorator [f env])
-
+(defrecord Decorator [env f])
 
 (comment
-(defn decorator [env f]
-  (let [id (java.util.UUID/randomUUID)
-        env {id env}]
-    (Decorator.
-     (fn [v aenv] 
-       (f v (get id env)))
-     env)))
+(defn decorator
+  ([f] (decorator {} f))
+  ([env f]
+   (let [id (java.util.UUID/randomUUID) ; generate id for env
+         env {id env}]                  ; generate a new global env
+     (Decorator. env                    ; create decorator with general env and a wrappred decoration function
+      (fn [v general-env]               ; the new decoration function takes 
+        (let [local (get id general-env); recovers the env for this decorator
+              [new-v new-local]  (f v local) ; decorate the value
+              new-general (assoc general-env id new-local)] ; create a new value for the general env
+          (list new-v new-general))))))) ; returns the new value and the new general env
 )
-
 
 (defn decorator
   "Construct a decorator, is a function that 
@@ -22,19 +24,18 @@
   When no environment is provided
   an empty map is used as the default one."
   ([f]
-   (Decorator. f {}))
-  ([f env]
-   (Decorator. f env)))
+   (Decorator. {} f))
+  ([env f]
+   (Decorator. env f)))
 
 
 (defn- chain-2-decorators [d1 d2]
   (let [{f1 :f env1 :env} d1
         {f2 :f env2 :env} d2]
-    (decorator
+    (decorator (merge env1 env2)
      (fn [r env]
        (let [[r env] (f1 r env)]
-         (f2 r env)))
-     (merge env1 env2))))
+         (f2 r env))))))
 
 (defn chain-decorators 
   "Allows to compose from left to right
