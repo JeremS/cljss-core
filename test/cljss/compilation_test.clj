@@ -1,10 +1,9 @@
 (ns cljss.compilation-test
   (:require [midje.repl :as m])
-  (:use cljss.data
-        cljss.parse
-        cljss.compilation
+  (:use cljss.compilation
         cljss.compilation.protocols
-        cljss.compilation.precompilation))
+        [cljss.parse :only (parse-rule)]
+        [cljss.precompilation :only (precompile-rule)]))
 
 
 
@@ -61,8 +60,7 @@
 (def r (-> [:div :color :blue
                  :border ["1px" :solid :black]]
            (parse-rule)
-           (decorate-rule default-decorator)
-           (flatten-rule)
+           (precompile-rule)
            first))
 
 
