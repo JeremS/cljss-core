@@ -5,13 +5,13 @@
 
 
 (defrecord RGBa [r g b a]
-  CssValueProperty
+  CssPropertyValue
   (compile-as-property-value [_]
     (if (= a 1)
       (str "rgb(r,g,b)")
       (str "rgb(r,g,b,a)"))))
 
-(def rgba
+(defn rgba
   ([r g b]
    (rgba r g b 1))
   ([r g b a]
@@ -19,13 +19,13 @@
 
 
 (defrecord HSLa [h s l a]
-  CssValueProperty
+  CssPropertyValue
   (compile-as-property-value [_]
     (if (= a 1)
       (str "hsl(h,s,l)")
       (str "hsl(h,s,l,a)"))))
 
-(def hsla 
+(defn hsla 
   ([h s l]
    (hsla h s l 1))
   ([h s l a]
