@@ -1,5 +1,6 @@
 (ns cljss.precompilation.decorator
-  (:require [cljss.selectors :as sel]))
+  (:require [cljss.selectors :as sel])
+  (:use clojure.tools.trace))
 
 (defrecord Decorator [env f])
 
@@ -19,7 +20,7 @@
          env {id env}]                  ; generate a new global env
      (Decorator. env                    ; create decorator with general env and a wrappred decoration function
       (fn [v general-env]               ; the new decoration function takes 
-        (let [local (general-env id); recovers the env for this decorator
+        (let [local (get general-env id); recovers the env for this decorator
               [new-v new-local]  (f v local) ; decorate the value
               new-general (assoc general-env id new-local)] ; create a new value for the general env
           (list new-v new-general))))))) ; returns the new value and the new general env
@@ -55,25 +56,33 @@
   [r {:keys [f env]}]
   (dr r f env))
 
-
 (def depth-decorator
   "Attach to a rule its depth, level in which
   it is embeded."
-  (decorator {:depth 0}
-   (fn [r {d :depth :as env}]
-     (list (assoc r :depth d)
-           (update-in env [:depth] inc)))))
+  (decorator 0
+   (fn [r depth]
+     (list (assoc r :depth depth) (inc depth)))))
 
 (def combine-selector-decorator
   "This decorator is used to combine the selectors of sub rules
-  with those of their ancestors"
-  (decorator {:parent-sel []}
-   (fn [{sel :selector :as r} 
-        {parent-sel :parent-sel :as env}]
+  with those of their ancestors."
+  (decorator []
+   (fn [{sel :selector :as r} parent-sel]
      (let [new-sel (sel/combine parent-sel sel)]
        (list (assoc r :selector new-sel)
-             (assoc-in env [:parent-sel] new-sel))))))
+             new-sel)))))
+
+
+(def assoc-parent-selector-decorator
+  (decorator []
+    (fn [r parent-sel]
+      (list (assoc r :parent-sel parent-sel)
+            (:selector r)))))
 
 (def default-decorator
-  (chain-decorators combine-selector-decorator depth-decorator))
+  (chain-decorators combine-selector-decorator 
+                    depth-decorator
+                    assoc-parent-selector-decorator))
+
+
 
