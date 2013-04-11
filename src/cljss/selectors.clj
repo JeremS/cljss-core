@@ -1,5 +1,12 @@
 (ns cljss.selectors)
 
+
+
+(defrecord GluedSelectors [fst nxt])
+
+
+
+
 (def neutral-type ::neutral)
 (def sel-type ::sel)
 (def simple-sel-type ::simple-sel)
@@ -16,10 +23,15 @@
 (defmethod selector-type :default [sel] 
   (throw (Exception. (str "No type defined for: " (type sel)))))
 
-(defmethod selector-type clojure.lang.Keyword          [_] ::simple-sel)
 (defmethod selector-type String                        [_] ::simple-sel)
+(defmethod selector-type clojure.lang.Keyword          [_] ::simple-sel)
 (defmethod selector-type clojure.lang.PersistentVector [x] (if (seq x) ::path ::neutral))
 (defmethod selector-type clojure.lang.IPersistentSet   [x] (if (seq x) ::set  ::neutral))
+
+
+(defmethod selector-type GluedSelectors                [_] ::simple-sel)
+
+
 
 (derive ::simple-sel ::sel)
 (derive ::path       ::sel)

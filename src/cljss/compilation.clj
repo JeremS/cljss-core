@@ -1,17 +1,10 @@
 (ns cljss.compilation
   (:require [cljss.selectors :as sel]
             [clojure.string :as string])
-  (:use cljss.compilation.protocols))
+  (:use cljss.compilation.protocols
+        cljss.compilation.utils))
 
 
-
-(defn compile-seq-then-join
-  "Compile each value of a collection using compile-fn,
-  then join the results with the string s."
-  [vs compile-fn s]
-  (->> vs
-       (map compile-fn)
-       (string/join s)))
 
 (defn compile-path-sel
   "Compile a path like selector."

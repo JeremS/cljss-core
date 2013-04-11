@@ -1,5 +1,8 @@
-(ns cljss.compilation.protocols)
+(ns cljss.compilation.protocols
+  (:use midje.sweet))
 
+
+(future-fact "the compiled elements must take a rule as a context")
 
 (defprotocol CssSelector
   (compile-as-selector [this]
