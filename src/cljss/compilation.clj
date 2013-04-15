@@ -1,24 +1,8 @@
 (ns cljss.compilation
-  (:require [cljss.selectors :as sel]
+  (:require [cljss.selectors.simple-selectors :as sel]
             [clojure.string :as string])
   (:use cljss.compilation.protocols
         cljss.compilation.utils))
-
-
-
-(defn compile-path-sel
-  "Compile a path like selector."
-  [sel]
-  (compile-seq-then-join sel 
-                         compile-as-selector
-                         \space))
-
-(defn compile-set-sel
-  "Compile a set selector."
-  [sel]
-  (compile-seq-then-join sel 
-                         compile-as-selector
-                         ", "))
 
 (defn compile-seq-property-value
   "Compile a collection representing a property's value."
@@ -26,22 +10,6 @@
   (compile-seq-then-join s
                          compile-as-property-value 
                          \space))
-
-
-(extend-protocol CssSelector
-  String
-  (compile-as-selector [this] this)
-  
-  clojure.lang.Keyword
-  (compile-as-selector [this] (name this))
-  
-  clojure.lang.PersistentVector
-  (compile-as-selector [this]
-    (compile-path-sel this))
-  
-  clojure.lang.IPersistentSet
-  (compile-as-selector [this]
-    (compile-set-sel this)))
 
 
 (extend-protocol CssPropertyName

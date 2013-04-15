@@ -34,6 +34,7 @@
          (m/fact "it compiles a keyword to its name string"
                  (compile-as-property-name :color) => "color"))
 
+
 (m/facts "About compiling css property values"
          (m/fact "it compiles a string to the same string"
                  (compile-as-property-value "black" => "black"))
@@ -72,6 +73,7 @@
 
 (comment
 (binding [*end-property-line* "\n"
+
           *start-properties* "\n"
           *end-properties* ""
           *general-indent* ""

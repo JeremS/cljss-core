@@ -1,5 +1,5 @@
 (ns cljss.selectors.parent
-  (:use cljss.selectors
+  (:use cljss.selectors.combination
         cljss.compilation.protocols))
 
 (defrecord ParentSelector [])

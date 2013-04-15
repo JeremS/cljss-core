@@ -1,5 +1,5 @@
 (ns cljss.precompilation.decorator
-  (:require [cljss.selectors :as sel])
+  (:require [cljss.selectors.combination :as sel])
   (:use clojure.tools.trace))
 
 (defrecord Decorator [env f])

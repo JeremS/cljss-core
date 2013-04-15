@@ -4,7 +4,7 @@
 (defn compile-seq-then-join
   "Compile each value of a collection using compile-fn,
   then join the results with the string s."
-  [vs compile-fn s]
-  (->> vs
+  [values compile-fn separator]
+  (->> values
        (map compile-fn)
-       (string/join s)))
+       (string/join separator)))

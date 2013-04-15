@@ -1,7 +1,8 @@
 (ns cljss.precompilation.decorator-test
   (:require [midje.sweet :as m])
   (:use cljss.precompilation.decorator
-        [cljss parse selectors]))
+        cljss.parse
+        cljss.selectors.combination))
 
 
 (def r1 [:div :bgcolor :blue])
