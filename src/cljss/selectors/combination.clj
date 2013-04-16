@@ -33,14 +33,9 @@
 (defmethod combine [combination-t simple-t ] [v k] (combine v [k]))
 (defmethod combine [set-t         simple-t ] [s k] (combine s [k]))
 
-(defmethod combine [descendant-t descendant-t]
-  [v1 v2]
-  (vec (concat v1 v2)))
-
 (defmethod combine [combination-t combination-t]
   [v1 v2]
   [v1 v2])
-
 
 (defmethod combine [set-t set-t] [s1 s2]
   (set (for [e1 s1 e2 s2]
@@ -55,3 +50,5 @@
   (set (reduce #(conj %1 (combine v %2)) 
                #{} 
                s)))
+
+

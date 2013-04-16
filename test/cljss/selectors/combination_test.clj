@@ -1,7 +1,8 @@
 (ns cljss.selectors.combination-test
   (:require [midje.sweet :as m])
   (:use cljss.selectors.combination
-        cljss.selectors.basic))
+        cljss.selectors.basic
+        cljss.selectors.combinators))
 
 
 (m/facts "About selector combination"
