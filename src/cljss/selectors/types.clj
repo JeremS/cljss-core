@@ -10,18 +10,20 @@
 (def sel-t         ::sel)
 (def simple-t      ::simple-sel)
 (def combination-t ::combination)
-(def descendant-t  ::descandant)
+(def descendant-t  ::descendant)
 (def set-t         ::set)
 
 (derive simple-t      sel-t)
 (derive combination-t sel-t)
 (derive set-t         sel-t)
 
+
 (derive cljss.selectors.basic.Children  combination-t)
 (derive cljss.selectors.basic.Siblings  combination-t)
 (derive cljss.selectors.basic.GSiblings combination-t)
+(derive descendant-t                    combination-t)
 
-(derive descendant-t combination-t)
+
 (derive clojure.lang.PersistentVector descendant-t)
 
 
