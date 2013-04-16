@@ -7,5 +7,5 @@
 (def & (ParentSelector.))
 
 
-(defmethod selector-type ParentSelector [_] simple-sel-type)
+(defmethod mm-selector-type ParentSelector [_] simple-sel-type)
 
