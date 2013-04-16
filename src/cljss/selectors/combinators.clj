@@ -3,8 +3,7 @@
   (:use cljss.selectors.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        cljss.compilation.protocols
-        [clojure.pprint :only (pprint)]))
+        cljss.compilation.protocols))
 
 (extend-type clojure.lang.PersistentVector
   Neutral
