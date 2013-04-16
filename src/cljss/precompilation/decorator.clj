@@ -58,12 +58,6 @@
   [r {:keys [f env]}]
   (dr r f env))
 
-(def depth-decorator
-  "Attach to a rule its depth, level in which
-  it is embeded."
-  (decorator 0
-   (fn [r depth]
-     (list (assoc r :depth depth) (inc depth)))))
 
 (def combine-selector-decorator
   "This decorator is used to combine the selectors of sub rules
@@ -80,11 +74,5 @@
     (fn [r parent-sel]
       (list (assoc r :parent-sel parent-sel)
             (:selector r)))))
-
-(def default-decorator
-  (chain-decorators combine-selector-decorator 
-                    depth-decorator
-                    assoc-parent-selector-decorator))
-
 
 

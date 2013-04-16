@@ -3,6 +3,22 @@
             [cljss.precompilation.decorator :as d]))
 
 
+(def depth-decorator
+  "Attach to a rule its depth, level in which
+  it is embeded. 
+  
+  This decorator is used when a rule is compiled, 
+  the depth being used to compute indentation."
+  (d/decorator 0
+   (fn [r depth]
+     (list (assoc r :depth depth) (inc depth)))))
+
+
+(def default-decorator
+  (d/chain-decorators d/combine-selector-decorator 
+                      depth-decorator
+                      d/assoc-parent-selector-decorator))
+
 
 (defn flatten-rule 
   "Given a rule returns a flatten list of the rule and its
@@ -17,7 +33,7 @@
   "Decorate a rule then flattens it."
   [r]
   (-> r
-      (d/decorate-rule d/default-decorator)
+      (d/decorate-rule default-decorator)
       (flatten-rule)))
 
 

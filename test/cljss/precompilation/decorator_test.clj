@@ -1,6 +1,7 @@
 (ns cljss.precompilation.decorator-test
   (:require [midje.sweet :as m])
   (:use cljss.precompilation.decorator
+        cljss.precompilation
         cljss.parse
         cljss.selectors.combination))
 
