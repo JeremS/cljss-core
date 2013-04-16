@@ -1,6 +1,5 @@
 (ns cljss.precompilation
-  (:require [cljss.selectors :as sel]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [cljss.precompilation.decorator :as d]))
 
 

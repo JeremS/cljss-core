@@ -7,26 +7,6 @@
 
 
 
-(m/facts "About Compiling selectors"
-         (m/fact "Compiling a String selector gives the same string"
-                 (compile-as-selector "div") => "div"
-                 (compile-as-selector "a") => "a"
-                 (compile-as-selector ".class") => ".class")
-         
-         (m/fact "Compiling a Keyword selector gives the name of the keyword"
-                 (compile-as-selector :div) => "div"
-                 (compile-as-selector :a) => "a"
-                 (compile-as-selector :.class) => ".class")
-         
-         (m/fact "Compiling a path like selector give the path of the compiled selectors"
-                 (compile-as-selector [:div "p" :.class]) => "div p .class")
-         
-         (m/fact "Compiling a set of selectors give the set of the compiled selectors"
-                 (compile-as-selector #{:div ["p" :.class]}) 
-                 => (m/some-checker "div, p .class"
-                                    "p .class, div")))
-
-
 (m/facts "About compiling css property names"
          (m/fact "it compiles a string to the same string"
                  (compile-as-property-name "color" => "color"))

@@ -1,4 +1,4 @@
-(ns cljss.selectors.simple-selectors
+(ns cljss.selectors.basic
   (:require [cljss.compilation.utils :as utils])
   (:use cljss.compilation.protocols))
 

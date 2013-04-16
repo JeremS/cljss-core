@@ -1,6 +1,5 @@
 (ns cljss.compilation
-  (:require [cljss.selectors.simple-selectors :as sel]
-            [clojure.string :as string])
+  (:require [clojure.string :as string])
   (:use cljss.compilation.protocols
         cljss.compilation.utils))
 

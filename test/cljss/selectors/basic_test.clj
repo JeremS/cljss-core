@@ -1,6 +1,6 @@
-(ns cljss.selectors.simple-selectors-test
+(ns cljss.selectors.basic-test
   (:require [midje.sweet :as m])
-  (:use cljss.selectors.simple-selectors
+  (:use cljss.selectors.basic
         cljss.compilation.protocols))
 
 

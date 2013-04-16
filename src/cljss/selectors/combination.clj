@@ -1,6 +1,6 @@
 (ns cljss.selectors.combination
-  (:use cljss.selectors.simple-selectors)
-  (:import [cljss.selectors.simple_selectors 
+  (:require cljss.selectors.basic)
+  (:import [cljss.selectors.basic 
             Children Siblings GSiblings]))
 
 (defprotocol Neutral
@@ -20,13 +20,13 @@
   clojure.lang.IPersistentSet
   (neutral? [this] (-> this seq not))
   
-  cljss.selectors.simple_selectors.Children
+  cljss.selectors.basic.Children
   (neutral? [this] (-> this :sels seq not))
   
-  cljss.selectors.simple_selectors.Siblings
+  cljss.selectors.basic.Siblings
   (neutral? [this] (-> this :sels seq not))
   
-  cljss.selectors.simple_selectors.GSiblings
+  cljss.selectors.basic.GSiblings
   (neutral? [this] (-> this :sels seq not)))
 
 
@@ -42,9 +42,10 @@
 (derive ::combination ::sel)
 (derive ::set         ::sel)
 
-(derive cljss.selectors.simple_selectors.Children ::combination)
-(derive cljss.selectors.simple_selectors.Siblings ::combination)
-(derive cljss.selectors.simple_selectors.GSiblings ::combination)
+(derive cljss.selectors.basic.Children ::combination)
+(derive cljss.selectors.basic.Siblings ::combination)
+(derive cljss.selectors.basic.GSiblings ::combination)
+
 (derive ::descendant ::combination)
 (derive clojure.lang.PersistentVector ::descendant)
 
@@ -110,5 +111,3 @@
   (set (reduce #(conj %1 (combine v %2)) 
                #{} 
                s)))
-
-(combine (c-> :div :p) (c-+ :a :span))
