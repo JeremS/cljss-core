@@ -43,13 +43,13 @@
 (m/facts "We can compile combined simple selectors"
          
          (m/fact "Compiling a set of selectors give the set of the compiled selectors"
-                 (compile-as-selector [:div (children-c "p" :.class)]) 
+                 (compile-as-selector [:div (c-> "p" :.class)]) 
                  => "div p > .class")
          
          (m/fact "Compiling a set of selectors give the set of the compiled selectors"
-                 (compile-as-selector (children-c :div ["p" :.class])) 
+                 (compile-as-selector (c-> :div ["p" :.class])) 
                  => "div > p .class")
          
          (m/fact "Compiling a set of selectors give the set of the compiled selectors"
-                 (compile-as-selector (children-c :div ["p" (siblings-c :.class :.class2)])) 
+                 (compile-as-selector (c-> :div ["p" (c-+ :.class :.class2)])) 
                  => "div > p .class + .class2"))
