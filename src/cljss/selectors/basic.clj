@@ -1,13 +1,21 @@
 (ns cljss.selectors.basic
   (:require [cljss.compilation.utils :as utils])
-  (:use cljss.compilation.protocols))
+  (:use cljss.selectors.protocols
+        cljss.compilation.protocols))
+
+(extend-type String
+  Neutral
+  (neutral? [this] (-> this seq not))
+  
+  CssSelector
+  (compile-as-selector [this] this))
 
 ;; Compilation of simple selectors.
-(extend-protocol CssSelector
-  String
-  (compile-as-selector [this] this)
+(extend-type clojure.lang.Keyword
+  Neutral
+  (neutral? [_] false)
   
-  clojure.lang.Keyword
+  CssSelector
   (compile-as-selector [this] (name this)))
 
 
@@ -19,6 +27,9 @@
   (utils/compile-seq-then-join sels compile-as-selector \space))
 
 (extend-type clojure.lang.PersistentVector
+  Neutral
+  (neutral? [this] (-> this seq not))
+  
   CssSelector
   (compile-as-selector [this]
     (compile-path-sel this)))
@@ -33,6 +44,9 @@
   (utils/compile-seq-then-join sels compile-as-selector " > "))
 
 (defrecord Children [sels]
+  Neutral
+  (neutral? [_] (-> sels seq not))
+  
   CssSelector
   (compile-as-selector [_]
     (compile-children-c sels)))
@@ -48,6 +62,9 @@
   (utils/compile-seq-then-join sels compile-as-selector " + "))
 
 (defrecord Siblings [sels]
+  Neutral
+  (neutral? [_] (-> sels seq not))
+  
   CssSelector
   (compile-as-selector [_]
     (compile-siblings sels)))
@@ -64,6 +81,9 @@
 
 
 (defrecord GSiblings [sels]
+  Neutral
+  (neutral? [_] (-> sels seq not))
+  
   CssSelector
   (compile-as-selector [_]
     (compile-gsiblings sels)))
@@ -81,6 +101,9 @@
   (utils/compile-seq-then-join sels compile-as-selector ", "))
 
 (extend-type clojure.lang.IPersistentSet
+  Neutral
+  (neutral? [this] (-> this seq not))
+  
   CssSelector
   (compile-as-selector [this]
     (compile-set-sel this)))

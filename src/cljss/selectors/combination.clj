@@ -1,63 +1,7 @@
 (ns cljss.selectors.combination
-  (:require cljss.selectors.basic)
-  (:import [cljss.selectors.basic 
-            Children Siblings GSiblings]))
-
-(defprotocol Neutral
-  (neutral? [this]))
+  (:use cljss.selectors.types))
 
 
-(extend-protocol Neutral
-  String
-  (neutral? [this] (-> this seq not))
-  
-  clojure.lang.Keyword
-  (neutral? [_] false)
-  
-  clojure.lang.PersistentVector
-  (neutral? [this] (-> this seq not))
- 
-  clojure.lang.IPersistentSet
-  (neutral? [this] (-> this seq not))
-  
-  cljss.selectors.basic.Children
-  (neutral? [this] (-> this :sels seq not))
-  
-  cljss.selectors.basic.Siblings
-  (neutral? [this] (-> this :sels seq not))
-  
-  cljss.selectors.basic.GSiblings
-  (neutral? [this] (-> this :sels seq not)))
-
-
-
-(def neutral-type ::neutral)
-(def sel-type ::sel)
-(def simple-sel-type ::simple-sel)
-(def combination-type ::combination)
-(def descendant-type ::descandant)
-(def set-type ::set)
-
-(derive ::simple-sel  ::sel)
-(derive ::combination ::sel)
-(derive ::set         ::sel)
-
-(derive cljss.selectors.basic.Children ::combination)
-(derive cljss.selectors.basic.Siblings ::combination)
-(derive cljss.selectors.basic.GSiblings ::combination)
-
-(derive ::descendant ::combination)
-(derive clojure.lang.PersistentVector ::descendant)
-
-
-(derive String                      ::simple-sel)
-(derive clojure.lang.Keyword        ::simple-sel)
-(derive clojure.lang.IPersistentSet ::set)
-
-(defn selector-type [sel]
-  (if (neutral? sel) 
-    ::neutral 
-    (type sel)))
 
 (defmulti combine 
   "Combine two selector in a way that sel1 is the parent selector
@@ -78,36 +22,36 @@
   (fn [sel1 sel2] [(selector-type sel1)(selector-type sel2)]))
 
 
-(defmethod combine [::sel ::neutral] [k _] k)
-(defmethod combine [::neutral ::sel] [_ k] k)
+(defmethod combine [sel-t neutral-t] [k _] k)
+(defmethod combine [neutral-t sel-t] [_ k] k)
 
 
-(defmethod combine [::simple-sel ::simple-sel] [k1 k2] [k1 k2])
+(defmethod combine [simple-t simple-t] [k1 k2] [k1 k2])
 
-(defmethod combine [::simple-sel  ::combination] [k v] (combine [k] v))
-(defmethod combine [::simple-sel  ::set        ] [k s] (combine [k] s))
-(defmethod combine [::combination ::simple-sel ] [v k] (combine v [k]))
-(defmethod combine [::set         ::simple-sel ] [s k] (combine s [k]))
+(defmethod combine [simple-t  combination-t] [k v] (combine [k] v))
+(defmethod combine [simple-t  set-t        ] [k s] (combine [k] s))
+(defmethod combine [combination-t simple-t ] [v k] (combine v [k]))
+(defmethod combine [set-t         simple-t ] [s k] (combine s [k]))
 
-(defmethod combine [::descendant ::descendant]
+(defmethod combine [descendant-t descendant-t]
   [v1 v2]
   (vec (concat v1 v2)))
 
-(defmethod combine [::combination ::combination]
+(defmethod combine [combination-t combination-t]
   [v1 v2]
   [v1 v2])
 
 
-(defmethod combine [::set ::set] [s1 s2]
+(defmethod combine [set-t set-t] [s1 s2]
   (set (for [e1 s1 e2 s2]
          (combine e1 e2))))
 
-(defmethod combine [::set ::combination] [s v]
+(defmethod combine [set-t combination-t] [s v]
   (set (reduce #(conj %1 (combine %2 v)) 
                #{} 
                s)))
 
-(defmethod combine [::combination ::set] [v s]
+(defmethod combine [combination-t set-t] [v s]
   (set (reduce #(conj %1 (combine v %2)) 
                #{} 
                s)))
