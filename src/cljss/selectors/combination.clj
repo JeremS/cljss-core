@@ -41,30 +41,22 @@
 (derive ::simple-sel  ::sel)
 (derive ::combination ::sel)
 (derive ::set         ::sel)
+
+(derive cljss.selectors.simple_selectors.Children ::combination)
+(derive cljss.selectors.simple_selectors.Siblings ::combination)
+(derive cljss.selectors.simple_selectors.GSiblings ::combination)
 (derive ::descendant ::combination)
+(derive clojure.lang.PersistentVector ::descendant)
 
 
-(defmulti mm-selector-type
-  "Given a selector, more precisely (type selector) returns
-  a keyword representing the kind of selector that this selector is.
-  This function is used by the combine function."
-  type)
+(derive String                      ::simple-sel)
+(derive clojure.lang.Keyword        ::simple-sel)
+(derive clojure.lang.IPersistentSet ::set)
 
-(defmethod mm-selector-type :default [sel] 
-  (throw (Exception. (str "No type defined for: " (type sel)))))
-
-(defmethod mm-selector-type String                        [_] ::simple-sel)
-(defmethod mm-selector-type clojure.lang.Keyword          [_] ::simple-sel)
-(defmethod mm-selector-type clojure.lang.PersistentVector [x] ::descendant)
-(defmethod mm-selector-type clojure.lang.IPersistentSet   [x] ::set)
-
-(defmethod mm-selector-type cljss.selectors.simple_selectors.Children  [x] ::combination)
-(defmethod mm-selector-type cljss.selectors.simple_selectors.Siblings  [x] ::combination)
-(defmethod mm-selector-type cljss.selectors.simple_selectors.GSiblings [x] ::combination)
 (defn selector-type [sel]
   (if (neutral? sel) 
     ::neutral 
-    (mm-selector-type sel)))
+    (type sel)))
 
 (defmulti combine 
   "Combine two selector in a way that sel1 is the parent selector
