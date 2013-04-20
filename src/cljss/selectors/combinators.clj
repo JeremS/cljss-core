@@ -3,10 +3,7 @@
   (:use cljss.selectors.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        cljss.compilation.protocols
-        
-        cljss.selectors.basic
-        clojure.tools.trace))
+        cljss.compilation.protocols))
 
 (defn- need-combination? [sels]
   (let [simple? #(isa? % simple-t)]
