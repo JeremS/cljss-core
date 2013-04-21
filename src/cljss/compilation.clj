@@ -1,7 +1,9 @@
 (ns cljss.compilation
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [cljss.precompilation.decorator :as d])
   (:use cljss.compilation.protocols
         cljss.compilation.utils))
+
 
 (defn compile-seq-property-value
   "Compile a collection representing a property's value."

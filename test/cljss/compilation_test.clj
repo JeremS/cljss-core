@@ -38,11 +38,13 @@
 
 
 
+
 (def r (-> [:div :color :blue
                  :border ["1px" :solid :black]]
            (parse-rule)
            (precompile-rule)
            first))
+
 
 
 (m/fact "We can compile a rule"

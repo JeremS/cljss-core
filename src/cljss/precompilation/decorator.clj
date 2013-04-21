@@ -1,8 +1,6 @@
 (ns cljss.precompilation.decorator
   (:require cljss.selectors.basic
-            cljss.selectors.combinators
-            [cljss.selectors.combination :as sel])
-  (:use clojure.tools.trace))
+            cljss.selectors.combinators))
 
 (defrecord Decorator [env f])
 
@@ -57,22 +55,5 @@
   to its sub rules."
   [r {:keys [f env]}]
   (dr r f env))
-
-
-(def combine-selector-decorator
-  "This decorator is used to combine the selectors of sub rules
-  with those of their ancestors."
-  (decorator []
-   (fn [{sel :selector :as r} parent-sel]
-     (let [new-sel (sel/combine parent-sel sel)]
-       (list (assoc r :selector new-sel)
-             new-sel)))))
-
-
-(def assoc-parent-selector-decorator
-  (decorator []
-    (fn [r parent-sel]
-      (list (assoc r :parent-sel parent-sel)
-            (:selector r)))))
 
 

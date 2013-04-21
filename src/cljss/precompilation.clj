@@ -1,7 +1,15 @@
 (ns cljss.precompilation
   (:require [clojure.string :as string]
-            [cljss.precompilation.decorator :as d]))
+            [cljss.precompilation.decorator :as d]
+            [cljss.selectors.combination :as sel])
+  (:use [cljss.selectors :only (combine-selector-decorator)]))
 
+
+(def assoc-parent-selector-decorator
+  (d/decorator []
+    (fn [r parent-sel]
+      (list (assoc r :parent-sel parent-sel)
+            (:selector r)))))
 
 (def depth-decorator
   "Attach to a rule its depth, level in which
@@ -11,13 +19,15 @@
   the depth being used to compute indentation."
   (d/decorator 0
    (fn [r depth]
-     (list (assoc r :depth depth) (inc depth)))))
+     (list (assoc r :depth depth) 
+           (inc depth)))))
+        
 
 
 (def default-decorator
-  (d/chain-decorators d/combine-selector-decorator 
+  (d/chain-decorators combine-selector-decorator 
                       depth-decorator
-                      d/assoc-parent-selector-decorator))
+                      assoc-parent-selector-decorator))
 
 
 (defn flatten-rule 

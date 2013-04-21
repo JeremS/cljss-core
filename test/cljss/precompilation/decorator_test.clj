@@ -3,7 +3,8 @@
   (:use cljss.precompilation.decorator
         cljss.precompilation
         cljss.parse
-        cljss.selectors.combination))
+        cljss.selectors.combination
+        [cljss.selectors :only (combine-selector-decorator)]))
 
 
 (def r1 [:div :bgcolor :blue])
