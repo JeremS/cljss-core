@@ -3,7 +3,8 @@
   (:use cljss.selectors.basic
         cljss.selectors.combinators
         cljss.selectors.protocols
-        cljss.compilation.protocols))
+        cljss.compilation.protocols
+        [cljss.selectors.parent :only (&)]))
 
 (m/facts "We can compile combined selectors"
          
@@ -115,3 +116,16 @@
                  (simplify (c-+  [:div :p][:a])) => (c-+  [:div :p] :a)
                  (simplify (c-g+ [:div :p][:a])) => (c-g+ [:div :p] :a)))
 
+(m/fact "We can determine if a combination of selectors contains the parent selector"
+        (parent? [:div :a]) => m/falsey
+        (parent? [:div & :a]) => m/truthy
+        
+        (parent? #{:div :a}) => m/falsey
+        (parent? #{:div & :a}) => m/truthy
+        
+        
+        (parent? (c-> :div :a)) => m/falsey
+        (parent? (c-> :div & :a)) => m/truthy
+        
+        (parent? [:section #{:div :p} :a]) => m/falsey
+        (parent? [:section #{:div :p &} :a]) => m/truthy)

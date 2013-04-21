@@ -8,42 +8,46 @@
   Neutral
   (neutral? [this] true)
   
+  SimplifyAble
+  (simplify [this] nil)
+  
+  Parent
+  (parent? [this] false)
+  
   CssSelector
   (compile-as-selector [this]
-    (throw (Exception. "nil selector can't be compiled")))
-  
-  SimplifyAble
-  (simplify [this] nil))
+    (throw (Exception. "nil selector can't be compiled"))))
+
 
 (extend-type String
   Neutral
   (neutral? [this] (-> this seq not))
   
-  CssSelector
-  (compile-as-selector [this] this)
-  
   SimplifyAble
   (simplify [this]
-    (if (neutral? this) nil this)))
+    (if (neutral? this) nil this))
+  
+  Parent
+  (parent? [this] false)
+  
+  CssSelector
+  (compile-as-selector [this] this))
 
 (derive String simple-t)
+
 
 (extend-type clojure.lang.Keyword
   Neutral
   (neutral? [_] false)
   
-  CssSelector
-  (compile-as-selector [this] (name this))
-  
   SimplifyAble
-  (simplify [this] this))
+  (simplify [this] this)
+  
+  Parent
+  (parent? [this] false)
+  
+  CssSelector
+  (compile-as-selector [this] (name this)))
 
 (derive clojure.lang.Keyword        simple-t)
-
-
-
-
-
-
-
 

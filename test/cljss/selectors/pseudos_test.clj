@@ -5,7 +5,8 @@
         cljss.selectors.basic
         cljss.selectors.combinators
         cljss.selectors.protocols
-        cljss.compilation.protocols))
+        cljss.compilation.protocols
+        [cljss.selectors.parent :only (&)]))
 
 (m/fact "We can add pseudo classes and pseudo elements to simple selectors"
         (-> "div" hover compile-as-selector) => "div:hover"
@@ -25,3 +26,7 @@
 (m/fact "Simplify a pseudo classed element gives the pseudo class of the simplifiction"
         (-> [:section #{:div :p} :span] hover simplify) 
         => (-> [:section #{:div :p} :span] simplify hover))
+
+(m/fact "We can test for parent use inside pseudos"
+        (-> [:section #{:div :p} :span] hover parent?) => m/falsey
+        (-> [:section #{:div &} :span] hover parent?) => m/truthy)

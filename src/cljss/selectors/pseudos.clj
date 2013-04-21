@@ -16,6 +16,9 @@
   (simplify [_]
    (pseudo (simplify selector) name args))
   
+  Parent
+  (parent? [this] (parent? selector))
+  
   CssSelector
   (compile-as-selector [_]
    (str (compile-as-selector selector) name 

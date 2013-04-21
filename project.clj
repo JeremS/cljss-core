@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/algo.generic "0.1.1"]]
   
+
+  
   :profiles {:dev
              {:dependencies [[org.clojure/tools.trace "0.7.5"]
                              [midje "1.5.1"]]}})

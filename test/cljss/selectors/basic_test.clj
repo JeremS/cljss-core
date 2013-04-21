@@ -33,3 +33,8 @@
 
 (m/fact "Simplify a neutral simple selector (empty string) returns nil"
         (simplify "") => nil)
+
+(m/fact "Basic selectors arent the parent decorator"
+        (parent? "div") => m/falsey
+        (parent? :div)  => m/falsey
+        (parent? nil)   => m/falsey)

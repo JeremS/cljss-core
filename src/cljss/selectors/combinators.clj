@@ -26,6 +26,8 @@
         (if (= 1 (count this)) 
           (first this) 
           this))))
+  Parent
+  (parent? [this] (some parent? this))
   
   CssSelector
   (compile-as-selector [this]
@@ -54,6 +56,9 @@
          (first this)
          this))))
   
+  Parent
+  (parent? [this] (some parent? this))
+  
   CssSelector
   (compile-as-selector [this]
     (utils/compile-seq-then-join this compile-as-selector ", ")))
@@ -77,6 +82,9 @@
        SimplifyAble
        (simplify [_#]
          (apply ~c-cstr (mapv simplify ~sels-sym)))
+       
+       Parent
+       (parent? [_#] (some parent? ~sels-sym))
        
        CssSelector
        (compile-as-selector [_#]
