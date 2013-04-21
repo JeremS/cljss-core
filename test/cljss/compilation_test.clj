@@ -3,9 +3,31 @@
   (:use cljss.compilation
         cljss.compilation.protocols
         [cljss.parse :only (parse-rule)]
-        [cljss.precompilation :only (precompile-rule)]))
+        [cljss.precompilation :only (precompile-rule)]
+        [cljss.precompilation.decorator :only (decorate-rule)]))
+
+(def r1 [:div :bgcolor :blue])
+(def r2 [:a :color :white])
+(def r3 [:p :color :green])
+(def r4 [:strong :color :black])
 
 
+(def r (conj r1 r2 (conj r3 r4)))
+(def p-r (parse-rule r))
+
+(def depth (keyword "cljss.compilation" "depth"))
+
+(m/fact "The depth decorator associate a depth to its rule."
+        (let [decorated (decorate-rule p-r depth-decorator)
+              depth1 (depth decorated)
+              depth2 (-> decorated :sub-rules first depth)
+              depth3 (-> decorated :sub-rules second depth)
+              depth4 (-> decorated :sub-rules second :sub-rules first depth)]
+
+          depth1 => 0
+          depth2 => 1
+          depth3 => 1
+          depth4 => 2))
 
 (m/facts "About compiling css property names"
          (m/fact "it compiles a string to the same string"
