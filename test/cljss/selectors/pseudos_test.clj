@@ -1,4 +1,5 @@
 (ns cljss.selectors.pseudos-test
+  (:refer-clojure :exclude [empty not])
   (:require [midje.repl :as m])
   (:use cljss.selectors.pseudos
         cljss.selectors.basic
@@ -17,6 +18,7 @@
 
 (m/fact "We can use pseudo classes on combined selectors"
         (-> [:#id :a] hover compile-as-selector) => "#id a:hover"
+        (-> (c-> :#id :p :a) hover compile-as-selector) => "#id > p > a:hover"
         (-> #{:#id :a} hover compile-as-selector) => (m/some-checker "#id:hover, a:hover"
                                                                      "a:hover, #id:hover"))
 
