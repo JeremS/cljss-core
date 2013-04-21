@@ -30,9 +30,15 @@
   ([selector name] 
    (pseudo selector name nil))
   ([selector name args]
-   (if (isa? (selector-type selector) set-t)
-     (set (map #(pseudo % name args) selector))
-     (Pseudo. selector name args))))
+   (cond 
+    (isa? (selector-type selector) set-t) 
+      (set (map #(pseudo % name args) selector))
+    
+    (isa? (selector-type selector) neutral-t)
+      []
+    
+    :else 
+      (Pseudo. selector name args))))
 
 
 
