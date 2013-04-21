@@ -25,6 +25,3 @@
 
 
 (derive ParentSelector simple-t)
-
-(defn replace-parent-selector [rule parent-sel]
-  (throw (Exception. "Not implemented yet.")))
