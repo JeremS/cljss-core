@@ -4,8 +4,11 @@
         cljss.precompilation
         cljss.parse
         cljss.selectors.combination
-        [cljss.selectors :only (combine-selector-decorator)]))
+        [cljss.selectors :only (combine-selector-decorator)]
+        [cljss.compilation :only (depth-decorator)]))
 
+
+(def depth (keyword "cljss.compilation" "depth"))
 
 (def r1 [:div :bgcolor :blue])
 (def r2 [:a :color :white])
@@ -19,10 +22,10 @@
 
 (m/fact "The depth decorator associate a depth to its rule."
         (let [decorated (decorate-rule p-r depth-decorator)
-              depth1 (:depth decorated)
-              depth2 (-> decorated :sub-rules first :depth)
-              depth3 (-> decorated :sub-rules second :depth)
-              depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
+              depth1 (depth decorated)
+              depth2 (-> decorated :sub-rules first depth)
+              depth3 (-> decorated :sub-rules second depth)
+              depth4 (-> decorated :sub-rules second :sub-rules first depth)]
 
           depth1 => 0
           depth2 => 1
@@ -75,10 +78,10 @@
               ps3 (-> decorated :sub-rules second :parent-sel)
               ps4 (-> decorated :sub-rules second :sub-rules first :parent-sel)
               
-              depth1 (:depth decorated)
-              depth2 (-> decorated :sub-rules first :depth)
-              depth3 (-> decorated :sub-rules second :depth)
-              depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
+              depth1 (depth decorated)
+              depth2 (-> decorated :sub-rules first depth)
+              depth3 (-> decorated :sub-rules second depth)
+              depth4 (-> decorated :sub-rules second :sub-rules first depth)]
           
           s1 => s1-expected
           s2 => s2-expected

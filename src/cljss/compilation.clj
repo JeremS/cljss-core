@@ -5,6 +5,18 @@
         cljss.compilation.utils))
 
 
+(def depth-decorator
+  "Attach to a rule its depth, level in which
+  it is embeded. 
+  
+  This decorator is used when a rule is compiled, 
+  the depth being used to compute indentation."
+  (d/decorator 0
+   (fn [r depth]
+     (list (assoc r ::depth depth) 
+           (inc depth)))))
+
+
 (defn compile-seq-property-value
   "Compile a collection representing a property's value."
   [s]
@@ -63,11 +75,12 @@
        (add-property-indent )
        (string/join )))
 
-(defn compile-rule [{:keys [selector properties depth]}]
-  (binding [*general-indent* (apply str (repeat depth *indent*))]
-    (let [compiled-selector   (compile-as-selector selector)
-          compiled-properties (compile-property-map properties)]
-      (str *general-indent* compiled-selector " {" *start-properties*
-                                compiled-properties 
-           *general-indent* "}"))))
+(defn compile-rule [{:keys [selector properties] :as r}]
+  (let [depth (::depth r)]
+    (binding [*general-indent* (apply str (repeat depth *indent*))]
+      (let [compiled-selector   (compile-as-selector selector)
+            compiled-properties (compile-property-map properties)]
+        (str *general-indent* compiled-selector " {" *start-properties*
+                                  compiled-properties 
+             *general-indent* "}")))))
 

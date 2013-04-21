@@ -2,7 +2,8 @@
   (:require [clojure.string :as string]
             [cljss.precompilation.decorator :as d]
             [cljss.selectors.combination :as sel])
-  (:use [cljss.selectors :only (combine-selector-decorator)]))
+  (:use [cljss.selectors :only (combine-selector-decorator)]
+        [cljss.compilation :only (depth-decorator)]))
 
 
 (def assoc-parent-selector-decorator
@@ -10,18 +11,6 @@
     (fn [r parent-sel]
       (list (assoc r :parent-sel parent-sel)
             (:selector r)))))
-
-(def depth-decorator
-  "Attach to a rule its depth, level in which
-  it is embeded. 
-  
-  This decorator is used when a rule is compiled, 
-  the depth being used to compute indentation."
-  (d/decorator 0
-   (fn [r depth]
-     (list (assoc r :depth depth) 
-           (inc depth)))))
-        
 
 
 (def default-decorator
