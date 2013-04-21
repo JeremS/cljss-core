@@ -14,6 +14,7 @@
   
   Parent
   (parent? [this] true)
+  (replace-parent [this replacement] replacement)
   
   CssSelector
   (compile-as-selector [this]

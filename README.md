@@ -11,6 +11,7 @@ FIXME
  - decorator that deals with simplification of selectors
  - decorator that deals with replacing the parent selector (think multi method
  for the case of a set containig it.)
+ - media queries
 
 ## License
 

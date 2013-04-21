@@ -30,3 +30,7 @@
 (m/fact "We can test for parent use inside pseudos"
         (-> [:section #{:div :p} :span] hover parent?) => m/falsey
         (-> [:section #{:div &} :span] hover parent?) => m/truthy)
+
+(m/fact "We can replace the parent selector"
+        (-> [:section #{:div &} :span] hover (replace-parent :#parent))
+        => (-> [:section #{:div :#parent} :span] hover))

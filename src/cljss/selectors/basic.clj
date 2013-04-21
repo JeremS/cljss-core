@@ -13,6 +13,7 @@
   
   Parent
   (parent? [this] false)
+  (replace-parent [this replacement] this)
   
   CssSelector
   (compile-as-selector [this]
@@ -29,6 +30,7 @@
   
   Parent
   (parent? [this] false)
+  (replace-parent [this replacement] this)
   
   CssSelector
   (compile-as-selector [this] this))
@@ -45,6 +47,7 @@
   
   Parent
   (parent? [this] false)
+  (replace-parent [this replacement] this)
   
   CssSelector
   (compile-as-selector [this] (name this)))

@@ -15,6 +15,8 @@
        (list (assoc r :selector new-sel)
              new-sel)))))
 
+(def simplify-after-parent-replacement)
+
 (def simplify-selectors-decorator
   (d/decorator
     (fn [r ctxt]

@@ -17,7 +17,12 @@
    (pseudo (simplify selector) name args))
   
   Parent
-  (parent? [this] (parent? selector))
+  (parent? [_] (parent? selector))
+  
+  (replace-parent [_ replacement]
+    (pseudo (replace-parent selector replacement) 
+            name 
+            args))
   
   CssSelector
   (compile-as-selector [_]

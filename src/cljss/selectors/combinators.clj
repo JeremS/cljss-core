@@ -3,7 +3,9 @@
   (:use cljss.selectors.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        cljss.compilation.protocols))
+        cljss.compilation.protocols
+        
+        [clojure.pprint :only (pprint)]))
 
 (defn- need-combination? [sels]
   (let [simple? #(isa? % simple-t)]
@@ -28,6 +30,10 @@
           this))))
   Parent
   (parent? [this] (some parent? this))
+  (replace-parent [this replacement]
+    (->> this
+         (map #(replace-parent % replacement))
+         (into [])))
   
   CssSelector
   (compile-as-selector [this]
@@ -59,6 +65,11 @@
   Parent
   (parent? [this] (some parent? this))
   
+  (replace-parent [this replacement]
+    (->> this
+         (map #(replace-parent % replacement))
+         (into #{})))
+  
   CssSelector
   (compile-as-selector [this]
     (utils/compile-seq-then-join this compile-as-selector ", ")))
@@ -86,6 +97,9 @@
        Parent
        (parent? [_#] (some parent? ~sels-sym))
        
+       (replace-parent [_# replacement#]
+         (~cstr-sym (replace-parent ~sels-sym replacement#)))
+       
        CssSelector
        (compile-as-selector [_#]
          (utils/compile-seq-then-join ~sels-sym compile-as-selector ~c-sym)))
@@ -97,6 +111,7 @@
          (~cstr-sym (vec sels#))))
      
      (derive ~c-name combination-t))))
+
 
 
 (defcombinator Children  c->  \>)

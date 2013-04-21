@@ -129,3 +129,29 @@
         
         (parent? [:section #{:div :p} :a]) => m/falsey
         (parent? [:section #{:div :p &} :a]) => m/truthy)
+
+(m/fact "When we try to replace the parent selector and its not used, the same selector is returned."
+        (replace-parent [:div  :a] :#parent) 
+        => [:div :a]
+        
+        (replace-parent #{:div  :a} :#parent) 
+        => #{:div :a}
+        
+        (replace-parent (c-> :div  :a) :#parent)
+        => (c-> :div :a)
+        
+        (replace-parent [:section #{:div :p } :a] :#parent) 
+        => [:section #{:div :p} :a])
+
+(m/fact "We can replace the parent selector given a replacement"
+        (replace-parent [:div & :a] :#parent) 
+        => [:div :#parent :a]
+        
+        (replace-parent #{:div & :a} :#parent) 
+        => #{:div :#parent :a}
+        
+        (replace-parent (c-> :div & :a) :#parent)
+        => (c-> :div :#parent :a)
+        
+        (replace-parent [:section #{:div :p &} :a] :#parent) 
+        => [:section #{:div :p :#parent} :a])
