@@ -2,11 +2,9 @@
   (:require [cljss.compilation.utils :as utils])
   (:use cljss.protocols
         cljss.selectors.types
-        cljss.selectors.combination
-        
-        clojure.tools.trace))
+        cljss.selectors.combination))
 
-(defn- need-combination? [sels]
+(defn- contains-set? [sels]
   (let [set-t? #(isa? % set-t)]
     (->> sels
          (map selector-type)
@@ -24,7 +22,7 @@
                       (keep simplify)
                       (remove neutral?)
                       (vec))] ; simplify internals
-        (if-not (need-combination? this)            ; combine left to right if possible 
+        (if-not (contains-set? this)            ; combine left to right if possible 
           this 
           (reduce #(combine %1 %2) this)))))
 
@@ -52,9 +50,13 @@
   
   SimplifyAble
   (simplify [this]
-   (if (neutral? this) 
-     nil
-     (set (keep simplify this))))
+   (if (neutral? this) nil
+     (let [this (set (keep simplify this))]
+       (if-not (contains-set? this)
+         this
+         (let [simples (remove #(-> % selector-type (isa? set-t)) this)
+               sets (apply concat (filter #(-> % selector-type (isa? set-t)) this))]
+           (into (set simples) sets))))))
   
   Parent
   (parent? [this] (some parent? this))

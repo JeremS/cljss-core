@@ -85,10 +85,12 @@
                  (simplify #{}) => nil)
          
          (m/fact "Returns the set of the simplifications"
-                 (simplify #{[[:div :p][:a []]] [#{:div :p []}[:a]]}) 
+                 (simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]}) 
                  => #{(simplify [[:div :p][:a []]])
-                      (simplify [#{:div :p []}[:a]])}))
-
+                      (simplify [[:div :p []][:a :span]])})
+         (m/fact "When sets are inside a set the inners sets a merged with the outer one"
+                 (simplify #{:section #{:div :p #{:span :a}} :a})
+                 => #{:section :div :p :span :a}))
 
 (m/facts "About simplification of selectors > + ~(children, siblings, general sibilings)"
          
@@ -105,11 +107,8 @@
                  (simplify (c-> #{:div :p}[:a])) => #{(apply c-> (combine :div [:a]))
                                                       (apply c-> (combine :p [:a]))}))
 
-(-> (c-> (c-+ :div :p)[:a]) simplify compile-as-selector)
-
-
-(-> (c-> #{:div :p}[:a]) simplify compile-as-selector)
-
+(m/fact ""
+  (simplify #{:div #{:p :a} :span}) => #{:div :p :a :span})
 
 (m/fact "We can determine if a combination of selectors contains the parent selector"
         (parent? [:div :a]) => m/falsey

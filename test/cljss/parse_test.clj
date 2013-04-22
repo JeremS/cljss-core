@@ -55,8 +55,6 @@
                                       [:a :display :block]])
                           => (m/contains {:sub-rules [(rule :a {:display :block} [])]}))))
 
-(m/future-facts "I have to parse the selectors")
-
 
 (m/fact "parse take a seq of vectors representing rules and return a vector of rules"
         (parse [[:a :color :blue]
