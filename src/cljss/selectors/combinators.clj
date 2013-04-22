@@ -4,13 +4,13 @@
         cljss.selectors.types
         cljss.selectors.combination
         
-        [clojure.pprint :only (pprint)]))
+        clojure.tools.trace))
 
 (defn- need-combination? [sels]
-  (let [simple? #(isa? % simple-t)]
+  (let [set-t? #(isa? % set-t)]
     (->> sels
          (map selector-type)
-         (some (complement simple?)))))
+         (some set-t?))))
 
 
 (extend-type clojure.lang.PersistentVector
@@ -20,13 +20,14 @@
   SimplifyAble
   (simplify [this]
     (if (neutral? this) nil
-      (let [this (vec (keep simplify this)) ; simplify internals
-            this (if-not (need-combination? this)            ; combine left to right if possible 
-                   this 
-                   (reduce #(combine %1 %2) this))]
-        (if (= 1 (count this)) 
-          (first this) 
-          this))))
+      (let [this (->> this
+                      (keep simplify)
+                      (remove neutral?)
+                      (vec))] ; simplify internals
+        (if-not (need-combination? this)            ; combine left to right if possible 
+          this 
+          (reduce #(combine %1 %2) this)))))
+
   Parent
   (parent? [this] (some parent? this))
   (replace-parent [this replacement]
@@ -38,13 +39,9 @@
   (compile-as-selector [this]
     (utils/compile-seq-then-join this compile-as-selector \space)))
 
-(def descendant-t  ::descendant)
-(derive descendant-t  combination-t)
-(derive clojure.lang.PersistentVector descendant-t)
 
-(defmethod combine [descendant-t descendant-t]
-  [v1 v2]
-  (vec (concat v1 v2)))
+(derive clojure.lang.PersistentVector  combination-t)
+
 
 
 ;; ----------------------------------------------------------------------------
@@ -55,11 +52,9 @@
   
   SimplifyAble
   (simplify [this]
-   (if (neutral? this) nil
-     (let [this (set (keep simplify this))]
-       (if (= 1 (count this))
-         (first this)
-         this))))
+   (if (neutral? this) 
+     nil
+     (set (keep simplify this))))
   
   Parent
   (parent? [this] (some parent? this))
@@ -91,7 +86,12 @@
        
        SimplifyAble
        (simplify [_#]
-         (apply ~c-cstr (mapv simplify ~sels-sym)))
+         (let [simplification# (simplify ~sels-sym)]
+           (if-not (-> simplification# selector-type (isa? set-t))
+             (apply ~c-cstr simplification#)
+             (->> simplification#
+                  (map #(apply ~c-cstr %))
+                  (into #{})))))
        
        Parent
        (parent? [_#] (some parent? ~sels-sym))

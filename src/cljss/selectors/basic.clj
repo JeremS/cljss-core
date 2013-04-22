@@ -15,8 +15,7 @@
   (replace-parent [this replacement] this)
   
   CssSelector
-  (compile-as-selector [this]
-    (throw (Exception. "nil selector can't be compiled"))))
+  (compile-as-selector [this] ""))
 
 
 (extend-type String

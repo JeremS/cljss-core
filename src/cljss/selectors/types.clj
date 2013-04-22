@@ -13,6 +13,6 @@
 
 
 (defn selector-type [sel]
-  (if (neutral? sel) 
+  (if (or (neutral? sel) (nil? sel)) 
     neutral-t
     (type sel)))
