@@ -18,17 +18,16 @@ heavyly inspired by css-gen for the syntax.
 FIXME
 
 ## Todo 
- - see what happened to the combine-decorator
- - remove the special case of descendant type of selectors
-  - it provides allows for a uniform simplfication of combined selectors
-    (think combination of the selectors inside c-> for instance which is not currently done 
-    during simplification of this kind of combinators)
- - decorator that deals with simplification of selectors
+ - change the not and empty pseudo classes so they dont conflict with clojure.core functions
  - only one namespace with the protocols
   - create a cljss.protocols
   - moves the implementation of compilation protocols away from compilation.clj
    - move the tests accordingly
- - change the not and empty pseudo classes so they dont conflict with clojure.core functions
+ - remove the special case of descendant type of selectors
+  - it provides allows for a uniform simplfication of combined selectors
+    (think combination of the selectors inside c-> for instance which is not currently done 
+    during simplification of this kind of combinators)
+
  - potemkin to create the api in cljss.core
   - default decorator : chaining of decorator used in precompilation
   - compilation -> some kind of css macro that compiles rules
