@@ -1,6 +1,14 @@
-(ns cljss.parse
-  (:use cljss.data
-        clojure.tools.trace))
+(ns cljss.parse)
+
+(defrecord Rule [selector properties sub-rules])
+
+(defn rule 
+  ([selection ]
+   (rule selection {}))
+  ([selection properties]
+   (rule selection properties []))
+  ([selection properties sub-rules]
+   (Rule. selection properties sub-rules)))
 
 
 (defmulti consume-properties 

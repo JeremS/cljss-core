@@ -1,7 +1,6 @@
 (ns cljss.parse-test
   (:require [midje.repl :as m])
-  (:use cljss.data
-        cljss.parse))
+  (:use cljss.parse))
 
 (m/facts "About make-rule"
          (m/facts "it construct rules from vectors : "
