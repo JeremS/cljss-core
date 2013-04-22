@@ -1,7 +1,7 @@
 (ns cljss.compilation-test
   (:require [midje.repl :as m])
   (:use cljss.compilation
-        cljss.compilation.protocols
+        cljss.protocols
         [cljss.parse :only (parse-rule)]
         [cljss.precompilation 
            :only (decorate-rule chain-decorators precompile-rule)]

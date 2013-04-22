@@ -1,8 +1,7 @@
 (ns cljss.selectors.basic-test
   (:require [midje.repl :as m])
   (:use cljss.selectors.basic
-        cljss.selectors.protocols
-        cljss.compilation.protocols))
+        cljss.protocols))
 
 (m/facts "We can compile simple selectors"
          

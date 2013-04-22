@@ -2,10 +2,9 @@
   (:refer-clojure :exclude [empty not])
   (:require [midje.repl :as m])
   (:use cljss.selectors
+        cljss.protocols
         cljss.selectors.pseudos
         cljss.selectors.parent
-        cljss.selectors.protocols
-        cljss.compilation.protocols
         [cljss.parse :only (parse-rule)]
         [cljss.precompilation :only (decorate-rule)]
         [cljss.selectors.combination :only (combine)]

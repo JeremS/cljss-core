@@ -19,10 +19,6 @@ FIXME
 
 ## Todo 
  - change the not and empty pseudo classes so they dont conflict with clojure.core functions
- - only one namespace with the protocols
-  - create a cljss.protocols
-  - moves the implementation of compilation protocols away from compilation.clj
-   - move the tests accordingly
  - remove the special case of descendant type of selectors
   - it provides allows for a uniform simplfication of combined selectors
     (think combination of the selectors inside c-> for instance which is not currently done 

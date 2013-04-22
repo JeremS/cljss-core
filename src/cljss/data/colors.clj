@@ -1,6 +1,6 @@
 (ns cljss.data.colors
   (:refer-clojure :exclude [rem + - * /])
-  (:use cljss.compilation.protocols
+  (:use cljss.protocols
         clojure.algo.generic.arithmetic
         midje.sweet))
 

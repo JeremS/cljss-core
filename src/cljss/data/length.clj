@@ -1,6 +1,6 @@
 (ns cljss.data.length
   (:refer-clojure :exclude [rem + - * /])
-  (:use cljss.compilation.protocols
+  (:use cljss.protocols
         clojure.algo.generic.arithmetic))
 
 

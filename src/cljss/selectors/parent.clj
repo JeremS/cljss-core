@@ -1,8 +1,7 @@
 (ns cljss.selectors.parent
-  (:use cljss.selectors.combination
-        cljss.selectors.types
-        cljss.selectors.protocols
-        cljss.compilation.protocols))
+  (:use cljss.protocols
+        cljss.selectors.combination
+        cljss.selectors.types))
 
 (defrecord ParentSelector []
   Neutral

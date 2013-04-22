@@ -1,8 +1,7 @@
 (ns cljss.selectors.basic
   (:require [cljss.compilation.utils :as utils])
-  (:use cljss.selectors.protocols
-        cljss.selectors.types
-        cljss.compilation.protocols))
+  (:use cljss.protocols
+        cljss.selectors.types))
 
 (extend-type nil
   Neutral

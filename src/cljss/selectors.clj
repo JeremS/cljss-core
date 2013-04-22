@@ -1,7 +1,7 @@
 (ns cljss.selectors
   (:require cljss.selectors.basic
             cljss.selectors.combinators)
-  (:use cljss.selectors.protocols
+  (:use cljss.protocols
         [cljss.precompilation :only (decorator)]
         [cljss.selectors.combination :only (combine)]))
 

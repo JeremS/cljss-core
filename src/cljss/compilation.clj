@@ -1,6 +1,6 @@
 (ns cljss.compilation
   (:require [clojure.string :as string])
-  (:use cljss.compilation.protocols
+  (:use cljss.protocols
         cljss.compilation.utils
         [cljss.precompilation :only (decorator)]))
 

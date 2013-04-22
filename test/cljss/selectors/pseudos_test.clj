@@ -4,8 +4,7 @@
   (:use cljss.selectors.pseudos
         cljss.selectors.basic
         cljss.selectors.combinators
-        cljss.selectors.protocols
-        cljss.compilation.protocols
+        cljss.protocols
         [cljss.selectors.parent :only (&)]))
 
 (m/fact "We can add pseudo classes and pseudo elements to simple selectors"

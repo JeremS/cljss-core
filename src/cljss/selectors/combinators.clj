@@ -1,9 +1,8 @@
 (ns cljss.selectors.combinators
   (:require [cljss.compilation.utils :as utils])
-  (:use cljss.selectors.protocols
+  (:use cljss.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        cljss.compilation.protocols
         
         [clojure.pprint :only (pprint)]))
 

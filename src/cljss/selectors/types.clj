@@ -1,7 +1,5 @@
 (ns cljss.selectors.types
-  (:use cljss.selectors.protocols))
-
-
+  (:use cljss.protocols))
 
 (def neutral-t     ::neutral)
 (def sel-t         ::sel)

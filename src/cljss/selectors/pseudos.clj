@@ -1,9 +1,8 @@
 (ns cljss.selectors.pseudos
   (:refer-clojure :exclude [empty not])
   (:require [clojure.string :as string])
-  (:use cljss.selectors.types
-        cljss.selectors.protocols
-        cljss.compilation.protocols))
+  (:use cljss.protocols
+        cljss.selectors.types))
 
 
 (declare pseudo)

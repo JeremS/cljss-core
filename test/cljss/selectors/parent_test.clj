@@ -1,8 +1,7 @@
 (ns cljss.selectors.parent-test
   (:require [midje.repl :as m])
   (:use cljss.selectors.parent
-        cljss.selectors.protocols
-        cljss.compilation.protocols))
+        cljss.protocols))
 
 (m/fact "The parent selector isn't neutral"
         (neutral? &) => m/falsey)

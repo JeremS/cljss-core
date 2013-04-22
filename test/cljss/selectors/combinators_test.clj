@@ -2,8 +2,7 @@
   (:require [midje.repl :as m])
   (:use cljss.selectors.basic
         cljss.selectors.combinators
-        cljss.selectors.protocols
-        cljss.compilation.protocols
+        cljss.protocols
         [cljss.selectors.parent :only (&)]))
 
 (m/facts "We can compile combined selectors"

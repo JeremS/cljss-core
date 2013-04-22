@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [rem + - * /])
   (:require [midje.sweet :as m])
   (:use cljss.data.length
-        cljss.compilation.protocols
+        cljss.protocols
         clojure.algo.generic.arithmetic))
 
 
