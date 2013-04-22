@@ -1,5 +1,4 @@
 (ns cljss.selectors.pseudos
-  (:refer-clojure :exclude [empty not])
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types))
@@ -49,15 +48,18 @@
 
 
 
-(defmacro defpseudo [ps-name ps-prefix]
-  (let [ps-compilation (str ps-prefix ps-name)]
-    `(defn ~ps-name
-       ([]
-        (pseudo :* ~ps-compilation))
-       ([sel#]
-        (pseudo sel# ~ps-compilation))
-       ([sel# & args#]
-        (pseudo sel# ~ps-compilation args#)))))
+(defmacro defpseudo
+  ([ps-name ps-prefix]
+   (list 'defpseudo ps-name ps-prefix (str ps-name)))
+  ([ps-name ps-prefix compiled-name]
+   (let [ps-compilation (str ps-prefix compiled-name)]
+     `(defn ~ps-name
+        ([]
+         (pseudo :* ~ps-compilation))
+        ([sel#]
+         (pseudo sel# ~ps-compilation))
+        ([sel# & args#]
+         (pseudo sel# ~ps-compilation args#))))))
 
 
 (defmacro defpseudo-classes [& classes-names]
@@ -89,9 +91,11 @@
   nth-of-type   nth-last-of-type
   first-child   last-child
   first-of-type last-of-type
-  only-child
-  empty
-  not)
+  only-child)
+
+(defpseudo css-empty \: "empty")
+(defpseudo css-not \: "not")
+
 
 (defpseudo-elements
   first-line

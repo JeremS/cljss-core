@@ -1,5 +1,4 @@
 (ns cljss.selectors.pseudos-test
-  (:refer-clojure :exclude [empty not])
   (:require [midje.repl :as m])
   (:use cljss.selectors.pseudos
         cljss.selectors.basic

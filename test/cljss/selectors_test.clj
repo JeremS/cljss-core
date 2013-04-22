@@ -1,5 +1,4 @@
 (ns cljss.selectors-test
-  (:refer-clojure :exclude [empty not])
   (:require [midje.repl :as m])
   (:use cljss.selectors
         cljss.protocols

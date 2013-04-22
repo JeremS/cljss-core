@@ -18,7 +18,6 @@ heavyly inspired by css-gen for the syntax.
 FIXME
 
 ## Todo 
- - change the not and empty pseudo classes so they dont conflict with clojure.core functions
  - remove the special case of descendant type of selectors
   - it provides allows for a uniform simplfication of combined selectors
     (think combination of the selectors inside c-> for instance which is not currently done 
