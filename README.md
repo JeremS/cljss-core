@@ -18,6 +18,7 @@ heavyly inspired by css-gen for the syntax.
 FIXME
 
 ## Todo 
+ - remove the namespace cljss.precompilation.decorators and put it in cljss.precompilation
  - remove the special case of descendant type of selectors
   - it provides allows for a uniform simplfication of combined selectors
     (think combination of the selectors inside c-> for instance which is not currently done 
@@ -26,6 +27,7 @@ FIXME
  - only one namespace with the protocols
   - create a cljss.protocols
   - moves the implementation of compilation protocols away from compilation.clj
+   - move the tests accordingly
  - change the not and empty pseudo classes so they dont conflict with clojure.core functions
  - potemkin to create the api in cljss.core
   - default decorator : chaining of decorator used in precompilation

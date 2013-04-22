@@ -25,6 +25,13 @@
 (def s3-expected (combine :div :p))
 (def s4-expected (combine s3-expected :strong))
 
+
+(def assoc-parent-selector-decorator
+  (decorator []
+    (fn [r parent-sel]
+      (list (assoc r :parent-sel parent-sel)
+            (:selector r)))))
+
 (m/fact "The assoc-parent-selector-decorator recursively associate
         the selector of a rule to its sub rules as their parent selector."
         (let [decorated (decorate-rule p-r assoc-parent-selector-decorator)
@@ -37,6 +44,11 @@
           ps3 => (first r1)
           ps4 => (first r3)))
 
+
+(def default-decorator
+  (chain-decorators combine-selector-decorator 
+                    depth-decorator
+                    assoc-parent-selector-decorator))
 
 
 (m/fact "The default decorator works as expected."

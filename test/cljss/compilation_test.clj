@@ -4,7 +4,8 @@
         cljss.compilation.protocols
         [cljss.parse :only (parse-rule)]
         [cljss.precompilation :only (precompile-rule)]
-        [cljss.precompilation.decorator :only (decorate-rule)]))
+        [cljss.selectors :only (combine-selector-decorator simplify-selectors-decorator)]
+        [cljss.precompilation.decorator :only (decorate-rule chain-decorators)]))
 
 (def r1 [:div :bgcolor :blue])
 (def r2 [:a :color :white])
@@ -59,12 +60,15 @@
                            "border: 1px solid black;color: blue;"))
 
 
-
+(def default-decorator
+  (chain-decorators depth-decorator 
+                    combine-selector-decorator
+                    simplify-selectors-decorator))
 
 (def r (-> [:div :color :blue
                  :border ["1px" :solid :black]]
            (parse-rule)
-           (precompile-rule)
+           (precompile-rule default-decorator)
            first))
 
 
