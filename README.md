@@ -18,7 +18,7 @@ heavyly inspired by css-gen for the syntax.
 FIXME
 
 ## Todo 
- - remove the namespace cljss.precompilation.decorators and put it in cljss.precompilation
+ - see what happened to the combine-decorator
  - remove the special case of descendant type of selectors
   - it provides allows for a uniform simplfication of combined selectors
     (think combination of the selectors inside c-> for instance which is not currently done 

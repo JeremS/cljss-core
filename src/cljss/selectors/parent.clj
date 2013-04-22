@@ -2,8 +2,7 @@
   (:use cljss.selectors.combination
         cljss.selectors.types
         cljss.selectors.protocols
-        cljss.compilation.protocols
-        [cljss.precompilation.decorator :only (decorator)]))
+        cljss.compilation.protocols))
 
 (defrecord ParentSelector []
   Neutral

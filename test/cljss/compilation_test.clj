@@ -3,9 +3,10 @@
   (:use cljss.compilation
         cljss.compilation.protocols
         [cljss.parse :only (parse-rule)]
-        [cljss.precompilation :only (precompile-rule)]
-        [cljss.selectors :only (combine-selector-decorator simplify-selectors-decorator)]
-        [cljss.precompilation.decorator :only (decorate-rule chain-decorators)]))
+        [cljss.precompilation 
+           :only (decorate-rule chain-decorators precompile-rule)]
+        [cljss.selectors 
+           :only (combine-selector-decorator simplify-selectors-decorator)]))
 
 (def r1 [:div :bgcolor :blue])
 (def r2 [:a :color :white])

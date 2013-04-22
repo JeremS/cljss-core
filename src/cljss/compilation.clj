@@ -1,8 +1,8 @@
 (ns cljss.compilation
-  (:require [clojure.string :as string]
-            [cljss.precompilation.decorator :as d])
+  (:require [clojure.string :as string])
   (:use cljss.compilation.protocols
-        cljss.compilation.utils))
+        cljss.compilation.utils
+        [cljss.precompilation :only (decorator)]))
 
 
 (def depth-decorator
@@ -11,7 +11,7 @@
   
   This decorator is used when a rule is compiled, 
   the depth being used to compute indentation."
-  (d/decorator 0
+  (decorator 0
    (fn [r depth]
      (list (assoc r ::depth depth) 
            (inc depth)))))

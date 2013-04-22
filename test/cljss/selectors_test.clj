@@ -7,7 +7,7 @@
         cljss.selectors.protocols
         cljss.compilation.protocols
         [cljss.parse :only (parse-rule)]
-        [cljss.precompilation.decorator :only (decorate-rule)]
+        [cljss.precompilation :only (decorate-rule)]
         [cljss.selectors.combination :only (combine)]
         [cljss.selectors.combinators :only (c-g+)]))
 
