@@ -137,7 +137,7 @@
         (replace-parent #{:div  :a} :#parent) 
         => #{:div :a}
         
-        (replace-parent (c-> :div  :a) :#parent)
+        (replace-parent (c-> :div :a) :#parent)
         => (c-> :div :a)
         
         (replace-parent [:section #{:div :p } :a] :#parent) 
