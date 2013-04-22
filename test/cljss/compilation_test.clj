@@ -6,7 +6,7 @@
         [cljss.precompilation 
            :only (decorate-rule chain-decorators precompile-rule)]
         [cljss.selectors 
-           :only (combine-selector-decorator simplify-selectors-decorator)]))
+           :only (combine-or-replace-parent-decorator simplify-selectors-decorator)]))
 
 (def r1 [:div :bgcolor :blue])
 (def r2 [:a :color :white])
@@ -63,7 +63,7 @@
 
 (def default-decorator
   (chain-decorators depth-decorator 
-                    combine-selector-decorator
+                    combine-or-replace-parent-decorator
                     simplify-selectors-decorator))
 
 (def r (-> [:div :color :blue

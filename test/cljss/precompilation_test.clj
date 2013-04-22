@@ -3,7 +3,7 @@
   (:use cljss.precompilation
         cljss.parse
         cljss.selectors.combination
-        [cljss.selectors :only (combine-selector-decorator)]
+        [cljss.selectors :only (combine-or-replace-parent-decorator)]
         [cljss.compilation :only (depth-decorator)]))
 
 (def depth (keyword "cljss.compilation" "depth"))
@@ -43,7 +43,7 @@
 
 
 (def default-decorator
-  (chain-decorators combine-selector-decorator 
+  (chain-decorators combine-or-replace-parent-decorator 
                     depth-decorator
                     assoc-parent-selector-decorator))
 
@@ -90,11 +90,11 @@
 
 (m/fact "The chain-decorator fn behave such as"
         (decorate-rule p-r (chain-decorators check-decorator 
-                                             combine-selector-decorator
+                                             combine-or-replace-parent-decorator
                                              depth-decorator))
         => (-> p-r
                (decorate-rule check-decorator)
-               (decorate-rule combine-selector-decorator)
+               (decorate-rule combine-or-replace-parent-decorator)
                (decorate-rule depth-decorator)))
 
 (def p-r1 (parse-rule r1))

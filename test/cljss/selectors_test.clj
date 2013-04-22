@@ -29,7 +29,7 @@
 
 (m/fact "The combine selectors decorator recursively combines
         the selector of a rule to its sub rules."
-        (let [decorated (decorate-rule p-r combine-selector-decorator)
+        (let [decorated (decorate-rule p-r combine-or-replace-parent-decorator)
               s1 (:selector decorated)
               s2 (-> decorated :sub-rules first :selector)
               s3 (-> decorated :sub-rules second :selector)
@@ -50,7 +50,7 @@
                
                        decorated (-> a-rule 
                                      parse-rule 
-                                     (decorate-rule  combine-selector-decorator))
+                                     (decorate-rule  combine-or-replace-parent-decorator))
                        s2 (-> decorated :sub-rules first :selector)]
                    s2 => #{(-> :section hover) 
                            (-> :div hover)}))
@@ -58,14 +58,14 @@
          (m/fact "The parent selector can be used inside a set"
                  (let [r [:section :color :blue
                           [#{& :div} :colore :white]]
-                       decorated (-> r parse-rule (decorate-rule  combine-selector-decorator))
+                       decorated (-> r parse-rule (decorate-rule  combine-or-replace-parent-decorator))
                        s2 (-> decorated :sub-rules first :selector)]
                    s2 => #{:section :div}))
          
          (m/fact "The parent selector can be used inside combined selectors"
                  (let [r [:section :color :blue
                           [[:a #{& :div}] :colore :white]]
-                       decorated (-> r parse-rule (decorate-rule  combine-selector-decorator))
+                       decorated (-> r parse-rule (decorate-rule  combine-or-replace-parent-decorator))
                        s2 (-> decorated :sub-rules first :selector)]
                    s2 => [:a #{:section :div}])))
 

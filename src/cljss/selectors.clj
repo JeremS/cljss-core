@@ -10,7 +10,7 @@
     (combine parent-sel sel)
     (replace-parent sel parent-sel)))
 
-(def combine-selector-decorator
+(def combine-or-replace-parent-decorator
   "This decorator is used to combine the selectors of sub rules
   with those of their ancestors."
   (decorator []
