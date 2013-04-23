@@ -241,12 +241,7 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
 FIXME
 
 ## Todo 
- - potemkin to create the api in cljss.core
-  - default decorator : chaining of decorator used in precompilation
-  - compilation -> some kind of css macro that compiles rules
-  - require the protocols, implementation
-  - a way to compile
-  - constructor of the differents part of the dsl
+ - work on the output format (line breaks indentation, etc...)
  - attibute selectors
  - media queries
  - move the implementations of colors and length units in their own libraries
