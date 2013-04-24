@@ -1,22 +1,22 @@
 # cljss
 
-Cljss provides some kind of dsl similar to css-gen in order to write with
-clojure data structure css like rules. As previously quoted this library is 
+Cljss provides some kind of DSL similar to css-gen. It allows to write css 
+rules with clojure data structures. As previously quoted this library is 
 heavyly inspired by css-gen for the syntax.
 
 ## Usage
 
 ### Rule syntax
 #### simple rules
-A rules a represented with vectors, the first element being a selector,
+Rules are represented with vectors, the first element being a selector,
 the rest can be property declarations or nested rules.
-
 For instance, the rules:
 
 ```clojure
-[:section :color :black]
-[:div :color :white]
+	[:section :color :black]
+		[:div :color :white]
 ```
+	
 will give the css:
 
 ```css
@@ -24,9 +24,8 @@ section {color: black;}
 div {color: white;}
 ```
 
-The properties can be a chaining of a mix and match of key values, 
+The properties can be a chain of a mix and match of key values, 
 maps or lists in any order.
-
 The rule:
 ```clojure
 [:#container :background-color :black
@@ -37,18 +36,20 @@ The rule:
               :left "30px"}
              :color :blue]
 ```
+
 will give css similar to:
+
 ```css
-#container {
-  background-color: black;
-  width: 900px; 
-  height: 400px;
-  border: 1px solid white;
-  position: relative;
-  top: 30px;
-  left: 30px;
-  color: blue;
-}
+  #container {
+    background-color: black;
+    width: 900px; 
+    height: 400px;
+    border: 1px solid white;
+    position: relative;
+    top: 30px;
+    left: 30px;
+    color: blue;
+  }
 ```
 
 This way we can create mixins directly in clojure:
@@ -60,14 +61,12 @@ This way we can create mixins directly in clojure:
 (def default-box
   '(:padding ["0px" "20px"]
     :margin-left "10px"))
+
+[:#nav (css-float :left) default-box]	
 ```
 
-and a rule
-```clojure
-[:#nav (css-float :left) default-box]
-```
+generates:
 
-to have:
 ```css
 #nav {
   margin-left: 10px;
@@ -78,7 +77,7 @@ to have:
 
 
 #### nested rules
-We can also nest rule "à la" scss etc...
+We can also nest rule "à la" scss, stylus etc...
 
 ```clojure
 [:#container 
@@ -122,7 +121,7 @@ String or key words are used for simple selectors:
 ```
 
 #### combining selectors
-Css provide 4 way that I know of to combine selectors
+Css provide 4 ways to combine selectors
  - the descendant combinator, spaced selectors in css, vector of selectors in cljss
  
  ```clojure
@@ -136,6 +135,7 @@ Css provide 4 way that I know of to combine selectors
  ```
  
  - the siblings combinator, + character in css, function c-+ in cljss
+
  ```clojure
  [(c-+ :div :a) ...] => "div + a { ... }"
  ```
@@ -152,7 +152,6 @@ We can of course combine them:
 [[:section (c-> :div (c-+ :p :a)) :span] ...] => "section div > p + a span { ... }"
 ```
 
-
 We can also use sets to represent list of selectors have the same properties:
 
 ```clojure
@@ -161,8 +160,8 @@ We can also use sets to represent list of selectors have the same properties:
 
 
 #### pseudos 
-Pseudo classes and pseudo elements are implemented as function that you can use
-to enrich a selector. The pseudo class will appear as a suffix
+Pseudo classes and pseudo elements are implemented as functions that you can use
+to enrich a selector. The pseudo class will appear as a suffix to the selector parameter:
 
 ```clojure
 [(hover :a) ... ] => "a:hover { ... }"
@@ -176,12 +175,13 @@ to enrich a selector. The pseudo class will appear as a suffix
 
 #### parent selectors
 The selector `&` is inspired by its namesake in sass, stylus... 
-However its semantic is different in cljss. For now, inside nested rules, 
+However its semantic is different in cljss. As of now, inside nested rules, 
 cljss combines a parent selector with its child when the selector `&` is not used. 
 When it is, it just replaces the selector `&` with the selector of the parent rule.
 
- - When we don't use it here is the behaviour in sass:
- ```scss
+ - When we don't use '&', here is the behaviour in sass:
+ 
+```scss
  section {
  ...
    div { ... }
@@ -189,6 +189,7 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  ```
  
  generates:
+
  ```css
  section { ... }
  section div { ... }
@@ -196,18 +197,22 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  
  Here the selectors "section" and "div" are combined in "section div" for the second rule.
  The same is true for cljss:
- ```clojure
+ 
+```clojure
  [:section ...
    [:div ...]]
    => "section {...} section div {}"
  ```
  
- - at first look cljss behaves like sass
+ - at first look cljss behaves like sass when '&' is used:
+
  ```scss
  a {...
    &:hover { ... }}
  ```
- generates
+
+ generates:
+
  ```css
  a { ... }
  a:hover {...}
@@ -221,31 +226,37 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  ```
  
  - it became diffenrent when sets are involved
+   in sass:
+
  ```scss
  section { ...
    & , div {...}
  }
  ```
+
  generates:
+
  ```css
  section {...}
  section,
  section div { ... }
  ```
  
- while with cljss
+ while with cljss:
+
  ```clojure
  [:section ...
    [#{& :div} ...]]
  ```
+
  generates:
+
  ```css
  section {...}
  section, div { ... }
  ```
 
-You can find the examples used in this section in the namespace
-cljss.examples.
+You can find the examples used this README in the namespace `cljss.examples`.
 
 ## Todo 
  - attibute selectors
