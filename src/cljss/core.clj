@@ -7,10 +7,6 @@
             [cljss.selectors parent pseudos]
             [cljss.compilation :as compilation]
             [cljss.compilation.styles :as styles]
-            
-            [units.core]
-            
-            [cljss.data units]
             [potemkin :as p]))
 
 (def default-decorator
@@ -50,17 +46,7 @@
   
    first-line
    first-letter
-   before after]
- 
- [units.core 
-   em rem ex ch vw vh vmin vmax
-   % px mm cm in pt pc
-  
-   deg grad rad turn]
- 
- )
-
-
+   before after])
 
 
 (defn css-with-style [style & rules]
