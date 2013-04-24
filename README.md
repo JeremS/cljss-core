@@ -248,11 +248,8 @@ You can find the examples used in this section in the namespace
 cljss.examples.
 
 ## Todo 
- - work on the output format (line breaks indentation, etc...)
  - attibute selectors
  - media queries
- - move the implementations of colors and length units in their own libraries
-   and just keep the protocols implementations.
 
 ## License
 
