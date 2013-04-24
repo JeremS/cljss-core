@@ -1,26 +1,23 @@
 (ns cljss.core
-  (:require [clojure.string :as string]
-            [potemkin :as p]
-            [cljss.selectors parent pseudos])
-  (:use clojure.tools.trace
-        [cljss.parse :only (parse-rule)]
-        [cljss.precompilation :only (chain-decorators precompile-rule)]
-        [cljss.selectors :only (combine-or-replace-parent-decorator
-                                simplify-selectors-decorator)]
-        [cljss.compilation :only (depth-decorator
-                                  compile-rules)]
-        [cljss.compilation.styles :only (compressed-style classic-style)]))
+  (:require [cljss.parse :as parse]
+            [cljss.precompilation :as pre]
+            [clojure.string :as string]
+            [cljss.selectors :as sel]
+            [cljss.selectors parent pseudos]
+            [cljss.compilation :as compilation]
+            [cljss.compilation.styles :as styles]
+            [potemkin :as p]))
 
 (def default-decorator
-  (chain-decorators combine-or-replace-parent-decorator
-                    simplify-selectors-decorator
-                    depth-decorator))
+  (pre/chain-decorators sel/combine-or-replace-parent-decorator
+                        sel/simplify-selectors-decorator
+                        compilation/depth-decorator))
 
 (defn- parse-rules [rules]
-  (map parse-rule rules))
+  (map parse/parse-rule rules))
 
 (defn- precompile-rules [rules]
-  (mapcat #(precompile-rule % default-decorator) rules))
+  (mapcat #(pre/precompile-rule % default-decorator) rules))
 
 
 
@@ -54,11 +51,11 @@
   (-> rules
        parse-rules
        precompile-rules
-       (compile-rules style)))
+       (compilation/compile-rules style)))
 
 
 (defn compressed-css [& rules]
-  (apply css-with-style compressed-style rules))
+  (apply css-with-style styles/compressed rules))
 
 (defn css [& rules]
-  (apply css-with-style classic-style rules))
+  (apply css-with-style styles/classic rules))

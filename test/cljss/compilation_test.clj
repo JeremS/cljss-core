@@ -1,4 +1,5 @@
 (ns cljss.compilation-test
+  (:require [cljss.compilation.styles :as styles])
   (:use cljss.compilation
         cljss.protocols
         midje.sweet
@@ -56,7 +57,8 @@
 
 (fact "We can compile a property map"
   (compile-property-map {:color :blue
-                         :border ["1px" :solid :black]}) 
+                         :border ["1px" :solid :black]}
+                        styles/compressed) 
   => (some-checker "color: blue;border: 1px solid black;"
                    "border: 1px solid black;color: blue;"))
 
@@ -75,7 +77,7 @@
 
 
 (fact "We can compile a rule"
-  (compile-rule r)
+  (compile-rule r styles/compressed)
   => (some-checker "div {color: blue;border: 1px solid black;}"
                    "div {border: 1px solid black;color: blue;}"))
 

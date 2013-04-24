@@ -23,7 +23,7 @@
 
 
 
-(defn float [side]
+(defn css-float [side]
   {:float side})
 
 (def default-box
@@ -31,7 +31,7 @@
     :margin-left "10px"))
 
 (def ex3
-  [[:#nav (float :left) default-box]])
+  [[:#nav (css-float :left) default-box]])
 
 
 

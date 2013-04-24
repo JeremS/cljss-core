@@ -1,13 +1,13 @@
 (ns cljss.compilation.styles)
 
-(def compressed-style
+(def compressed
   {:indent ""
    :property-separator ""
    :rules-separator ""
    :start-properties ""
    :general-indent ""})
 
-(def classic-style
+(def classic
   {:indent "  "
    :property-separator \newline
    :rules-separator \newline

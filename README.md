@@ -54,7 +54,7 @@ will give css similar to:
 This way we can create mixins directly in clojure:
 
 ```clojure
-(defn float [side]
+(defn css-float [side]
   {:float side})
 
 (def default-box
@@ -64,7 +64,7 @@ This way we can create mixins directly in clojure:
 
 and a rule
 ```clojure
-[:#nav (float :left) default-box]
+[:#nav (css-float :left) default-box]
 ```
 
 to have:
