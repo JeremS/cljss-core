@@ -1,13 +1,13 @@
 (ns cljss.selectors.parent-test
-  (:require [midje.repl :as m])
   (:use cljss.selectors.parent
-        cljss.protocols))
+        cljss.protocols
+        midje.sweet))
 
-(m/fact "The parent selector isn't neutral"
-        (neutral? &) => m/falsey)
+(fact "The parent selector isn't neutral"
+  (neutral? &) => falsey)
 
-(m/fact "The parent selector is its own simplifaction"
-        (simplify &) => &)
+(fact "The parent selector is its own simplifaction"
+  (simplify &) => &)
 
-(m/fact "The parent selector doesn't compile"
-        (compile-as-selector &) => (m/throws Exception))
+(fact "The parent selector doesn't compile"
+  (compile-as-selector &) => (throws Exception))
