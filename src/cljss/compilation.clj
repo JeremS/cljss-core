@@ -2,7 +2,8 @@
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.compilation.utils
-        [cljss.precompilation :only (decorator)]))
+        [cljss.precompilation :only (decorator)]
+        [cljss.compilation.styles :only (compressed-style)]))
 
 
 (def depth-decorator
@@ -51,36 +52,47 @@
 
 
 
-(def ^:dynamic *end-property-line* "")
-(def ^:dynamic *start-properties* "")
-(def ^:dynamic *end-properties* "")
-(def ^:dynamic *general-indent* "")
-(def ^:dynamic *indent* "")
-(def ^:dynamic *property-indent* "")
 
 (defn compile-property [[p-name p-val]]
   (let [s-name (compile-as-property-name p-name)
         s-val  (compile-as-property-value p-val)]
-    (str s-name ": " s-val \; *end-property-line*)))
+    (str s-name ": " s-val \;)))
 
 
+(defn compile-property-map 
+  ([m]
+   (compile-property-map m compressed-style))
+  ([m style]
+   (let [{i  :indent 
+          gi :general-indent 
+          sep :property-separator} style]
+     (->> m
+          (map compile-property )
+          (mapcat #(list gi i % sep ))
+          (apply str)))))
 
-(defn- add-property-indent [props]
-  (interleave (repeat (str *general-indent* *property-indent*))
-               props))
+(defn compile-rule 
+  ([rule]
+   (compile-rule rule compressed-style))
+  ([{:keys [selector properties] :as r} 
+    {start :start-properties i :indent
+     :as style}]
+   (let [depth (::depth r)
+         general-indent (apply str (repeat depth i))
+         compiled-selector
+            (compile-as-selector selector)
+         compiled-properties 
+            (compile-property-map properties 
+                                  (assoc style :general-indent general-indent))]
+        
+     (str general-indent compiled-selector " {" start
+          compiled-properties 
+          general-indent "}"))))
 
-(defn compile-property-map [m]
-  (->> m
-       (map compile-property )
-       (add-property-indent )
-       (string/join )))
-
-(defn compile-rule [{:keys [selector properties] :as r}]
-  (let [depth (::depth r)]
-    (binding [*general-indent* (apply str (repeat depth *indent*))]
-      (let [compiled-selector   (compile-as-selector selector)
-            compiled-properties (compile-property-map properties)]
-        (str *general-indent* compiled-selector " {" *start-properties*
-                                  compiled-properties 
-             *general-indent* "}")))))
-
+(defn compile-rules 
+  ([rules]
+   (compile-rules rules compressed-style))
+  ([rules {sep :rules-separator :as style}]
+   (->> rules
+        (map #(compile-rule % style))
+        (string/join sep ))))

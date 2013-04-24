@@ -8,7 +8,8 @@
         [cljss.selectors :only (combine-or-replace-parent-decorator
                                 simplify-selectors-decorator)]
         [cljss.compilation :only (depth-decorator
-                                  compile-rule)]))
+                                  compile-rules)]
+        [cljss.compilation.styles :only (compressed-style classic-style)]))
 
 (def default-decorator
   (chain-decorators combine-or-replace-parent-decorator
@@ -21,8 +22,6 @@
 (defn- precompile-rules [rules]
   (mapcat #(precompile-rule % default-decorator) rules))
 
-(defn- compile-rules [rules]
-  (map compile-rule rules))
 
 
 (p/import-vars
@@ -51,12 +50,15 @@
    first-letter
    before after])
 
-(defn css [& rules]
-  (->> rules
+(defn css-with-style [style & rules]
+  (-> rules
        parse-rules
        precompile-rules
-       compile-rules
-       trace
-       (string/join \newline)
-       str
-       println))
+       (compile-rules style)))
+
+
+(defn compressed-css [& rules]
+  (apply css-with-style compressed-style rules))
+
+(defn css [& rules]
+  (apply css-with-style classic-style rules))

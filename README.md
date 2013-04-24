@@ -41,12 +41,12 @@ will give css similar to:
 ```css
 #container {
   background-color: black;
-  width: "900px"; 
-  height: "400px";
+  width: 900px; 
+  height: 400px;
   border: 1px solid white;
   position: relative;
-  top: "30px";
-  left: "30px";
+  top: 30px;
+  left: 30px;
   color: blue;
 }
 ```
@@ -65,6 +65,15 @@ This way we can create mixins directly in clojure:
 and a rule
 ```clojure
 [:#nav (float :left) default-box]
+```
+
+to have:
+```css
+#nav {
+  margin-left: 10px;
+  padding: 0px 20px;
+  float: left;
+}
 ```
 
 
@@ -87,21 +96,18 @@ gives something like:
 
 ```css
 #container {
-  border: "1px solid black";
-  padding-left: "30px";
+  padding-left: 30px;
+  border: 1px solid black;
 }
-
-#container a { 
-  color: green;
-}
-
-#container section {
-  font-size: 1em;
-}
-
-#container a section p::first-letter{
-  :font-size: 2em;
-}
+  #container a {
+    color: green;
+  }
+  #container section {
+    font-size: 1em;
+  }
+    #container section p::first-letter {
+      font-size: 2em;
+    }
 ```
 
 ### selectors
@@ -143,7 +149,7 @@ Css provide 4 way that I know of to combine selectors
 We can of course combine them:
 
 ```clojure
-[[:section (c-> :div (c-+ :p :a)) :span] ...] => "section div > p + a > span { ... }"
+[[:section (c-> :div (c-+ :p :a)) :span] ...] => "section div > p + a span { ... }"
 ```
 
 
@@ -238,7 +244,8 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  section, div { ... }
  ```
 
-FIXME
+You can find the examples used in this section in the namespace
+cljss.examples.
 
 ## Todo 
  - work on the output format (line breaks indentation, etc...)

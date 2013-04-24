@@ -80,18 +80,6 @@
                    "div {border: 1px solid black;color: blue;}"))
 
 
-(comment
-(binding [*end-property-line* "\n"
-
-          *start-properties* "\n"
-          *end-properties* ""
-          *general-indent* ""
-          *indent* ""
-          *property-indent* "  "]
-  (println (compile-rule (assoc r :depth 3))))
-
-)
-
 
 
 
