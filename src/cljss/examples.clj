@@ -1,4 +1,5 @@
 (ns cljss.examples
+  (:refer-clojure :exclude [rem])
   (:use cljss.core))
 
 (comment 

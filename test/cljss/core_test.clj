@@ -1,2 +1,1 @@
-(ns cljss.core-test
-  (:use cljss.core))
+(ns cljss.core-test)
