@@ -8,12 +8,14 @@
 
 
 (defn decorator
-  "Construct a decorator, is a function that 
+  "Construct a decorator, from a function that 
   decorate, transforms a rule given a environment.
-  the environment env, must be a map.
   
   When no environment is provided
-  an empty map is used as the default one."
+  an empty map is used as the default one.
+  
+  Decorator are used to process rules trees results of 
+  parsing rules as expressed in the dsl."
   ([f] (decorator {} f))
   ([env f]
    (let [id (uuid) 
@@ -35,10 +37,7 @@
 
 (defn chain-decorators 
   "Allows to compose from left to right
-  the behaviour of decorators.
-  
-  Be careful, the default environments of each
-  decorators are merged, if they "
+  the behaviour of decorators."
   [d1 d2 & ds]
   (reduce chain-2-decorators 
           (list* d1 d2 ds)))
