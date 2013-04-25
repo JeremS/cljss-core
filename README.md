@@ -1,13 +1,13 @@
 # cljss
 
-Cljss provides some kind of DSL similar to css-gen. It allows to write css 
-rules with clojure data structures. As previously quoted this library is 
-heavyly inspired by css-gen for the syntax.
+Cljss provides some kind of DSL similar to 
+[css-gen](https://github.com/paraseba/cssgen/tree/0.3.0) in the 0.3.0 branch. 
+More precisely the rules syntax more or less the same syntax as css-gen with 
+somme tricks of my own.
 
-## Usage
 
-### Rule syntax
-#### simple rules
+## Rule syntax
+### simple rules
 Rules are represented with vectors, the first element being a selector,
 the rest can be property declarations or nested rules.
 For instance, the rules:
@@ -76,7 +76,7 @@ generates:
 ```
 
 
-#### nested rules
+### nested rules
 We can also nest rule "à la" scss, stylus etc...
 
 ```clojure
@@ -109,8 +109,8 @@ gives something like:
     }
 ```
 
-### selectors
-#### simple selectors
+## selectors
+### simple selectors
 String or key words are used for simple selectors:
 ```clojure
 [:div.class1.class2 ...]
@@ -120,7 +120,7 @@ String or key words are used for simple selectors:
 => "div.class1.class2"
 ```
 
-#### combining selectors
+### combining selectors
 Css provide 4 ways to combine selectors
  - the descendant combinator, spaced selectors in css, vector of selectors in cljss
  
@@ -159,7 +159,7 @@ We can also use sets to represent list of selectors have the same properties:
 ````
 
 
-#### pseudos 
+### pseudos 
 Pseudo classes and pseudo elements are implemented as functions that you can use
 to enrich a selector. The pseudo class will appear as a suffix to the selector parameter:
 
@@ -173,8 +173,9 @@ to enrich a selector. The pseudo class will appear as a suffix to the selector p
 ```
 
 
-#### parent selectors
-The selector `&` is inspired by its namesake in sass, stylus... 
+### parent selectors
+The selector `&` is inspired by its namesake in [sass](http://sass-lang.com), 
+[stylus](http://learnboost.github.io/stylus/)... 
 However its semantic is different in cljss. As of now, inside nested rules, 
 cljss combines a parent selector with its child when the selector `&` is not used. 
 When it is, it just replaces the selector `&` with the selector of the parent rule.
@@ -257,6 +258,13 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  ```
 
 You can find the examples used this README in the namespace `cljss.examples`.
+
+## Thanks
+Obivousily thanks to [@paraseba](https://github.com/paraseba) for the ideas
+I used from [css-gen](https://github.com/paraseba/cssgen/tree/0.3.0).
+
+A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
+writing this code with Ligh Table !
 
 ## Todo 
  - attibute selectors
