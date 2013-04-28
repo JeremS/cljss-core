@@ -1,5 +1,6 @@
 (ns cljss.media-test
   (:use cljss.media
+        cljss.rule
         cljss.protocols
         midje.sweet))
 
@@ -8,5 +9,5 @@
                 [:body :width "1000px"]
                 [:h1   :font-size "1em"]))
   => {:exp "screen"
-      :body [[:body :width "1000px"]
-             [:h1   :font-size "1em"]]})
+      :body [(parse-rule [:body :width "1000px"])
+             (parse-rule [:h1   :font-size "1em"])]})

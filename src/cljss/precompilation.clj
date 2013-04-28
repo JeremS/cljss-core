@@ -1,7 +1,6 @@
 (ns cljss.precompilation
   (:require [clojure.string :as string]))
 
-
 (defrecord Decorator [env f])
 
 (defn- uuid [] (java.util.UUID/randomUUID))

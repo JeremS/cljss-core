@@ -14,10 +14,11 @@
     (Query. exp (mapv #(decorate % d) body)))
   
   CSS
-  (css-compile [_ {sep :rules-separator :as style}]
-    (str exp \space \{
-           (map #(css-compile % (assoc-in style [depth] 1)) body)
-         \} sep)))
+  (css-compile [this {sep :rules-separator :as style}]
+    (let [d (or (depth this) 0)]
+      (str exp \space \{
+             (map #(css-compile % (assoc style depth d)) body)
+           \} sep))))
 
 
 (defn media [exp & body]
