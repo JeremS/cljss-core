@@ -4,7 +4,7 @@
         cljss.selectors.pseudos
         cljss.selectors.parent
         [midje.sweet :only (fact facts)]
-        [cljss.parse :only (parse-rule)]
+        [cljss.rule :only (parse-rule)]
         [cljss.precompilation :only (decorate-rule)]
         [cljss.selectors.combination :only (combine)]
         [cljss.selectors.combinators :only (c-g+)]))

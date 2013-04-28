@@ -1,13 +1,14 @@
 (ns cljss.core
   (:refer-clojure :exclude (rem))
   (:require [clojure.string :as string]
-            [cljss.parse :as parse]
+            [cljss.rule :as rule]
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]
             [cljss.selectors parent pseudos]
             [cljss.compilation :as compilation]
             [cljss.compilation.styles :as styles]
-            [potemkin :as p]))
+            [potemkin :as p])
+  (:use cljss.protocols))
 
 (def default-decorator
   (pre/chain-decorators sel/combine-or-replace-parent-decorator
@@ -15,7 +16,7 @@
                         compilation/depth-decorator))
 
 (defn- parse-rules [rules]
-  (map parse/parse-rule rules))
+  (map rule/parse-rule rules))
 
 (defn- precompile-rules [rules]
   (mapcat #(pre/precompile-rule % default-decorator) rules))
@@ -48,12 +49,16 @@
    first-letter
    before after])
 
+(defn compile-css [rules {sep :rules-separator :as style}]
+  (->> rules
+      (map #(css-compile % style))
+      (string/join sep )))
 
 (defn css-with-style [style & rules]
   (-> rules
        parse-rules
        precompile-rules
-       (compilation/compile-rules style)))
+       (compile-css style)))
 
 
 (defn compressed-css [& rules]

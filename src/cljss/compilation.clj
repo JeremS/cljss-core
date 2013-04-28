@@ -5,6 +5,8 @@
         [cljss.precompilation :only (decorator)]))
 
 
+(def depth ::depth)
+
 (def depth-decorator
   "Attach to a rule its depth, level in which
   it is embeded. 
@@ -52,37 +54,3 @@
 
 
 
-(defn compile-property [[p-name p-val]]
-  (let [s-name (compile-as-property-name p-name)
-        s-val  (compile-as-property-value p-val)]
-    (str s-name ": " s-val \;)))
-
-
-(defn compile-property-map [m style]
-  (let [{i  :indent
-         gi :general-indent 
-         sep :property-separator} style]
-    (->> m
-         (map compile-property )
-         (mapcat #(list gi i % sep ))
-         (apply str))))
-
-(defn compile-rule [{:keys [selector properties] :as r} 
-                    {start :start-properties i :indent 
-                     :as style}]
-  (let [depth (::depth r)
-        general-indent (apply str (repeat depth i))
-        compiled-selector
-            (compile-as-selector selector)
-        compiled-properties 
-            (compile-property-map properties 
-                                  (assoc style :general-indent general-indent))]
-        
-    (str general-indent compiled-selector " {" start
-         compiled-properties 
-         general-indent "}")))
-
-(defn compile-rules [rules {sep :rules-separator :as style}]
-  (->> rules
-      (map #(compile-rule % style))
-      (string/join sep )))

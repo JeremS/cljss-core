@@ -1,8 +1,8 @@
 (ns cljss.precompilation-test
   (:use cljss.precompilation
-        cljss.parse
         cljss.selectors.combination
         midje.sweet
+        [cljss.rule :only (parse-rule)]
         [cljss.selectors :only (combine-or-replace-parent-decorator)]
         [cljss.compilation :only (depth-decorator)]))
 

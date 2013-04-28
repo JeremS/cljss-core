@@ -3,7 +3,7 @@
   (:use cljss.compilation
         cljss.protocols
         midje.sweet
-        [cljss.parse :only (parse-rule)]
+        [cljss.rule :only (parse-rule)]
         [cljss.precompilation 
            :only (decorate-rule chain-decorators precompile-rule)]
         [cljss.selectors 
@@ -18,7 +18,6 @@
 (def r (conj r1 r2 (conj r3 r4)))
 (def p-r (parse-rule r))
 
-(def depth (keyword "cljss.compilation" "depth"))
 
 (fact "The depth decorator associate a depth to its rule."
   (let [decorated (decorate-rule p-r depth-decorator)
@@ -49,38 +48,6 @@
          
   (fact "it compiles vectors and lists to the space separated compilation of their values"
     (compile-as-property-value ["1px" :solid :black]) => "1px solid black"))
-
-(fact "We can compile properties"
-  (compile-property [:color :blue]) => "color: blue;"
-  (compile-property [:border ["1px" :solid :black]]) => "border: 1px solid black;")
-
-
-(fact "We can compile a property map"
-  (compile-property-map {:color :blue
-                         :border ["1px" :solid :black]}
-                        styles/compressed) 
-  => (some-checker "color: blue;border: 1px solid black;"
-                   "border: 1px solid black;color: blue;"))
-
-
-(def default-decorator
-  (chain-decorators depth-decorator 
-                    combine-or-replace-parent-decorator
-                    simplify-selectors-decorator))
-
-(def r (-> [:div :color :blue
-                 :border ["1px" :solid :black]]
-           (parse-rule)
-           (precompile-rule default-decorator)
-           first))
-
-
-
-(fact "We can compile a rule"
-  (compile-rule r styles/compressed)
-  => (some-checker "div {color: blue;border: 1px solid black;}"
-                   "div {border: 1px solid black;color: blue;}"))
-
 
 
 
