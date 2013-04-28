@@ -1,5 +1,6 @@
 (ns cljss.selectors.basic
-  (:require [cljss.compilation.utils :as utils])
+  (:require [cljss.compilation.utils :as utils]
+            [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types))
 
@@ -31,7 +32,7 @@
   (replace-parent [this replacement] this)
   
   CssSelector
-  (compile-as-selector [this] this))
+  (compile-as-selector [this] (string/trim this)))
 
 (derive String simple-t)
 
