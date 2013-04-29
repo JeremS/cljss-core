@@ -5,6 +5,7 @@ Cljss provides some kind of DSL similar to
 More precisely the rules syntax more or less the same syntax as css-gen with 
 somme tricks of my own.
 
+cljss 0.2.0 is a work in progress. 
 
 ## Rule syntax
 ### simple rules
