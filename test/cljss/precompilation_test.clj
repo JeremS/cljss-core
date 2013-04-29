@@ -1,9 +1,13 @@
 (ns cljss.precompilation-test
   (:use cljss.precompilation
+        cljss.protocols
         cljss.selectors.combination
-        midje.sweet
+        cljss.selectors.pseudos
+        cljss.selectors.parent
+        [midje.sweet :only (fact facts future-fact)]
         [cljss.parse :only (parse-rule)]
-        [cljss.selectors :only (combine-or-replace-parent-decorator)]
+        [cljss.selectors.combination :only (combine)]
+        [cljss.selectors.combinators :only (c-g+)]
         [cljss.compilation :only (depth-decorator)]))
 
 (def r1 [:div :bgcolor :blue])
@@ -22,85 +26,123 @@
 (def s4-expected (combine s3-expected :strong))
 
 
-(def assoc-parent-selector-decorator
-  (decorator []
-    (fn [r parent-sel]
-      (list (assoc r :parent-sel parent-sel)
-            (:selector r)))))
-
-(fact "The assoc-parent-selector-decorator recursively associate
-  the selector of a rule to its sub rules as their parent selector."
-  (let [decorated (decorate-rule p-r assoc-parent-selector-decorator)
-        ps1 (:parent-sel decorated)
-        ps2 (-> decorated :sub-rules first :parent-sel)
-        ps3 (-> decorated :sub-rules second :parent-sel)
-        ps4 (-> decorated :sub-rules second :sub-rules first :parent-sel)]
-    ps1 => []
-    ps2 => (first r1)
-    ps3 => (first r1)
-    ps4 => (first r3)))
-
-
-(def default-decorator
-  (chain-decorators combine-or-replace-parent-decorator 
-                    depth-decorator
-                    assoc-parent-selector-decorator))
-
-
-(fact "The default decorator works as expected."
-  (let [decorated (decorate-rule p-r default-decorator)
-        s1 (:selector decorated)
-        s2 (-> decorated :sub-rules first :selector)
-        s3 (-> decorated :sub-rules second :selector)
-        s4 (-> decorated :sub-rules second :sub-rules first :selector)
-              
-        ps1 (:parent-sel decorated)
-        ps2 (-> decorated :sub-rules first :parent-sel)
-        ps3 (-> decorated :sub-rules second :parent-sel)
-        ps4 (-> decorated :sub-rules second :sub-rules first :parent-sel)
-              
-        depth1 (:depth decorated)
-        depth2 (-> decorated :sub-rules first :depth)
-        depth3 (-> decorated :sub-rules second :depth)
-        depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
-          
-    s1 => s1-expected
-    s2 => s2-expected
-    s3 => s3-expected
-    s4 => s4-expected
-          
-    ps1 => []
-    ps2 => s1-expected
-    ps3 => s1-expected
-    ps4 => s3-expected
-          
+(fact "The depth decorator associate a depth to its rule."
+  (let [visited (visit p-r depth-decorator)
+        depth1 (:depth visited)
+        depth2 (-> visited :sub-rules first :depth)
+        depth3 (-> visited :sub-rules second :depth)
+        depth4 (-> visited :sub-rules second :sub-rules first :depth)]
+    
     depth1 => 0
     depth2 => 1
     depth3 => 1
     depth4 => 2))
 
 
-(def check-decorator 
-  "this decorator just tags each rule with :check true"
-  (decorator
-   (fn [r env]
-     (list (assoc r :check true)
-           env))))
+(def default-visitor
+  (chain-visitors assoc-depth 
+                  combine-or-replace-parent
+                  simplify-selector))
 
-(fact "The chain-decorator fn behave such as"
-  (decorate-rule p-r (chain-decorators check-decorator 
-                                       combine-or-replace-parent-decorator
-                                       depth-decorator))
+
+(fact "The default decorator works as expected."
+  (let [visited (visit p-r default-visitor)
+        s1 (:selector visited)
+        s2 (-> visited :sub-rules first :selector)
+        s3 (-> visited :sub-rules second :selector)
+        s4 (-> visited :sub-rules second :sub-rules first :selector)
+              
+        depth1 (:depth visited)
+        depth2 (-> visited :sub-rules first :depth)
+        depth3 (-> visited :sub-rules second :depth)
+        depth4 (-> visited :sub-rules second :sub-rules first :depth)]
+          
+    s1 => s1-expected
+    s2 => s2-expected
+    s3 => s3-expected
+    s4 => s4-expected
+          
+    depth1 => 0
+    depth2 => 1
+    depth3 => 1
+    depth4 => 2))
+
+(future-fact "use the simplify selector")
+
+
+(fact "The chain-visitor fn behave such as"
+  (visit p-r (chain-visitors assoc-depth
+                             combine-or-replace-parent
+                             simplify-selector))
   => (-> p-r
-         (decorate-rule check-decorator)
-         (decorate-rule combine-or-replace-parent-decorator)
-         (decorate-rule depth-decorator)))
+         (visit assoc-depth)
+         (visit combine-or-replace-parent)
+         (visit simplify-selector)))
 
 (def p-r1 (parse-rule r1))
 (def p-r2 (parse-rule r2))
 (def p-r3 (parse-rule r3))
 (def p-r4 (parse-rule r4))
 
+
 (fact "flatten rule flattens a rule and its sub rules..."
   (flatten-rule p-r) 
   => (list p-r1 p-r2 p-r3 p-r4))
+
+
+(fact "The combine selectors visitor recursively combines
+  the selector of a rule to its sub rules."
+  (let [visited (visit p-r combine-or-replace-parent)
+        s1 (:selector visited)
+        s2 (-> visited :sub-rules first :selector)
+        s3 (-> visited :sub-rules second :selector)
+        s4 (-> visited :sub-rules second :sub-rules first :selector)]
+    s1 => s1-expected
+    s2 => s2-expected
+    s3 => s3-expected
+    s4 => s4-expected))
+
+
+
+(facts "We can replace the parent selector in nested rules"
+  
+  (fact "Parent selector can be used in pseudo classes"
+    (let [a-rule [#{:section :div} 
+                  :color :blue
+                  [(-> & hover) :color :white]]
+               
+          visited (-> a-rule 
+                        parse-rule 
+                        (visit combine-or-replace-parent))
+          s2 (-> visited :sub-rules first :selector)]
+      
+      s2 => #{(-> :section hover) 
+              (-> :div hover)}))
+         
+  (fact "The parent selector can be used inside a set"
+    (let [r [:section :color :blue
+             [#{& :div} :colore :white]]
+          visited (-> r parse-rule (visit combine-or-replace-parent))
+          s2 (-> visited :sub-rules first :selector)]
+      
+      s2 => #{:section :div}))
+         
+  (fact "The parent selector can be used inside combined selectors"
+    (let [r [:section :color :blue
+             [[:a #{& :div}] :colore :white]]
+          visited (-> r parse-rule (visit  combine-or-replace-parent))
+          s2 (-> visited :sub-rules first :selector)]
+      s2 => [:a #{:section :div}])))
+
+
+
+
+(fact "The siplify decorator simplifies selector in a rule and its nested rules"
+  (let [r [#{[[:div :p][:a []]] [#{:div :p []}[:a]]}
+           :color :black
+           [(c-g+ [:div :p][:a]) :color :blue]]
+        visited (-> r parse-rule (visit  simplify-selector))
+        s1 (:selector visited)
+        s2 (-> visited :sub-rules first :selector)]
+    s1 => (simplify #{[[:div :p][:a []]] [#{:div :p []}[:a]]})
+    s2 => (simplify (c-g+ [:div :p][:a]))))

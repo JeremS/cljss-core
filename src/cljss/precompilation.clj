@@ -1,10 +1,12 @@
 (ns cljss.precompilation
-  (:require [clojure.string :as string]
-            [cljss.AST :as ast]
-            [cljss.parse :as parse])
+  (:require cljss.selectors.basic
+            cljss.selectors.combinators
+            [clojure.string :as string]
+            [cljss.AST :as ast])
   (:use cljss.protocols
+        [cljss.selectors.combination :only (combine)]
         clojure.tools.trace)
-  (:import cljss.AST.Rule))
+  (:import [cljss.AST Rule Query]))
 
 (defn- uuid [] (java.util.UUID/randomUUID))
 
@@ -71,17 +73,55 @@
     `(defmethod ~mm-name ~v-type ~args ~@body)))
 
 
-(defvisitor depth-visitor 0)
+(defvisitor assoc-depth 0)
 
-(defvisit depth-visitor :default [node depth]
+(defvisit assoc-depth :default [node depth]
   (list (assoc node :depth depth)
         (inc depth)))
 
 
+(defn- combine-or-replace [sel parent-sel]
+  (if-not (parent? sel)
+    (combine parent-sel sel)
+    (replace-parent sel parent-sel)))
+
+(defvisitor combine-or-replace-parent [])
+
+(defvisit combine-or-replace-parent cljss.AST.Rule 
+  [{sel :selector :as rule} parent-sel]
+  (let [new-sel (combine-or-replace sel parent-sel)]
+    (list (assoc rule :selector new-sel)
+          new-sel)))
+
+(defvisit combine-or-replace-parent :default
+  [node parent-sel]
+  (list node parent-sel))
 
 
 
+(defvisitor simplify-selector nil)
 
+(defvisit simplify-selector :default
+  [node env]
+  (list node env))
+
+(defvisit simplify-selector cljss.AST.Rule
+  [{sel :selector :as rule} env]
+  (list (assoc rule 
+          :selector (simplify sel))
+        env))
+
+
+(defvisitor make-rule-for-media-properties :*)
+
+(defvisit make-rule-for-media-properties cljss.AST.Rule
+  [{sel :selector :as rule} parent-selector]
+  (list rule sel))
+
+(defvisit make-rule-for-media-properties cljss.AST.Query
+ [{props :properties sr :sub-rules :as query} parent-sel]
+  (let [new-sub-rules (conj sr (ast/rule parent-sel props))]
+    (list (assoc query :sub-rules new-sub-rules))))
 
 
 

@@ -56,8 +56,7 @@
            (precompile-rule default-decorator)
            first))
 
-r
-
+(future-fact "Test that media queries compile well")
 
 (fact "We can compile a rule"
   (css-compile r styles/compressed)
