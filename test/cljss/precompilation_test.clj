@@ -2,11 +2,10 @@
   (:use cljss.precompilation
         cljss.selectors.combination
         midje.sweet
-        [cljss.rule :only (parse-rule)]
+        [cljss.parse :only (parse-rule)]
         [cljss.selectors :only (combine-or-replace-parent-decorator)]
         [cljss.compilation :only (depth-decorator)]))
 
-(def depth (keyword "cljss.compilation" "depth"))
 (def r1 [:div :bgcolor :blue])
 (def r2 [:a :color :white])
 (def r3 [:p :color :green])
@@ -60,10 +59,10 @@
         ps3 (-> decorated :sub-rules second :parent-sel)
         ps4 (-> decorated :sub-rules second :sub-rules first :parent-sel)
               
-        depth1 (depth decorated)
-        depth2 (-> decorated :sub-rules first depth)
-        depth3 (-> decorated :sub-rules second depth)
-        depth4 (-> decorated :sub-rules second :sub-rules first depth)]
+        depth1 (:depth decorated)
+        depth2 (-> decorated :sub-rules first :depth)
+        depth3 (-> decorated :sub-rules second :depth)
+        depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
           
     s1 => s1-expected
     s2 => s2-expected

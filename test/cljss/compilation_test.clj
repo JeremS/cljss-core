@@ -3,7 +3,7 @@
   (:use cljss.compilation
         cljss.protocols
         midje.sweet
-        [cljss.rule :only (parse-rule)]
+        [cljss.parse :only (parse-rule)]
         [cljss.precompilation 
            :only (decorate-rule chain-decorators precompile-rule)]
         [cljss.selectors 
@@ -21,10 +21,10 @@
 
 (fact "The depth decorator associate a depth to its rule."
   (let [decorated (decorate-rule p-r depth-decorator)
-        depth1 (depth decorated)
-        depth2 (-> decorated :sub-rules first depth)
-        depth3 (-> decorated :sub-rules second depth)
-        depth4 (-> decorated :sub-rules second :sub-rules first depth)]
+        depth1 (:depth decorated)
+        depth2 (-> decorated :sub-rules first :depth)
+        depth3 (-> decorated :sub-rules second :depth)
+        depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
     
     depth1 => 0
     depth2 => 1

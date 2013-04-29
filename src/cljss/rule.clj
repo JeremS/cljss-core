@@ -1,22 +1,20 @@
 (ns cljss.rule
-  (:use cljss.protocols
-        [cljss.precompilation :only (decorate-rule)]
-        [cljss.compilation :only (depth)]))
+  (:use cljss.protocols))
 
 
 (declare compile-property-map)
 
 
 (defrecord Rule [selector properties sub-rules]
-  DecorAble
-  (decorate [this d]
-    (decorate-rule this d))
+  Node
+  (children-key [this] :sub-rules)
+  (node? [_] true)
   
   CSS
   (css-compile [this {start :start-properties 
-                   i :indent 
-                   :as style}]
-    (let [d (depth this)
+                      i :indent 
+                      :as style}]
+    (let [d (:depth this)
           general-indent      (apply str (repeat d i))
           compiled-selector   (compile-as-selector selector)
           compiled-properties (compile-property-map properties 
@@ -28,6 +26,7 @@
          general-indent "}"))))
 
 
+
 (defn rule 
   ([selection ]
    (rule selection {}))
@@ -35,6 +34,22 @@
    (rule selection properties []))
   ([selection properties sub-rules]
    (Rule. selection properties sub-rules)))
+
+
+(defrecord Query [selector body properties sub-rules]
+  Node
+  (children-key [this] :body)
+  
+  CSS
+  (css-compile [this {sep :rules-separator :as style}]
+    (let [d (or (:depth this) 0)]
+      (str selector " {"
+             (map #(css-compile % (assoc style :depth d)) body)
+           \} sep))))
+
+(defn media [sel & body]
+  (Query. sel (vec body) {} []))
+
 
 
 (defn compile-property [[p-name p-val]]
@@ -51,42 +66,6 @@
          (map compile-property )
          (mapcat #(list gi i % sep ))
          (apply str))))
-
-
-(defmulti consume-properties 
-  "When parsing a rule, consume property 
-  declarations and sub rule declarations
-  to add them to the rule resulted of the parsing."
-  (fn [s rule] (type (first s))))
-
-
-(defn parse-rule 
-  "Parse a rule expressed with a vector and returns a Rule."
-  [[selection & props-sub-rules]]
-  (consume-properties props-sub-rules (rule selection)))
-
-(defmethod consume-properties :default [s r] r)
-
-(defmethod consume-properties clojure.lang.Keyword [[fst scd & rst] r]
-  (let [r (assoc-in r [:properties fst] scd)]
-    (consume-properties rst r)))
-
-
-(defmethod consume-properties clojure.lang.PersistentList [[fst scd & rst] r]
-  (let [props (apply assoc(:properties r) fst)
-        r (assoc r :properties props)]
-    (consume-properties (cons scd rst) r)))
-
-(defmethod consume-properties clojure.lang.IPersistentMap [[fst scd & rst] r]
-  (let [props (merge (:properties r) fst)
-        r (assoc r :properties props)]
-    (consume-properties (cons scd rst) r)))
-
-
-(defmethod consume-properties clojure.lang.PersistentVector [[fst scd & rst] r]
-  (let [r (update-in r [:sub-rules] conj (parse-rule fst))]
-    (consume-properties (cons scd rst) r)))
-
 
 
 

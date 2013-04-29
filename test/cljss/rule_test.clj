@@ -1,67 +1,12 @@
 (ns cljss.rule-test
-  (:require [cljss.compilation :refer (depth-decorator depth)]
+  (:require [cljss.compilation :refer (depth-decorator)]
             [cljss.compilation.styles :as styles])
   (:use cljss.rule
         midje.sweet
         cljss.protocols
+        [cljss.parse :only (parse-rule)]
         [cljss.precompilation :only (decorate-rule chain-decorators precompile-rule)]
         [cljss.selectors :only (combine-or-replace-parent-decorator simplify-selectors-decorator)]))
-
-(facts "About parse-rule"
-  (facts "it construct rules from vectors : "
-    (fact "it makes a rule from a vector"
-      (parse-rule [:a :color :blue])
-      => (rule :a
-               {:color :blue}
-               []))
-                  
-    (fact "it accepts (prop-name val) as properties declaration"
-      (parse-rule [:a :color :blue :width "10px"])
-      => (contains {:properties {:color :blue :width "10px"}}))
-
-
-    (fact "it accepts map as property declacation"
-      (parse-rule [:a {:color :blue 
-                       :width "10px"}])
-      => (contains {:properties {:color :blue 
-                                              :width "10px"}}))
-    
-    (fact "it accepts a lists as property declacation"
-      (parse-rule [:a (list :color :blue 
-                            :width "10px")])
-      => (contains {:properties {:color :blue 
-                                   :width "10px"}}))
-
-    (fact "it accepts a mix of properties declaration style"
-      (parse-rule [:a 
-                   :border ["1px" :solid :black]
-                   {:color :blue 
-                    :width "10px"}])
-      => (contains {:properties {:border ["1px" :solid :black]
-                                 :color :blue 
-                                 :width "10px"}})
-
-      (parse-rule [:a       
-                   {:border ["1px" :solid :black]}
-                   :color :blue 
-                   :width "10px"])
-      => (contains {:properties {:border ["1px" :solid :black]
-                                 :color :blue 
-                                 :width "10px"}})
-      
-      (parse-rule [:a 
-                   :border ["1px" :solid :black]
-                   {:color :blue} 
-                   '(:width "10px")])           
-      => (contains {:properties {:border ["1px" :solid :black]
-                                 :color :blue 
-                                 :width "10px"}}))
-         
-    (fact "It allows for sub rules"
-      (parse-rule [:div :border ["1px" :solid :black]
-                    [:a :display :block]])
-      => (contains {:sub-rules [(rule :a {:display :block} [])]}))))
-
 
 
 (def r1 [:div :bgcolor :blue])
@@ -76,10 +21,10 @@
 
 (fact "The depth decorator associate a depth to its rule."
   (let [decorated (decorate-rule p-r depth-decorator)
-        depth1 (depth decorated)
-        depth2 (-> decorated :sub-rules first depth)
-        depth3 (-> decorated :sub-rules second depth)
-        depth4 (-> decorated :sub-rules second :sub-rules first depth)]
+        depth1 (:depth decorated)
+        depth2 (-> decorated :sub-rules first :depth)
+        depth3 (-> decorated :sub-rules second :depth)
+        depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
     
     depth1 => 0
     depth2 => 1
@@ -111,6 +56,7 @@
            (precompile-rule default-decorator)
            first))
 
+r
 
 
 (fact "We can compile a rule"

@@ -2,6 +2,7 @@
   (:refer-clojure :exclude (rem))
   (:require [clojure.string :as string]
             [cljss.rule :as rule]
+            [cljss.parse :as parse]
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]
             [cljss.selectors parent pseudos]
@@ -16,7 +17,7 @@
                         compilation/depth-decorator))
 
 (defn- parse-rules [rules]
-  (map rule/parse-rule rules))
+  (map parse/parse-rule rules))
 
 (defn- precompile-rules [rules]
   (mapcat #(pre/precompile-rule % default-decorator) rules))

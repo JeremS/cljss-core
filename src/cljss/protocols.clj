@@ -1,11 +1,14 @@
 (ns cljss.protocols)
 
-(defprotocol ParseAble
-  (parse [this]
-    "Return the AST version of itself"))
+(defprotocol Node
+  (children-key [this]
+    "Each node of the AST must return the keyword to access its children.")
+  (node? [this]))
 
-(defprotocol DecorAble
-  (decorate [this decorator]))
+(extend-protocol Node
+  Object
+  (children-key [this] nil)
+  (node? [this] false))
 
 ; Protocols specific to selectors
 (defprotocol Neutral

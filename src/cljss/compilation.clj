@@ -4,9 +4,6 @@
         cljss.compilation.utils
         [cljss.precompilation :only (decorator)]))
 
-
-(def depth ::depth)
-
 (def depth-decorator
   "Attach to a rule its depth, level in which
   it is embeded. 
@@ -15,7 +12,7 @@
   the depth being used to compute indentation."
   (decorator 0
    (fn [r depth]
-     (list (assoc r ::depth depth) 
+     (list (assoc r :depth depth) 
            (inc depth)))))
 
 
