@@ -11,18 +11,6 @@
             [potemkin :as p])
   (:use cljss.protocols))
 
-(def default-decorator
-  (pre/chain-decorators sel/combine-or-replace-parent-decorator
-                        sel/simplify-selectors-decorator
-                        compilation/depth-decorator))
-
-(defn- parse-rules [rules]
-  (map parse/parse-rule rules))
-
-(defn- precompile-rules [rules]
-  (mapcat #(pre/precompile-rule % default-decorator) rules))
-
-
 
 (p/import-vars
  [cljss.selectors.parent &]
@@ -50,6 +38,13 @@
    first-letter
    before after])
 
+(defn- parse-rules [rules]
+  (map parse/parse-rule rules))
+
+(defn- precompile-rules [rules]
+  (mapcat pre/precompile-rule rules))
+
+
 (defn compile-css [rules {sep :rules-separator :as style}]
   (->> rules
       (map #(css-compile % style))
@@ -60,7 +55,6 @@
        parse-rules
        precompile-rules
        (compile-css style)))
-
 
 (defn compressed-css [& rules]
   (apply css-with-style styles/compressed rules))

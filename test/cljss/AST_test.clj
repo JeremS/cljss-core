@@ -1,12 +1,10 @@
 (ns cljss.AST-test
-  (:require [cljss.compilation :refer (depth-decorator)]
-            [cljss.compilation.styles :as styles])
+  (:require [cljss.compilation.styles :as styles])
   (:use cljss.AST
         midje.sweet
         cljss.protocols
         [cljss.parse :only (parse-rule)]
-        [cljss.precompilation :only (decorate-rule chain-decorators precompile-rule)]
-        [cljss.selectors :only (combine-or-replace-parent-decorator simplify-selectors-decorator)]))
+        [cljss.precompilation :only (visit chain-visitors precompile-rule)])
 
 
 (def r1 [:div :bgcolor :blue])
@@ -19,17 +17,6 @@
 (def p-r (parse-rule r))
 
 
-(fact "The depth decorator associate a depth to its rule."
-  (let [decorated (decorate-rule p-r depth-decorator)
-        depth1 (:depth decorated)
-        depth2 (-> decorated :sub-rules first :depth)
-        depth3 (-> decorated :sub-rules second :depth)
-        depth4 (-> decorated :sub-rules second :sub-rules first :depth)]
-    
-    depth1 => 0
-    depth2 => 1
-    depth3 => 1
-    depth4 => 2))
 
 
 (fact "We can compile properties"
@@ -44,7 +31,7 @@
   => (some-checker "color: blue;border: 1px solid black;"
                    "border: 1px solid black;color: blue;"))
 
-
+(comment
 (def default-decorator
   (chain-decorators depth-decorator 
                     combine-or-replace-parent-decorator
@@ -55,10 +42,10 @@
            (parse-rule)
            (precompile-rule default-decorator)
            first))
-
+)
 (future-fact "Test that media queries compile well")
 
-(fact "We can compile a rule"
+(future-fact "We can compile a rule"
   (css-compile r styles/compressed)
   => (some-checker "div {color: blue;border: 1px solid black;}"
                    "div {border: 1px solid black;color: blue;}"))

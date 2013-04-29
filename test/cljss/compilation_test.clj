@@ -3,11 +3,7 @@
   (:use cljss.compilation
         cljss.protocols
         midje.sweet
-        [cljss.parse :only (parse-rule)]
-        [cljss.precompilation 
-           :only (decorate-rule chain-decorators precompile-rule)]
-        [cljss.selectors 
-           :only (combine-or-replace-parent-decorator simplify-selectors-decorator)]))
+        [cljss.parse :only (parse-rule)]))
 
 (facts "About compiling css property names"
   (fact "it compiles a string to the same string"

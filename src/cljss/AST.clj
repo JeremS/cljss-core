@@ -6,9 +6,10 @@
 
 
 (defrecord Rule [selector properties sub-rules]
-  Node
-  (children-key [this] :sub-rules)
-  (node? [_] true)
+  Tree
+  (children [_] sub-rules)
+  (assoc-children [this children] 
+    (assoc this :sub-rules children))
   
   CSS
   (css-compile [this {start :start-properties 
@@ -37,8 +38,10 @@
 
 
 (defrecord Query [selector body properties sub-rules]
-  Node
-  (children-key [this] :body)
+  Tree
+  (children [_] sub-rules)
+  (assoc-children [this children] 
+    (assoc this :sub-rules children))
   
   CSS
   (css-compile [this {sep :rules-separator :as style}]

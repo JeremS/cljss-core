@@ -1,19 +1,7 @@
 (ns cljss.compilation
   (:require [clojure.string :as string])
   (:use cljss.protocols
-        cljss.compilation.utils
-        [cljss.precompilation :only (decorator)]))
-
-(def depth-decorator
-  "Attach to a rule its depth, level in which
-  it is embeded. 
-  
-  This decorator is used when a rule is compiled, 
-  the depth being used to compute indentation."
-  (decorator 0
-   (fn [r depth]
-     (list (assoc r :depth depth) 
-           (inc depth)))))
+        cljss.compilation.utils))
 
 
 (defn compile-seq-property-value
