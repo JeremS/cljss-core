@@ -1,10 +1,10 @@
 (ns cljss.precompilation
   (:require [clojure.string :as string]
-            [cljss.rule :as rule]
+            [cljss.AST :as ast]
             [cljss.parse :as parse])
   (:use cljss.protocols
         clojure.tools.trace)
-  (:import cljss.rule.Rule))
+  (:import cljss.AST.Rule))
 
 (defn- uuid [] (java.util.UUID/randomUUID))
 

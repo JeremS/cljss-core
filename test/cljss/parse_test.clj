@@ -1,6 +1,6 @@
 (ns cljss.parse-test
   (:use cljss.parse
-        cljss.rule
+        cljss.AST
         midje.sweet))
 
 (facts "About parse-rule"

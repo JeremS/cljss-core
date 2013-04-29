@@ -1,6 +1,6 @@
 (ns cljss.parse
-  (:use [cljss.rule :only (rule)])
-  (:import cljss.rule.Query))
+  (:use [cljss.AST :only (rule)])
+  (:import cljss.AST.Query))
 
 
 (defmulti consume-properties 
@@ -18,7 +18,7 @@
 (defmethod parse-rule clojure.lang.PersistentVector [[selection & props-sub-rules]]
   (consume-properties props-sub-rules (rule selection)))
 
-(defmethod parse-rule cljss.rule.Query [{body :body :as query}]
+(defmethod parse-rule cljss.AST.Query [{body :body :as query}]
   (consume-properties body (assoc query :body nil)))
 
 
@@ -45,7 +45,7 @@
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties (cons scd rst) node)))
 
-(defmethod consume-properties cljss.rule.Query [[fst scd & rst] node]
+(defmethod consume-properties cljss.AST.Query [[fst scd & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties (cons scd rst) node)))
 

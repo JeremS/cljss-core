@@ -1,7 +1,7 @@
 (ns cljss.core
   (:refer-clojure :exclude (rem))
   (:require [clojure.string :as string]
-            [cljss.rule :as rule]
+            [cljss.AST :as AST]
             [cljss.parse :as parse]
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]

@@ -1,7 +1,7 @@
-(ns cljss.rule-test
+(ns cljss.AST-test
   (:require [cljss.compilation :refer (depth-decorator)]
             [cljss.compilation.styles :as styles])
-  (:use cljss.rule
+  (:use cljss.AST
         midje.sweet
         cljss.protocols
         [cljss.parse :only (parse-rule)]

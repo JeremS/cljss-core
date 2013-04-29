@@ -1,4 +1,4 @@
-(ns cljss.rule
+(ns cljss.AST
   (:use cljss.protocols))
 
 
