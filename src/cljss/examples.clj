@@ -2,9 +2,9 @@
   (:refer-clojure :exclude [rem])
   (:use cljss.core))
 
-(comment 
+(comment
   "to run an example"
-  (apply cljss.core/css exX))
+  (println (apply cljss.core/css exX)))
 
 (def ex1
   [[:section :color :black]
@@ -12,7 +12,7 @@
 
 
 (def ex2
-  [[:#container 
+  [[:#container
       :background-color :black
       (list :width "900px" :height "400px")
       :border ["1px" :solid :white]
@@ -36,55 +36,56 @@
 
 
 (def ex4
-  [[:#container 
+  [[:#container
       :border "1px solid black"
       :padding-left "30px"
-  
+
       [:a :color :green]
-  
-      [:section 
+
+      [:section
         :font-size "1em"
-       
+
         ["p::first-letter"
           :font-size "2em"]]]])
 
 (def ... '(:... :...))
 
-(def ex5 
+(def ex5
   [[:div.class1.class2  ...]
    ["div.class1.class2" ...]])
 
 
 (def ex6
   [
-   [[:div :a] ...] 
-   
+   [[:div :a] ...]
+
    [(c-> :div :a) ...]
-   
+
    [(c-+ :div :a) ...]
 
    [(c-g+ :div :a) ...]
 
-   [[:section (c-> :div (c-+ :p :a)) :span] ...] 
+   [[:section (c-> :div (c-+ :p :a)) :span] ...]
 
-   [[:.class1 (c-> #{:ul :ol} :li)] ...] 
+   [[:.class1 (c-> #{:ul :ol} :li)] ...]
   ])
 
 
-
 (def ex7
-  [[(hover :a) ... ] 
-   [(first-letter :p) ... ] 
-   [(-> (c-> :ul :li) hover (nth-child "even")) ... ]])
+  [[(hover :a) ... ]
+   [(first-letter :p) ... ]
+   [(-> (c-> :ul :li) hover (nth-child "even")) ... ]
+   [(-> :a (att-sel "href=\"http://...\"")) ...]])
+
 
 
 (def ex8
   [[:section ...
      [:div ...]]
-   
+
    [:a ...
      [(-> & hover) ...]]
-   
+
    [:section ...
      [#{& :div} ...]]])
 

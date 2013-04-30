@@ -12,23 +12,25 @@
 (p/import-vars
  [cljss.AST media]
  [cljss.selectors & c-> c-+ c-g+
-  
+
+  att-sel
+
   link visited hover active focus
-  
+
    target lang
-  
+
    enabled disabled checked indeterminate
-  
+
    root
    nth-child     nth-last-child
    nth-of-type   nth-last-of-type
    first-child   last-child
    first-of-type last-of-type
    only-child
-  
+
    css-empty
    css-not
-  
+
    first-line
    first-letter
    before after])

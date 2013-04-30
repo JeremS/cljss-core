@@ -6,10 +6,11 @@
 (declare compile-property-map)
 
 (defn- compile-css [sel inner {start :start-properties
+                                 sep :rules-separator
                                indent :outer-indent}]
   (str indent sel " {" start
-              inner 
-       indent "}"))
+              inner
+       indent "}" sep))
 
 (defn make-indent [n unit]
   (apply str (repeat n unit)))
@@ -17,11 +18,11 @@
 (defrecord Rule [selector properties sub-rules]
   Tree
   (children [_] sub-rules)
-  (assoc-children [this children] 
+  (assoc-children [this children]
     (assoc this :sub-rules children))
-  
+
   CSS
-  (css-compile [this {start :start-properties 
+  (css-compile [this {start :start-properties
                       unit :indent-unit
                       :as style}]
     (let [d (:depth this)
@@ -30,12 +31,12 @@
           new-style (assoc style :outer-indent outer :inner-indent inner)
           compiled-selector (compile-as-selector selector)
           compiled-properties (compile-property-map properties new-style)]
-        
+
     (compile-css compiled-selector compiled-properties new-style))))
 
 
 
-(defn rule 
+(defn rule
   ([selection ]
    (rule selection {}))
   ([selection properties]
@@ -47,11 +48,11 @@
 (defrecord Query [selector body properties sub-rules]
   Tree
   (children [_] sub-rules)
-  (assoc-children [this children] 
+  (assoc-children [this children]
     (assoc this :sub-rules children))
-  
+
   CSS
-  (css-compile [this {start :start-properties 
+  (css-compile [this {start :start-properties
                        unit :indent-unit
                         sep :rules-separator
                       :as style}]
@@ -60,7 +61,7 @@
           inner (make-indent (inc d) outer)
           new-style (assoc style :outer-indent outer :inner-indent inner)
           sel (str "@media " selector)
-          compiled-sub-rules (->> sub-rules 
+          compiled-sub-rules (->> sub-rules
                                  (map #(css-compile % new-style))
                                  (string/join sep ))]
       (compile-css sel (str compiled-sub-rules sep) new-style))))

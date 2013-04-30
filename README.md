@@ -158,8 +158,8 @@ We can also use sets to represent list of selectors have the same properties:
 ````
 
 
-### pseudos
-Pseudo classes and pseudo elements are implemented as functions that you can use
+### pseudos & attribute selectors
+Pseudo classes, pseudo elements and attribute selectors are implemented as functions that you can use
 to enrich a selector. The pseudo class will appear as a suffix to the selector parameter:
 
 ```clojure
@@ -168,6 +168,7 @@ to enrich a selector. The pseudo class will appear as a suffix to the selector p
 [(first-letter :p) ... ] => "a::first-letter { ... }"
 
 [(-> (c-> :ul :li) hover (nth-child "even")) ... ] => "ul > li:hover:nth-child(even)  { ... }"
+[(-> :a (att-sel "href=\"http://...\"")) ...] =>  a[href="http://..."] { ... }
 
 ```
 
