@@ -1,21 +1,15 @@
 (ns cljss.AST-test
-  (:require [cljss.compilation.styles :as styles])
   (:use cljss.AST
         midje.sweet
         cljss.protocols
         [cljss.parse :only (parse-rule)]
-        [cljss.precompilation :only (visit chain-visitors precompile-rule)])
-
-
-(def r1 [:div :bgcolor :blue])
-(def r2 [:a :color :white])
-(def r3 [:p :color :green])
-(def r4 [:strong :color :black])
-
-
-(def r (conj r1 r2 (conj r3 r4)))
-(def p-r (parse-rule r))
-
+        [cljss.precompilation :only (precompile-rule)]
+        [cljss.compilation :only (compile-rules styles)]
+        
+        
+        clojure.tools.trace
+        
+        ))
 
 
 
@@ -27,25 +21,40 @@
 (fact "We can compile a property map"
   (compile-property-map {:color :blue
                          :border ["1px" :solid :black]}
-                        styles/compressed) 
+                        (styles :compressed)) 
   => (some-checker "color: blue;border: 1px solid black;"
                    "border: 1px solid black;color: blue;"))
 
-(comment
-(def default-decorator
-  (chain-decorators depth-decorator 
-                    combine-or-replace-parent-decorator
-                    simplify-selectors-decorator))
 
-(def r (-> [:div :color :blue
-                 :border ["1px" :solid :black]]
-           (parse-rule)
-           (precompile-rule default-decorator)
-           first))
-)
-(future-fact "Test that media queries compile well")
 
-(future-fact "We can compile a rule"
-  (css-compile r styles/compressed)
-  => (some-checker "div {color: blue;border: 1px solid black;}"
+(def r1 [:div {:color :blue
+               :border ["1px" :solid :black]}])
+
+(def r2 (media "screen"
+               [:body :width "1024px"]))
+
+(def r3 [#{:div :section}
+         :background-color :blue
+         :width "800px"
+         [:p :font-size "12pt"
+          (media "(max-width: 500px)"
+                 :font-size "5pt"
+                 [:a :color :green])]
+        (media "(max-width: 400px)"
+               :width "400px")])
+
+(facts "We can compile an ast"
+  (fact "We can compile a simple rule"
+    (->> r1 parse-rule precompile-rule (compile-rules (:compressed styles)))
+    => (some-checker "div {color: blue;border: 1px solid black;}"
                    "div {border: 1px solid black;color: blue;}"))
+  
+  (fact "We can compile a media query"
+    (->> r2 parse-rule precompile-rule (compile-rules (:compressed styles)))
+    => #"\@media screen \{body \{width: 1024px;\}\}")
+  
+  ; this test might fail because the order of the properties, or the "set" like selector might change
+  ; because of the use of maps and sets under the covers.
+  (fact "We can compile a mix of everything"
+    (->> r3 parse-rule precompile-rule (compile-rules (:compressed styles)))
+    => (some-checker "div, section {width: 800px;background-color: blue;}section p, div p {font-size: 12pt;}@media (max-width: 500px) {div p a, section p a {color: green;}section p, div p {font-size: 5pt;}}@media (max-width: 400px) {div, section {width: 400px;}}")))

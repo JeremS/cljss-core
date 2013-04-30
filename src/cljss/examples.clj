@@ -87,3 +87,14 @@
    
    [:section ...
      [#{& :div} ...]]])
+
+(def ex9
+  [[#{:div :section}
+         :background-color :blue
+         :width "800px"
+         [:p :font-size "12pt"
+          (media "(max-width: 500px)"
+                 :font-size "5pt"
+                 [:a :color :green])]
+        (media "(max-width: 400px)"
+               :width "400px")]])

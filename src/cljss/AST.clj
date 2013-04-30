@@ -1,9 +1,18 @@
 (ns cljss.AST
+  (:require [clojure.string :as string])
   (:use cljss.protocols))
 
 
 (declare compile-property-map)
 
+(defn- compile-css [sel inner {start :start-properties
+                               indent :outer-indent}]
+  (str indent sel " {" start
+              inner 
+       indent "}"))
+
+(defn make-indent [n unit]
+  (apply str (repeat n unit)))
 
 (defrecord Rule [selector properties sub-rules]
   Tree
@@ -13,18 +22,16 @@
   
   CSS
   (css-compile [this {start :start-properties 
-                      i :indent 
+                      unit :indent-unit
                       :as style}]
     (let [d (:depth this)
-          general-indent      (apply str (repeat d i))
-          compiled-selector   (compile-as-selector selector)
-          compiled-properties (compile-property-map properties 
-                                                    (assoc style 
-                                                      :general-indent general-indent))]
+          outer (make-indent d unit)
+          inner (make-indent (inc d) unit)
+          new-style (assoc style :outer-indent outer :inner-indent inner)
+          compiled-selector (compile-as-selector selector)
+          compiled-properties (compile-property-map properties new-style)]
         
-    (str general-indent compiled-selector " {" start
-         compiled-properties 
-         general-indent "}"))))
+    (compile-css compiled-selector compiled-properties new-style))))
 
 
 
@@ -44,11 +51,19 @@
     (assoc this :sub-rules children))
   
   CSS
-  (css-compile [this {sep :rules-separator :as style}]
-    (let [d (or (:depth this) 0)]
-      (str "@media " selector " {"
-             (map #(css-compile % (assoc style :depth d)) body)
-           \} sep))))
+  (css-compile [this {start :start-properties 
+                       unit :indent-unit
+                        sep :rules-separator
+                      :as style}]
+    (let [d (:depth this)
+          outer (make-indent d unit)
+          inner (make-indent (inc d) outer)
+          new-style (assoc style :outer-indent outer :inner-indent inner)
+          sel (str "@media " selector)
+          compiled-sub-rules (->> sub-rules 
+                                 (map #(css-compile % new-style))
+                                 (string/join sep ))]
+      (compile-css sel (str compiled-sub-rules sep) new-style))))
 
 (defn media [sel & body]
   (Query. sel (vec body) {} []))
@@ -62,12 +77,11 @@
 
 
 (defn compile-property-map [m style]
-  (let [{i  :indent
-         gi :general-indent 
-         sep :property-separator} style]
+  (let [{inner :inner-indent
+           sep :property-separator} style]
     (->> m
          (map compile-property )
-         (mapcat #(list gi i % sep ))
+         (mapcat #(list inner % sep ))
          (apply str))))
 
 

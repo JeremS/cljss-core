@@ -258,6 +258,52 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  section, div { ... }
  ```
 
+### Media queries
+There is now a support for media queries similar the one in sass.
+
+```clojure
+(css [#{:div :section}
+         :background-color :blue
+         :width "800px"
+         
+         [:p 
+           :font-size "12pt"
+           
+           (media "(max-width: 500px)"
+                 :font-size "5pt"
+                 [:a :color :green])]
+                 
+        (media "(max-width: 400px)"
+               :width "400px")])
+````
+
+generates:
+
+```css
+div, section {
+  width: 800px;
+  background-color: blue;
+}
+  section p, div p {
+    font-size: 12pt;
+  }
+    @media (max-width: 500px) {
+      div p a, section p a {
+        color: green;
+      }
+      section p, div p {
+        font-size: 5pt;
+      }
+    }
+  @media (max-width: 400px) {
+    div, section {
+      width: 400px;
+    }
+  }
+
+```
+
+
 You can find the examples used this README in the namespace `cljss.examples`.
 
 ## Thanks

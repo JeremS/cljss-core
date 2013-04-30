@@ -1,5 +1,6 @@
 (ns cljss.compilation
-  (:require [clojure.string :as string])
+  (:require cljss.AST
+            [clojure.string :as string])
   (:use cljss.protocols
         cljss.compilation.utils))
 
@@ -38,7 +39,25 @@
 
 
 
-(defn compile-css [{sep :rules-separator :as style} rules]
+(defn compile-rule [style rule]
+  (css-compile rule style))
+
+(defn compile-rules [{sep :rules-separator :as style} rules]
   (->> rules
-      (map #(css-compile % style))
-      (string/join sep )))
+       (map (partial compile-rule style))
+       (string/join sep )))
+
+
+
+(def styles 
+  {:compressed
+   {:indent-unit ""
+    :property-separator ""
+    :rules-separator ""
+    :start-properties ""}
+   
+   :classic 
+   {:indent-unit "  "
+    :property-separator \newline
+    :rules-separator \newline
+    :start-properties \newline}})

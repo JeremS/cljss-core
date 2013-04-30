@@ -23,7 +23,7 @@
 
 ; protocols about compilation
 (defprotocol CSS
-  (css-compile [this opts]
+  (css-compile [this style]
     "Compile as a css element."))
 
 (defprotocol CssSelector

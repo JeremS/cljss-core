@@ -5,12 +5,12 @@
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]
             [cljss.compilation :as compi]
-            [cljss.compilation.styles :as styles]
             [potemkin :as p])
   (:use cljss.protocols))
 
 
 (p/import-vars
+ [cljss.AST media]
  [cljss.selectors & c-> c-+ c-g+
   
   link visited hover active focus
@@ -40,10 +40,10 @@
   (->> rules
        parse/parse-rules
        pre/precompile-rules
-       (compi/compile-css style)))
+       (compi/compile-rules style)))
 
 (defn compressed-css [& rules]
-  (apply css-with-style styles/compressed rules))
+  (apply css-with-style (:compressed compi/styles) rules))
 
 (defn css [& rules]
-  (apply css-with-style styles/classic rules))
+  (apply css-with-style (:classic compi/styles) rules))

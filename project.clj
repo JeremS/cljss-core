@@ -1,4 +1,4 @@
-(defproject cljss "0.1.0"
+(defproject cljss "0.2.0"
   :description "DSL to write css rule in clojure."
   
   :url ""
