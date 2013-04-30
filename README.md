@@ -259,7 +259,7 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  ```
 
 ### Media queries
-There is now a support for media queries similar the one in sass.
+There is now a support for media queries similar the one in [sass](http://sass-lang.com).
 
 ```clojure
 (css [#{:div :section}
@@ -315,10 +315,13 @@ writing this code with Ligh Table !
 
 ## Todo 
  - attibute selectors
- - media queries
+
+## Changelog 0.2.0
+ - the support for media queries has been added.
+
 
 ## License
 
-Copyright © 2013 Jérémy Schoffen. All rights reserved.
+Copyright © 2013 Jérémy Schoffen.
 
 Distributed under the Eclipse Public License, the same as Clojure.
