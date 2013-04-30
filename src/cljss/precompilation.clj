@@ -1,12 +1,7 @@
 (ns cljss.precompilation
-  (:require cljss.selectors.basic
-            cljss.selectors.combinators
-            [cljss.selectors.parent :refer [&]]
-            [cljss.AST :as ast])
-  (:use cljss.protocols
-        clojure.tools.trace
-        [clojure.pprint :only (pprint)]
-        [cljss.selectors.combination :only (combine)])
+  (:require [cljss.selectors :refer (& combine)]
+            [cljss.AST :refer (rule)])
+  (:use cljss.protocols)
   (:import [cljss.AST Rule Query]))
 
 (defn- uuid [] (java.util.UUID/randomUUID))
@@ -70,6 +65,8 @@
     `(defmethod ~mm-name ~v-type ~args ~@body)))
 
 
+
+
 (defvisitor assoc-depth 0)
 
 (defvisit assoc-depth :default [node depth]
@@ -77,23 +74,25 @@
         (inc depth)))
 
 
-(defn- combine-or-replace [sel parent-sel]
-  (if-not (parent? sel)
-    (combine parent-sel sel)
-    (replace-parent sel parent-sel)))
 
 (defvisitor combine-or-replace-parent [])
 
-(defvisit combine-or-replace-parent cljss.AST.Rule 
+(defvisit combine-or-replace-parent :default
+  [node parent-sel]
+  (list node parent-sel))
+
+
+(defn- combine-or-replace [sel parent-sel]
+  (if (parent? sel)
+    (replace-parent sel parent-sel)
+    (combine parent-sel sel)))
+
+(defvisit combine-or-replace-parent Rule 
   [{sel :selector :as rule} 
    parent-sel]
   (let [new-sel (combine-or-replace sel parent-sel)]
     (list (assoc rule :selector new-sel)
           new-sel)))
-
-(defvisit combine-or-replace-parent :default
-  [node parent-sel]
-  (list node parent-sel))
 
 
 
@@ -103,7 +102,7 @@
   [node env]
   (list node env))
 
-(defvisit simplify-selector cljss.AST.Rule
+(defvisit simplify-selector Rule
   [{sel :selector :as rule} env]
   (list (assoc rule 
           :selector (simplify sel))
@@ -112,13 +111,13 @@
 
 (defvisitor make-rule-for-media-properties nil)
 
-(defvisit make-rule-for-media-properties cljss.AST.Rule
+(defvisit make-rule-for-media-properties Rule
   [{sel :selector :as rule} parent-selector]
   (list rule sel))
 
-(defvisit make-rule-for-media-properties cljss.AST.Query
+(defvisit make-rule-for-media-properties Query
  [{props :properties sr :sub-rules :as query} parent-sel]
-  (let [new-rule (ast/rule & props)
+  (let [new-rule (rule & props)
         new-sub-rules (conj sr new-rule)]
     (list (assoc query 
             :sub-rules new-sub-rules
@@ -150,3 +149,6 @@
   (-> rule
       (visit default-visitor)
       (flatten-AST)))
+
+(defn precompile-rules [rules]
+  (mapcat precompile-rule rules))

@@ -46,7 +46,7 @@
   CSS
   (css-compile [this {sep :rules-separator :as style}]
     (let [d (or (:depth this) 0)]
-      (str selector " {"
+      (str "@media " selector " {"
              (map #(css-compile % (assoc style :depth d)) body)
            \} sep))))
 

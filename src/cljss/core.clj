@@ -1,24 +1,19 @@
 (ns cljss.core
   (:refer-clojure :exclude (rem))
-  (:require [clojure.string :as string]
-            [cljss.AST :as AST]
+  (:require [cljss.AST]
             [cljss.parse :as parse]
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]
-            [cljss.selectors parent pseudos]
-            [cljss.compilation :as compilation]
+            [cljss.compilation :as compi]
             [cljss.compilation.styles :as styles]
             [potemkin :as p])
   (:use cljss.protocols))
 
 
 (p/import-vars
- [cljss.selectors.parent &]
- 
- [cljss.selectors.combinators c-> c-+ c-g+ ]
- 
- [cljss.selectors.pseudos
-   link visited hover active focus
+ [cljss.selectors & c-> c-+ c-g+
+  
+  link visited hover active focus
   
    target lang
   
@@ -38,23 +33,14 @@
    first-letter
    before after])
 
-(defn- parse-rules [rules]
-  (map parse/parse-rule rules))
-
-(defn- precompile-rules [rules]
-  (mapcat pre/precompile-rule rules))
 
 
-(defn compile-css [rules {sep :rules-separator :as style}]
-  (->> rules
-      (map #(css-compile % style))
-      (string/join sep )))
 
 (defn css-with-style [style & rules]
-  (-> rules
-       parse-rules
-       precompile-rules
-       (compile-css style)))
+  (->> rules
+       parse/parse-rules
+       pre/precompile-rules
+       (compi/compile-css style)))
 
 (defn compressed-css [& rules]
   (apply css-with-style styles/compressed rules))

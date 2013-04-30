@@ -6,7 +6,6 @@
   "to run an example"
   (apply cljss.core/css exX))
 
-
 (def ex1
   [[:section :color :black]
    [:div :color :white]])

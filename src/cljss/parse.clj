@@ -51,5 +51,5 @@
 
 
 
-(defn parse [rules]
+(defn parse-rules [rules]
   (map parse-rule rules))

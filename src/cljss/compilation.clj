@@ -38,4 +38,7 @@
 
 
 
-
+(defn compile-css [{sep :rules-separator :as style} rules]
+  (->> rules
+      (map #(css-compile % style))
+      (string/join sep )))

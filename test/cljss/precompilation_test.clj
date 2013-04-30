@@ -1,16 +1,9 @@
 (ns cljss.precompilation-test
   (:use cljss.precompilation
         cljss.protocols
-        cljss.selectors.combination
-        cljss.selectors.pseudos
-        cljss.selectors.parent
-        
-        [clojure.pprint :only (pprint)]
-        
         [cljss.AST :only (media)]
         [cljss.parse :only (parse-rule)]
-        [cljss.selectors.combination :only (combine)]
-        [cljss.selectors.combinators :only (c-g+)]
+        [cljss.selectors :only (combine c-g+ & hover)]
         [midje.sweet :only (fact facts future-fact)]))
 
 (def r1 [:div :bgcolor :blue])
