@@ -306,7 +306,7 @@ div, section {
 You can find the examples used this README in the namespace `cljss.examples`.
 
 ## Thanks
-Obivousily thanks to [@paraseba](https://github.com/paraseba) for the ideas
+Obviousily thanks to [@paraseba](https://github.com/paraseba) for the ideas
 I used from [css-gen](https://github.com/paraseba/cssgen/tree/0.3.0).
 
 A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
