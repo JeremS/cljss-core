@@ -1,17 +1,18 @@
-(ns cljss.selectors.combination
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.combination
   (:use cljss.selectors.types))
 
 
 
-(defmulti combine 
+(defmulti combine
   "Combine two selector in a way that sel1 is the parent selector
   and sel2 is the child selector. This function is used determine
   selectors when we deal with nested rules.
-  
+
   For instance, when we flatten the css rule:
   [:div :color :blue
    [:a :color :red]]
-  
+
   we get the two rules:
   [:div :color :blue]
   [(combine :div :a) :color :red]"

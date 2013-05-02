@@ -1,4 +1,5 @@
-(ns cljss.selectors.types
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.types
   (:use cljss.protocols))
 
 (def neutral-t     ::neutral)
@@ -13,6 +14,6 @@
 
 
 (defn selector-type [sel]
-  (if (or (neutral? sel) (nil? sel)) 
+  (if (or (neutral? sel) (nil? sel))
     neutral-t
     (type sel)))

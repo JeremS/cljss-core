@@ -1,4 +1,5 @@
-(ns cljss.selectors.pseudos-test
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.pseudos-test
   (:use cljss.selectors.pseudos
         cljss.selectors.basic
         cljss.selectors.combinators
@@ -21,7 +22,7 @@
                                                                      "a:hover, #id:hover"))
 
 (fact "Simplify a pseudo classed element gives the pseudo class of the simplifiction"
-  (-> [:section #{:div :p} :span] hover simplify) 
+  (-> [:section #{:div :p} :span] hover simplify)
   => (-> [:section #{:div :p} :span] simplify hover))
 
 (fact "We can test for parent use inside pseudos"

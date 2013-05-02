@@ -1,4 +1,5 @@
-(ns cljss.AST
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.AST
   (:require [clojure.string :as string])
   (:use cljss.protocols))
 

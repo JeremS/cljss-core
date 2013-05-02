@@ -1,4 +1,5 @@
-(ns cljss.core
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.core
   (:refer-clojure :exclude (rem))
   (:require [cljss.AST]
             [cljss.parse :as parse]

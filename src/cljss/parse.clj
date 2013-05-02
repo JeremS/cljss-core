@@ -1,15 +1,16 @@
-(ns cljss.parse
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.parse
   (:use [cljss.AST :only (rule)])
   (:import cljss.AST.Query))
 
 
-(defmulti consume-properties 
-  "When parsing a rule, consume property 
+(defmulti consume-properties
+  "When parsing a rule, consume property
   declarations and sub rule declarations
   to add them to the rule resulted of the parsing."
   (fn [s rule] (type (first s))))
 
-(defmulti parse-rule 
+(defmulti parse-rule
   "Parse a rule expressed with a vector or a media query and returns
   a tree represntation."
   type)

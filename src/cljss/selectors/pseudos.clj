@@ -1,4 +1,5 @@
-(ns cljss.selectors.pseudos
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.pseudos
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types))
@@ -9,22 +10,22 @@
 (defrecord Pseudo [selector name args]
   Neutral
   (neutral? [_] false)
-  
+
   SimplifyAble
   (simplify [_]
    (pseudo (simplify selector) name args))
-  
+
   Parent
   (parent? [_] (parent? selector))
-  
+
   (replace-parent [_ replacement]
-    (pseudo (replace-parent selector replacement) 
-            name 
+    (pseudo (replace-parent selector replacement)
+            name
             args))
-  
+
   CssSelector
   (compile-as-selector [_]
-   (str (compile-as-selector selector) name 
+   (str (compile-as-selector selector) name
         (if-not (seq args)
           ""
           (str \( (string/join \, args) \))))))
@@ -32,18 +33,18 @@
 
 (derive Pseudo simple-t)
 
-(defn pseudo 
-  ([selector name] 
+(defn pseudo
+  ([selector name]
    (pseudo selector name nil))
   ([selector name args]
-   (cond 
-    (isa? (selector-type selector) set-t) 
+   (cond
+    (isa? (selector-type selector) set-t)
       (set (map #(pseudo % name args) selector))
-    
+
     (isa? (selector-type selector) neutral-t)
       []
-    
-    :else 
+
+    :else
       (Pseudo. selector name args))))
 
 
@@ -71,20 +72,20 @@
               `(defpseudo ~n "::"))))
 
 
-(defpseudo-classes 
+(defpseudo-classes
   ;dynamic pseudo classes
-  link visited ; link 
+  link visited ; link
   hover active focus ; user action
-  
+
   target
-  
+
   lang
-  
+
   ;ui element states pseudo classes
   enabled disabled
   checked
   indeterminate
-  
+
   ;structural pseudo classes
   root
   nth-child     nth-last-child

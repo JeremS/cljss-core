@@ -1,4 +1,5 @@
-(ns cljss.selectors.basic
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.basic
   (:require [cljss.compilation.utils :as utils]
             [clojure.string :as string])
   (:use cljss.protocols
@@ -7,14 +8,14 @@
 (extend-type nil
   Neutral
   (neutral? [this] true)
-  
+
   SimplifyAble
   (simplify [this] nil)
-  
+
   Parent
   (parent? [this] false)
   (replace-parent [this replacement] this)
-  
+
   CssSelector
   (compile-as-selector [this] ""))
 
@@ -22,15 +23,15 @@
 (extend-type String
   Neutral
   (neutral? [this] (-> this seq not))
-  
+
   SimplifyAble
   (simplify [this]
     (if (neutral? this) nil this))
-  
+
   Parent
   (parent? [this] false)
   (replace-parent [this replacement] this)
-  
+
   CssSelector
   (compile-as-selector [this] (string/trim this)))
 
@@ -40,14 +41,14 @@
 (extend-type clojure.lang.Keyword
   Neutral
   (neutral? [_] false)
-  
+
   SimplifyAble
   (simplify [this] this)
-  
+
   Parent
   (parent? [this] false)
   (replace-parent [this replacement] this)
-  
+
   CssSelector
   (compile-as-selector [this] (name this)))
 

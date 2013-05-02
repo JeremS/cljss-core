@@ -1,4 +1,5 @@
-(ns cljss.selectors.combinators
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.combinators
   (:require [cljss.compilation.utils :as utils])
   (:use cljss.protocols
         cljss.selectors.types
@@ -14,7 +15,7 @@
 (extend-type clojure.lang.PersistentVector
   Neutral
   (neutral? [this] (-> this seq not))
-  
+
   SimplifyAble
   (simplify [this]
     (if (neutral? this) nil
@@ -22,8 +23,8 @@
                       (keep simplify)
                       (remove neutral?)
                       (vec))] ; simplify internals
-        (if-not (contains-set? this)            ; combine left to right if possible 
-          this 
+        (if-not (contains-set? this)            ; combine left to right if possible
+          this
           (reduce #(combine %1 %2) this)))))
 
   Parent
@@ -32,7 +33,7 @@
     (->> this
          (map #(replace-parent % replacement))
          (into [])))
-  
+
   CssSelector
   (compile-as-selector [this]
     (utils/compile-seq-then-join this compile-as-selector \space)))
@@ -47,7 +48,7 @@
 (extend-type clojure.lang.IPersistentSet
   Neutral
   (neutral? [this] (-> this seq not))
-  
+
   SimplifyAble
   (simplify [this]
    (if (neutral? this) nil
@@ -57,15 +58,15 @@
          (let [simples (remove #(-> % selector-type (isa? set-t)) this)
                sets (apply concat (filter #(-> % selector-type (isa? set-t)) this))]
            (into (set simples) sets))))))
-  
+
   Parent
   (parent? [this] (some parent? this))
-  
+
   (replace-parent [this replacement]
     (->> this
          (map #(replace-parent % replacement))
          (into #{})))
-  
+
   CssSelector
   (compile-as-selector [this]
     (utils/compile-seq-then-join this compile-as-selector ", ")))
@@ -79,13 +80,13 @@
         c-sym (str \space c-sym \space)
         sels-sym 'sels]
   `(do
-     
+
      (declare ~c-cstr)
-     
+
      (defrecord ~c-name [~sels-sym]
        Neutral
        (neutral? [_#] (-> ~sels-sym seq not))
-       
+
        SimplifyAble
        (simplify [_#]
          (let [simplification# (simplify ~sels-sym)]
@@ -94,23 +95,23 @@
              (->> simplification#
                   (map #(apply ~c-cstr %))
                   (into #{})))))
-       
+
        Parent
        (parent? [_#] (some parent? ~sels-sym))
-       
+
        (replace-parent [_# replacement#]
          (~cstr-sym (replace-parent ~sels-sym replacement#)))
-       
+
        CssSelector
        (compile-as-selector [_#]
          (utils/compile-seq-then-join ~sels-sym compile-as-selector ~c-sym)))
-     
+
      (defn ~c-cstr [& sels#]
        (case (count sels#)
          0 []
          1 (first sels#)
          (~cstr-sym (vec sels#))))
-     
+
      (derive ~c-name combination-t))))
 
 

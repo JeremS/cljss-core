@@ -1,15 +1,11 @@
-(ns cljss.AST-test
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.AST-test
   (:use cljss.AST
         midje.sweet
         cljss.protocols
         [cljss.parse :only (parse-rule)]
         [cljss.precompilation :only (precompile-rule)]
-        [cljss.compilation :only (compile-rules styles)]
-        
-        
-        clojure.tools.trace
-        
-        ))
+        [cljss.compilation :only (compile-rules styles)]))
 
 
 
@@ -21,7 +17,7 @@
 (fact "We can compile a property map"
   (compile-property-map {:color :blue
                          :border ["1px" :solid :black]}
-                        (styles :compressed)) 
+                        (styles :compressed))
   => (some-checker "color: blue;border: 1px solid black;"
                    "border: 1px solid black;color: blue;"))
 
@@ -48,11 +44,11 @@
     (->> r1 parse-rule precompile-rule (compile-rules (:compressed styles)))
     => (some-checker "div {color: blue;border: 1px solid black;}"
                    "div {border: 1px solid black;color: blue;}"))
-  
+
   (fact "We can compile a media query"
     (->> r2 parse-rule precompile-rule (compile-rules (:compressed styles)))
     => #"\@media screen \{body \{width: 1024px;\}\}")
-  
+
   ; this test might fail because the order of the properties, or the "set" like selector might change
   ; because of the use of maps and sets under the covers.
   (fact "We can compile a mix of everything"

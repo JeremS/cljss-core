@@ -1,4 +1,5 @@
-(ns cljss.precompilation-test
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.precompilation-test
   (:use cljss.precompilation
         cljss.protocols
         [cljss.AST :only (media)]
@@ -30,7 +31,7 @@
         depth3 (-> visited :sub-rules first :sub-rules first :depth)
         depth4 (-> visited :sub-rules second :depth)
         depth5 (-> visited :sub-rules second :sub-rules first :depth)]
-    
+
     depth1 => 0
     depth2 => 1
     depth3 => 2
@@ -71,22 +72,22 @@
         s4 (-> visited :sub-rules second :selector)
         s5 (-> visited :sub-rules second :sub-rules first :selector)
         s6 (-> visited :sub-rules first :sub-rules second :selector)
-        
-              
+
+
         depth1 (:depth visited)
         depth2 (-> visited :sub-rules first :depth)
         depth3 (-> visited :sub-rules first :sub-rules first :depth)
         depth4 (-> visited :sub-rules second :depth)
         depth5 (-> visited :sub-rules second :sub-rules first :depth)
         depth6 (-> visited :sub-rules first :sub-rules second :depth)]
-          
+
     s1 => s1-expected
     s2 => s2-expected
     s3 => s3-expected
     s4 => s4-expected
     s5 => s5-expected
     s6 => :div
-          
+
     depth1 => 0
     depth2 => 1
     depth3 => 2
@@ -96,28 +97,28 @@
 
 
 (facts "We can replace the parent selector in nested rules"
-  
+
   (fact "Parent selector can be used in pseudo classes"
-    (let [a-rule [#{:section :div} 
+    (let [a-rule [#{:section :div}
                   :color :blue
                   [(-> & hover) :color :white]]
-               
-          visited (-> a-rule 
-                        parse-rule 
+
+          visited (-> a-rule
+                        parse-rule
                         (visit combine-or-replace-parent))
           s2 (-> visited :sub-rules first :selector)]
-      
-      s2 => #{(-> :section hover) 
+
+      s2 => #{(-> :section hover)
               (-> :div hover)}))
-         
+
   (fact "The parent selector can be used inside a set"
     (let [r [:section :color :blue
              [#{& :div} :colore :white]]
           visited (-> r parse-rule (visit combine-or-replace-parent))
           s2 (-> visited :sub-rules first :selector)]
-      
+
       s2 => #{:section :div}))
-         
+
   (fact "The parent selector can be used inside combined selectors"
     (let [r [:section :color :blue
              [[:a #{& :div}] :colore :white]]
@@ -133,5 +134,5 @@
 (def p-r4 (parse-rule r4))
 
 (fact "flatten-AST flattens a rule and its sub rules"
-  (flatten-AST p-r) 
+  (flatten-AST p-r)
   => (list p-r1 p-r2 p-r3 p-r4))

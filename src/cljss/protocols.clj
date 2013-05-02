@@ -1,4 +1,5 @@
-(ns cljss.protocols)
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.protocols)
 
 (defprotocol Tree
   (children [this]
@@ -8,7 +9,7 @@
 
 ; Protocols specific to selectors
 (defprotocol Neutral
-  (neutral? [this] 
+  (neutral? [this]
     "True if the selector is a neutral element in a composition of selectors."))
 
 (defprotocol SimplifyAble

@@ -1,4 +1,5 @@
-(ns cljss.selectors.parent-test
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors.parent-test
   (:use cljss.selectors.parent
         cljss.protocols
         midje.sweet))

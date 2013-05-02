@@ -1,4 +1,5 @@
-(ns cljss.compilation.utils
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.compilation.utils
   (:require [clojure.string :as string]))
 
 (defn compile-seq-then-join

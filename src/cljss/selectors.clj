@@ -1,4 +1,5 @@
-(ns cljss.selectors
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.selectors
   (:refer-clojure :exclude (rem))
   (:require [cljss.selectors
                basic

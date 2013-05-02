@@ -1,4 +1,5 @@
-(ns cljss.precompilation
+(ns ^{:author "Jeremy Schoffen."}
+  cljss.precompilation
   (:require [cljss.selectors :refer (& combine)]
             [cljss.AST :refer (rule)])
   (:use cljss.protocols)
@@ -11,7 +12,7 @@
 (defn make-visitor
   ([f] (make-visitor {} f))
   ([env f]
-   (let [id (uuid) 
+   (let [id (uuid)
          env {id env}]
      (Visitor. env
       (fn [v general-env]
@@ -26,7 +27,7 @@
     node
     (let [[new-node new-env] (f node env)
           visitor (assoc visitor :env new-env)
-          new-children (mapv #(visit % visitor) 
+          new-children (mapv #(visit % visitor)
                             (children new-node))]
       (assoc-children new-node new-children))))
 
@@ -90,15 +91,15 @@
     (replace-parent sel parent-sel)
     (combine parent-sel sel)))
 
-(defvisit combine-or-replace-parent Rule 
-  [{sel :selector :as rule} 
+(defvisit combine-or-replace-parent Rule
+  [{sel :selector :as rule}
    parent-sel]
   (let [new-sel (combine-or-replace sel parent-sel)]
     (list (assoc rule :selector new-sel)
           new-sel)))
 
 
-;; Symplify, or compute the definite selector 
+;; Symplify, or compute the definite selector
 ;; of a rule and its sub rules recursilely
 (defvisitor simplify-selector nil)
 
@@ -108,14 +109,14 @@
 
 (defvisit simplify-selector Rule
   [{sel :selector :as rule} env]
-  (list (assoc rule 
+  (list (assoc rule
           :selector (simplify sel))
         env))
 
 
 ;; In the case of a media query with properties
-;; remove the properties of the media query 
-;; and create a rule with those properties 
+;; remove the properties of the media query
+;; and create a rule with those properties
 ;; and the parent selecor as selector.
 (defvisitor make-rule-for-media-properties nil)
 
@@ -128,7 +129,7 @@
   (if (seq props)
     (let [new-rule (rule & props)
           new-sub-rules (conj sr new-rule)]
-      (list (assoc query 
+      (list (assoc query
               :sub-rules new-sub-rules
               :properties nil)
             parent-sel))
@@ -136,7 +137,7 @@
 
 
 (def default-visitor
-  "The visitor used to precompile an AST, representation 
+  "The visitor used to precompile an AST, representation
   of a rule and its sub rules."
   (chain-visitors
      combine-or-replace-parent
@@ -148,16 +149,16 @@
   "Flattens a rule to ready for compilation."
   type)
 
-(defmethod flatten-AST Rule 
+(defmethod flatten-AST Rule
   [{sr :sub-rules :as rule}]
   (cons (assoc rule :sub-rules '())
         (mapcat flatten-AST sr)))
 
 (defmethod flatten-AST Query [{sr :sub-rules :as query}]
-  (list (assoc query 
+  (list (assoc query
           :sub-rules (mapcat flatten-AST sr))))
 
-(defn precompile-rule 
+(defn precompile-rule
   "Applies the defaut visitor to a rule then flattens it."
   [rule]
   (-> rule
