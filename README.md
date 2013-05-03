@@ -313,7 +313,6 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - Fix line spacing of the output.
  - List should behave more like in Hiccup
    - enrich parse-rule
      - when it parses a list, concat it to the rest of the rules to parse
@@ -325,6 +324,8 @@ writing this code with Ligh Table !
 ### 0.2.1
  - FIX: If a rule contains a list (or lazy seq) any sub rule declared
  here is now correctly parsed.
+ - FIX: The double newline in the output is fixed.
+
 
  - ADDED: Inline css in rules as a string.
  - ADDED: Compact style.

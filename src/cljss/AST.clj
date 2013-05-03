@@ -11,7 +11,7 @@
                                indent :outer-indent}]
   (str indent sel " {" start
               inner
-       indent "}" sep))
+       indent "}"))
 
 (defn make-indent [n unit]
   (apply str (repeat n unit)))
