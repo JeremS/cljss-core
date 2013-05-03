@@ -48,5 +48,9 @@
 (defn compressed-css [& rules]
   (apply css-with-style (:compressed compi/styles) rules))
 
+(defn compact-css [& rules]
+  (apply css-with-style (:compact compi/styles) rules))
+
+
 (defn css [& rules]
   (apply css-with-style (:classic compi/styles) rules))

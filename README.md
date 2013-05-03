@@ -325,7 +325,9 @@ writing this code with Ligh Table !
 ### 0.2.1
  - FIX: If a rule contains a list (or lazy seq) any sub rule declared
  here is now correctly parsed.
+
  - ADDED: Inline css in rules as a string.
+ - ADDED: Compact style.
 
 ### 0.2.0
  - ADDED: support for media queries.

@@ -56,6 +56,12 @@
     :rules-separator ""
     :start-properties ""}
 
+   :compact
+   {:indent-unit ""
+    :property-separator ""
+    :rules-separator \newline
+    :start-properties ""}
+
    :classic
    {:indent-unit "  "
     :property-separator \newline
