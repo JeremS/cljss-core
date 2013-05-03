@@ -313,6 +313,15 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
+ - List should behave more like in Hiccup
+   - Change the behaviour of the parsing when it has to parse a
+   list. Instead of directly associng, it should consume the list
+   as it was not here.
+   - enrich parse-rule
+     - when it parses a string, leaves it untouched, considered as
+     as inline css.
+     - when it parses a list, concat it to the rest of the rules to parse
+     so that the list as no particular semantic.
  - syntax checking / error reporting ?
  - ClojureScript version ?
 
