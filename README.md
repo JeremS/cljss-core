@@ -318,6 +318,7 @@ writing this code with Ligh Table !
 
 ## Changelog
 ### 0.2.1
+ - FIX: Numbers can now be used as properties value.
  - FIX: Cljss behaves like hiccup in presence of lists or lazy seq.
  It basically functions as if the parenthesis weren't there.
  - FIX: The double newline in the output is fixed.

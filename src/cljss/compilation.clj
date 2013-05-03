@@ -27,6 +27,9 @@
   String
   (compile-as-property-value [this] this)
 
+  Number
+  (compile-as-property-value [this] (str this))
+
   clojure.lang.Keyword
   (compile-as-property-value [this] (name this))
 
