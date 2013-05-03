@@ -124,3 +124,14 @@
       (parse-rule (media "screen"
                          [:a :display :block]))
       => (contains {:sub-rules [(rule :a {:display :block} [])]}))))
+
+(fact "We can parse a bunch of rules"
+  (parse-rules [[:a :a :a]
+                (list [:b :b :b]
+                      [:c :c :c])
+                [:d :d :d]])
+  => [(rule :a {:a :a})
+      (rule :b {:b :b})
+      (rule :c {:c :c})
+      (rule :d {:d :d})])
+

@@ -28,6 +28,15 @@
   (consume-properties body (assoc query :body nil)))
 
 
+;; Parsing of a list of rules
+
+(defmethod parse-rule clojure.lang.PersistentList [rules]
+  (map parse-rule rules))
+
+(defmethod parse-rule clojure.lang.LazySeq [rules]
+  (map parse-rule rules))
+
+
 ;; A string is considered inline css
 
 (defmethod parse-rule String [s] (inline-css s))
@@ -66,4 +75,8 @@
 
 
 (defn parse-rules [rules]
-  (map parse-rule rules))
+  (->> rules
+       (map parse-rule)
+       flatten))
+
+

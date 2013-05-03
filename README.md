@@ -313,17 +313,13 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - List should behave more like in Hiccup
-   - enrich parse-rule
-     - when it parses a list, concat it to the rest of the rules to parse
-     so that the list as no particular semantic.
- - syntax checking / error reporting ?
  - ClojureScript version ?
+ - syntax checking / error reporting ?
 
 ## Changelog
 ### 0.2.1
- - FIX: If a rule contains a list (or lazy seq) any sub rule declared
- here is now correctly parsed.
+ - FIX: Cljss behaves like hiccup in presence of lists or lazy seq.
+ It basically functions as if the parenthesis weren't there.
  - FIX: The double newline in the output is fixed.
 
 
