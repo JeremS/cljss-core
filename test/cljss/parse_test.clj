@@ -54,10 +54,17 @@
                                  :color :blue
                                  :width "10px"}}))
 
-    (fact "It allows for sub rules"
-      (parse-rule [:div :border ["1px" :solid :black]
-                    [:a :display :block]])
-      => (contains {:sub-rules [(rule :a {:display :block} [])]})))
+    (facts "It allows for sub rules"
+      (fact "directly in the vector"
+        (parse-rule [:div :border ["1px" :solid :black]
+                     [:a :display :block]])
+        => (contains {:sub-rules [(rule :a {:display :block} [])]}))
+
+      (fact "or in a list thats in the vector"
+        (parse-rule [:div (list :border ["1px" :solid :black]
+                                [:a :display :block])])
+        => (contains {:properties {:border ["1px" :solid :black]}
+                      :sub-rules [(rule :a {:display :block} [])]}))))
 
 
 

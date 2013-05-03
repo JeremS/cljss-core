@@ -24,6 +24,7 @@
 
 
 
+
 (defmethod consume-properties :default [stream rule] rule)
 
 (defmethod consume-properties clojure.lang.Keyword [[fst scd & rst] node]
@@ -31,10 +32,11 @@
     (consume-properties rst node)))
 
 
-(defmethod consume-properties clojure.lang.PersistentList [[fst scd & rst] node]
-  (let [props (apply assoc (:properties node) fst)
-        node (assoc node :properties props)]
-    (consume-properties (cons scd rst) node)))
+(defmethod consume-properties clojure.lang.PersistentList [[a-list & rst] node]
+    (consume-properties (concat a-list rst) node))
+
+(defmethod consume-properties clojure.lang.LazySeq [[a-list & rst] node]
+    (consume-properties (concat a-list rst) node))
 
 (defmethod consume-properties clojure.lang.IPersistentMap [[fst scd & rst] node]
   (let [props (merge (:properties node) fst)
@@ -49,7 +51,6 @@
 (defmethod consume-properties cljss.AST.Query [[fst scd & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties (cons scd rst) node)))
-
 
 
 (defn parse-rules [rules]
