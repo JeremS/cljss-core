@@ -8,6 +8,10 @@
         [cljss.compilation :only (compile-rules styles)]))
 
 
+(fact "Compiling inline css give the css"
+  (css-compile (inline-css "a:hover { color: green; }") {})
+  => "a:hover { color: green; }")
+
 
 (fact "We can compile properties"
   (compile-property [:color :blue]) => "color: blue;"

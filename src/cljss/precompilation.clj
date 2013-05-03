@@ -149,6 +149,9 @@
   "Flattens a rule to ready for compilation."
   type)
 
+(defmethod flatten-AST :default [node]
+  (list node))
+
 (defmethod flatten-AST Rule
   [{sr :sub-rules :as rule}]
   (cons (assoc rule :sub-rules '())

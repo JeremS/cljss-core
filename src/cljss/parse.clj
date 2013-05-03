@@ -1,6 +1,6 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.parse
-  (:use [cljss.AST :only (rule)])
+  (:use [cljss.AST :only (rule inline-css)])
   (:import cljss.AST.Query))
 
 
@@ -15,15 +15,27 @@
   a tree represntation."
   type)
 
+;; ### Parsing of rules
+;; A vector is considered a rule.
 
 (defmethod parse-rule clojure.lang.PersistentVector [[selection & props-sub-rules]]
   (consume-properties props-sub-rules (rule selection)))
+
+
+;; Parsing of a media query.
 
 (defmethod parse-rule cljss.AST.Query [{body :body :as query}]
   (consume-properties body (assoc query :body nil)))
 
 
+;; A string is considered inline css
 
+(defmethod parse-rule String [s] (inline-css s))
+
+
+
+
+;; ### Parsing of the inside of rules
 
 (defmethod consume-properties :default [stream rule] rule)
 

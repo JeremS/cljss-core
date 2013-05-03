@@ -313,21 +313,23 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
+ - Fix line spacing of the output.
  - List should behave more like in Hiccup
-   - Change the behaviour of the parsing when it has to parse a
-   list. Instead of directly associng, it should consume the list
-   as it was not here.
    - enrich parse-rule
-     - when it parses a string, leaves it untouched, considered as
-     as inline css.
      - when it parses a list, concat it to the rest of the rules to parse
      so that the list as no particular semantic.
  - syntax checking / error reporting ?
  - ClojureScript version ?
 
-## Changelog 0.2.0
- - support for media queries.
- - support for attributes selectors.
+## Changelog
+### 0.2.1
+ - FIX: If a rule contains a list (or lazy seq) any sub rule declared
+ here is now correctly parsed.
+ - ADDED: Inline css in rules as a string.
+
+### 0.2.0
+ - ADDED: support for media queries.
+ - ADDED: support for attributes selectors.
 
 
 ## License

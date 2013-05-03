@@ -39,7 +39,6 @@
     (compile-seq-property-value this)))
 
 
-
 (defn compile-rule [style rule]
   (css-compile rule style))
 

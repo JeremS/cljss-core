@@ -5,6 +5,9 @@
         midje.sweet))
 
 (facts "About parse-rule"
+  (fact "It considers strings as inline css then returns it directly"
+    (parse-rule "a {color: blue;}") => (inline-css "a {color: blue;}"))
+
   (facts "it construct rules from vectors : "
     (fact "it makes a rule from a vector"
       (parse-rule [:a :color :blue])

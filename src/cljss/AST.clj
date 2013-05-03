@@ -86,5 +86,9 @@
          (mapcat #(list inner % sep ))
          (apply str))))
 
+(defrecord InlineCss [css]
+  CSS
+  (css-compile [this _] css))
 
-
+(defn inline-css [s]
+  (InlineCss. s))
