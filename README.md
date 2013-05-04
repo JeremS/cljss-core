@@ -313,6 +313,8 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
+ - add utilities:
+  - functions rules, group-rules, comment
  - ClojureScript version ?
  - syntax checking / error reporting ?
 
