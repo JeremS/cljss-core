@@ -101,3 +101,7 @@
                  [:a :color :green])]
         (media "(max-width: 400px)"
                :width "400px")]])
+
+(def ex10
+  [[:a :a :a "inline1"]
+   "inline2"])

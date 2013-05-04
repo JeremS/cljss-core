@@ -46,7 +46,15 @@
 
 ;; ### Parsing of the inside of rules
 
-(defmethod consume-properties :default [stream rule] rule)
+(defmethod consume-properties :default [stream rule]
+  (throw
+   (ex-info
+    (str (type (first stream))
+         " can't be a css property name/value.")
+    {:properties stream
+     :rule rule})))
+
+(defmethod consume-properties nil [stream rule] rule)
 
 (defmethod consume-properties clojure.lang.Keyword [[fst scd & rst] node]
   (let [node (assoc-in node [:properties fst] scd)]
@@ -65,13 +73,17 @@
     (consume-properties (cons scd rst) node)))
 
 
-(defmethod consume-properties clojure.lang.PersistentVector [[fst scd & rst] node]
+(defmethod consume-properties clojure.lang.PersistentVector [[fst & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
-    (consume-properties (cons scd rst) node)))
+    (consume-properties rst node)))
 
-(defmethod consume-properties cljss.AST.Query [[fst scd & rst] node]
+(defmethod consume-properties String [[fst & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
-    (consume-properties (cons scd rst) node)))
+    (consume-properties rst node)))
+
+(defmethod consume-properties cljss.AST.Query [[fst & rst] node]
+  (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
+    (consume-properties rst node)))
 
 
 (defn parse-rules [rules]
