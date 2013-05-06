@@ -316,6 +316,8 @@ writing this code with Ligh Table !
  - add utilities:
   - functions rules, group-rules, comment
  - ClojureScript version ?
+ - Parser of selectors in order to use combinators with infix notation.
+ (Could be an extension)
  - syntax checking / error reporting ?
 
 ## Changelog
@@ -328,6 +330,7 @@ writing this code with Ligh Table !
 
  - ADDED: Inline css in rules as a string.
  - ADDED: Compact style.
+ - ADDED: Use of key words for pseudo classes args
 
 ### 0.2.0
  - ADDED: support for media queries.

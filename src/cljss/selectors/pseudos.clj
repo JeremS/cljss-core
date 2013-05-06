@@ -2,7 +2,16 @@
   cljss.selectors.pseudos
   (:require [clojure.string :as string])
   (:use cljss.protocols
-        cljss.selectors.types))
+        cljss.selectors.types
+
+        clojure.repl
+        ))
+
+
+(defmacro ^:private as->> [name & rst]
+  (let [expr (last rst)
+        forms (butlast rst)]
+    `(as-> ~expr ~name ~@forms)))
 
 
 (declare pseudo)
@@ -28,7 +37,11 @@
    (str (compile-as-selector selector) name
         (if-not (seq args)
           ""
-          (str \( (string/join \, args) \))))))
+          (->> args
+               (map compile-as-selector)
+               (string/join \, )
+               (as->> args
+                 (str \( args \))))))))
 
 
 (derive Pseudo simple-t)

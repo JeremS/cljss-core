@@ -10,7 +10,8 @@
 (fact "We can add pseudo classes and pseudo elements to simple selectors"
   (-> "div" hover compile-as-selector) => "div:hover"
   (-> :div hover compile-as-selector)  => "div:hover"
-  (-> "div" (nth-child "2n+1") compile-as-selector) => "div:nth-child(2n+1)")
+  (-> "div" (nth-child "2n+1") compile-as-selector) => "div:nth-child(2n+1)"
+  (-> "div" (nth-child :even) compile-as-selector) => "div:nth-child(even)")
 
 (fact "We can add more tah one pseudo classe / element"
   (-> :div hover first-line compile-as-selector) => "div:hover::first-line")
