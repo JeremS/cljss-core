@@ -37,9 +37,33 @@
    before after])
 
 
+(def ^{:arglist '([& rules])
+       :doc "Create a list of first level rules."}
+  rules vector)
 
+(def ^{:arglist '([& rules])
+       :doc "Create a list of rules."}
+  inside-rules list)
 
-(defn css-with-style [style & rules]
+(def ^{:arglist '([& rules])
+       :doc "Groups a list of rules."}
+  group-rules concat)
+
+(defmacro defrules
+  "Defines a named list of rules."
+  [r-name & body]
+  `(def ~r-name
+     (rules ~@body)))
+
+(defn css-str
+  "Return the string wrapped inside a pair
+  of character \".
+  Useful to declare a css property as a css string."
+  [s] (str \" s \"))
+
+(defn css-with-style
+  "Compile a list of rules with a given style."
+  [style & rules]
   (->> rules
        parse/parse-rules
        pre/precompile-rules
@@ -50,7 +74,6 @@
 
 (defn compact-css [& rules]
   (apply css-with-style (:compact compi/styles) rules))
-
 
 (defn css [& rules]
   (apply css-with-style (:classic compi/styles) rules))

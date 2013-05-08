@@ -332,6 +332,7 @@ writing this code with Ligh Table !
  - ADDED: Compact style.
  - ADDED: Use of key words for pseudo classes args
  - ADDED: Possible line break in the set like selectors output.
+ - ADDED: Helpers to have a more fluent API.
 
 ### 0.2.0
  - ADDED: support for media queries.
