@@ -61,12 +61,14 @@
 
    :compact
    {:indent-unit ""
+    :selector-break 3
     :property-separator ""
     :rules-separator \newline
     :start-properties ""}
 
    :classic
    {:indent-unit "  "
+    :selector-break 3
     :property-separator \newline
     :rules-separator \newline
     :start-properties \newline}})

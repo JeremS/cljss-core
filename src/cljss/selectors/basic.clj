@@ -5,6 +5,8 @@
   (:use cljss.protocols
         cljss.selectors.types))
 
+
+
 (extend-type nil
   Neutral
   (neutral? [this] true)
@@ -17,7 +19,9 @@
   (replace-parent [this replacement] this)
 
   CssSelector
-  (compile-as-selector [this] ""))
+  (compile-as-selector
+   ([this] "")
+   ([this _] (compile-as-selector this))))
 
 
 (extend-type String
@@ -33,7 +37,10 @@
   (replace-parent [this replacement] this)
 
   CssSelector
-  (compile-as-selector [this] (string/trim this)))
+  (compile-as-selector
+   ([this] (string/trim this))
+   ([this _]
+    (compile-as-selector this))))
 
 (derive String simple-t)
 
@@ -50,7 +57,10 @@
   (replace-parent [this replacement] this)
 
   CssSelector
-  (compile-as-selector [this] (name this)))
+  (compile-as-selector
+   ([this] (name this))
+   ([this _]
+    (compile-as-selector this))))
 
 (derive clojure.lang.Keyword        simple-t)
 

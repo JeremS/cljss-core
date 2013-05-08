@@ -28,8 +28,8 @@
     "Compile as a css element."))
 
 (defprotocol CssSelector
-  (compile-as-selector [this]
-    "Compile a value considered a selector to a string."))
+  (compile-as-selector [this] [this style]
+    "Compile a value considered a selector to a string using a style."))
 
 (defprotocol CssPropertyName
   (compile-as-property-name [this]

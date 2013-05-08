@@ -331,6 +331,7 @@ writing this code with Ligh Table !
  - ADDED: Inline css in rules as a string.
  - ADDED: Compact style.
  - ADDED: Use of key words for pseudo classes args
+ - ADDED: Possible line break in the set like selectors output.
 
 ### 0.2.0
  - ADDED: support for media queries.

@@ -1,6 +1,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.combinators
-  (:require [cljss.compilation.utils :as utils])
+  (:require [cljss.compilation.utils :as utils]
+            [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types
         cljss.selectors.combination))
@@ -35,11 +36,15 @@
          (into [])))
 
   CssSelector
-  (compile-as-selector [this]
-    (utils/compile-seq-then-join this compile-as-selector \space)))
+  (compile-as-selector
+   ([this]
+    (utils/compile-seq-then-join this compile-as-selector \space))
+   ([this _]
+    (compile-as-selector this))))
 
 
 (derive clojure.lang.PersistentVector  combination-t)
+
 
 
 
@@ -68,8 +73,19 @@
          (into #{})))
 
   CssSelector
-  (compile-as-selector [this]
-    (utils/compile-seq-then-join this compile-as-selector ", ")))
+  (compile-as-selector
+   ([this]
+    (utils/compile-seq-then-join this compile-as-selector ", "))
+   ([this style]
+    (if-let [break (:selector-break style)]
+      (->> this
+           (map compile-as-selector)
+           (interpose ", ")
+           (partition-all (* 2 break))
+           (map #(apply str %))
+           (string/join \newline))
+      (compile-as-selector this)))))
+
 
 (derive clojure.lang.IPersistentSet set-t)
 
@@ -104,7 +120,9 @@
 
        CssSelector
        (compile-as-selector [_#]
-         (utils/compile-seq-then-join ~sels-sym compile-as-selector ~c-sym)))
+         (utils/compile-seq-then-join ~sels-sym compile-as-selector ~c-sym))
+       (compile-as-selector [~'this _#]
+         (compile-as-selector ~'this)))
 
      (defn ~c-cstr [& sels#]
        (case (count sels#)
