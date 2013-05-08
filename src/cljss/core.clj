@@ -6,6 +6,7 @@
             [cljss.precompilation :as pre]
             [cljss.selectors :as sel]
             [cljss.compilation :as compi]
+            [clojure.string :as string]
             [potemkin :as p])
   (:use cljss.protocols))
 
@@ -60,6 +61,11 @@
   of character \".
   Useful to declare a css property as a css string."
   [s] (str \" s \"))
+
+(defn css-comment [& c]
+  (str "/* "
+       (string/join \newline c)
+       " */"))
 
 (defn css-with-style
   "Compile a list of rules with a given style."

@@ -313,8 +313,7 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - add utilities:
-  - functions rules, group-rules, comment
+ - css function (url...)
  - ClojureScript version ?
  - Parser of selectors in order to use combinators with infix notation.
  (Could be an extension)
