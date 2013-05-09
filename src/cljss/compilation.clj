@@ -3,7 +3,8 @@
   (:require cljss.AST
             [clojure.string :as string])
   (:use cljss.protocols
-        cljss.compilation.utils))
+        cljss.compilation.utils)
+  (:import [cljss.AST InlineCss]))
 
 
 (defn compile-seq-property-value
@@ -45,8 +46,15 @@
 (defn compile-rule [style rule]
   (css-compile rule style))
 
+
+(defn- empty-rule? [r]
+  (and (not (isa? (type r) InlineCss))
+       (-> r :properties seq not)
+       (-> r :sub-rules seq not)))
+
 (defn compile-rules [{sep :rules-separator :as style} rules]
   (->> rules
+       (remove empty-rule?)
        (map (partial compile-rule style))
        (string/join sep )))
 

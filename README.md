@@ -325,6 +325,7 @@ writing this code with Ligh Table !
  - FIX: Cljss behaves like hiccup in presence of lists or lazy seq.
  It basically functions as if the parenthesis weren't there.
  - FIX: The double newline in the output is fixed.
+ - FIX: empty rules are no more part of the compiled output.
 
 
  - ADDED: Inline css in rules as a string.

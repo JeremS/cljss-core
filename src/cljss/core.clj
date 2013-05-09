@@ -39,12 +39,9 @@
 
 
 (def ^{:arglist '([& rules])
-       :doc "Create a list of first level rules."}
-  rules vector)
-
-(def ^{:arglist '([& rules])
        :doc "Create a list of rules."}
-  inside-rules list)
+  rules list)
+
 
 (def ^{:arglist '([& rules])
        :doc "Groups a list of rules."}
