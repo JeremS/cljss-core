@@ -313,6 +313,8 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
+ - Make dinstinction between inline css and css comments
+ in order to suppress comments with compressed style.
  - css function (url...)
  - ClojureScript version ?
  - Parser of selectors in order to use combinators with infix notation.
