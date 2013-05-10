@@ -30,7 +30,7 @@
           outer (make-indent d unit)
           inner (make-indent (inc d) unit)
           new-style (assoc style :outer-indent outer :inner-indent inner)
-          compiled-selector (compile-as-selector selector)
+          compiled-selector (compile-as-selector selector style)
           compiled-properties (compile-property-map properties new-style)]
 
     (compile-css compiled-selector compiled-properties new-style))))
