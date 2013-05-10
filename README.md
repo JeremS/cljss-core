@@ -313,12 +313,8 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - Make dinstinction between inline css and css comments
- in order to suppress comments with compressed style.
  - css function (url...)
  - ClojureScript version ?
- - Parser of selectors in order to use combinators with infix notation.
- (Could be an extension)
  - syntax checking / error reporting ?
 
 ## Changelog
@@ -329,12 +325,16 @@ writing this code with Ligh Table !
  - FIX: The double newline in the output is fixed.
  - FIX: empty rules are no more part of the compiled output.
 
-
+ - ADDED: Now the key words `:> :+ :~` can be used as combinators
+ inside a vector of selectors instead of the `c-> c-+ c-g+` functions.
  - ADDED: Inline css in rules as a string.
  - ADDED: Compact style.
  - ADDED: Use of key words for pseudo classes args
  - ADDED: Possible line break in the set like selectors output.
  - ADDED: Helpers to have a more fluent API.
+ - ADDED: We can now use inline css or css comments. There
+ is a compilation option that allows the comments to be in the
+ compiled output or not.
 
 ### 0.2.0
  - ADDED: support for media queries.

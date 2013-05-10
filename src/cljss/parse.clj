@@ -1,8 +1,9 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.parse
   (:use [cljss.AST :only (rule inline-css)])
-  (:import cljss.AST.Query))
+  (:import [cljss.AST Query InlineCss CssComment]))
 
+;; ### Parsing functions
 
 (defmulti consume-properties
   "When parsing a rule, consume property
@@ -15,6 +16,17 @@
   a tree represntation."
   type)
 
+
+;; Generic types used for dispatch
+(derive clojure.lang.LazySeq ::list)
+(derive clojure.lang.PersistentList ::list)
+
+Character
+
+(derive String ::inline)
+(derive Character ::inline)
+(derive InlineCss ::inline)
+(derive CssComment ::inline)
 ;; ### Parsing of rules
 ;; A vector is considered a rule.
 
@@ -30,21 +42,22 @@
 
 ;; Parsing of a list of rules
 
-(defmethod parse-rule clojure.lang.PersistentList [rules]
+(defmethod parse-rule ::list [rules]
   (map parse-rule rules))
 
-(defmethod parse-rule clojure.lang.LazySeq [rules]
-  (map parse-rule rules))
 
 
 ;; A string is considered inline css
 
+(defmethod parse-rule ::inline [i] i)
 (defmethod parse-rule String [s] (inline-css s))
-
+(defmethod parse-rule Character [c] (inline-css (str c)))
 
 
 
 ;; ### Parsing of the inside of rules
+
+;; If we don't recognize what is parsed an exception is thrown.
 
 (defmethod consume-properties :default [stream rule]
   (throw
@@ -54,18 +67,25 @@
     {:properties stream
      :rule rule})))
 
+;; End of a rule we return the rule.
+
 (defmethod consume-properties nil [stream rule] rule)
+
+
+;; Parsing of a property name
 
 (defmethod consume-properties clojure.lang.Keyword [[fst scd & rst] node]
   (let [node (assoc-in node [:properties fst] scd)]
     (consume-properties rst node)))
 
 
-(defmethod consume-properties clojure.lang.PersistentList [[a-list & rst] node]
+;; We eliminate lists as if they weren't there.
+
+(defmethod consume-properties ::list [[a-list & rst] node]
     (consume-properties (concat a-list rst) node))
 
-(defmethod consume-properties clojure.lang.LazySeq [[a-list & rst] node]
-    (consume-properties (concat a-list rst) node))
+
+;; A map is merged directly in the properties of the constructed rule.
 
 (defmethod consume-properties clojure.lang.IPersistentMap [[fst scd & rst] node]
   (let [props (merge (:properties node) fst)
@@ -73,15 +93,23 @@
     (consume-properties (cons scd rst) node)))
 
 
+;; A vector is considered a sub rule.
+
 (defmethod consume-properties clojure.lang.PersistentVector [[fst & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties rst node)))
 
-(defmethod consume-properties String [[fst & rst] node]
+
+;; A media query is a sub rule.
+
+(defmethod consume-properties cljss.AST.Query [[fst & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties rst node)))
 
-(defmethod consume-properties cljss.AST.Query [[fst & rst] node]
+
+;; Inline stuff
+
+(defmethod consume-properties ::inline [[fst & rst] node]
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties rst node)))
 

@@ -12,7 +12,8 @@
 
 
 (p/import-vars
- [cljss.AST media]
+ [cljss.compilation styles]
+ [cljss.AST media inline-css css-comment]
  [cljss.selectors & c-> c-+ c-g+
 
   att-sel
@@ -58,11 +59,6 @@
   of character \".
   Useful to declare a css property as a css string."
   [s] (str \" s \"))
-
-(defn css-comment [& c]
-  (str "/* "
-       (string/join \newline c)
-       " */"))
 
 (defn css-with-style
   "Compile a list of rules with a given style."

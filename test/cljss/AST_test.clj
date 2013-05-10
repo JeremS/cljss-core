@@ -12,6 +12,10 @@
   (css-compile (inline-css "a:hover { color: green; }") {})
   => "a:hover { color: green; }")
 
+(fact "Compiling css comments give the css comment..."
+  (css-compile (css-comment "a comment") {:comments true})
+  => "/* a comment */")
+
 
 (fact "We can compile properties"
   (compile-property [:color :blue]) => "color: blue;"

@@ -23,6 +23,8 @@
     (assoc this :sub-rules children))
 
   CSS
+  (empty-rule? [_] (not (or (seq properties)
+                        (seq sub-rules))))
   (css-compile [this {start :start-properties
                       unit :indent-unit
                       :as style}]
@@ -53,6 +55,8 @@
     (assoc this :sub-rules children))
 
   CSS
+  (empty-rule? [_] (not (or (seq properties)
+                            (seq sub-rules))))
   (css-compile [this {start :start-properties
                        unit :indent-unit
                         sep :rules-separator
@@ -86,9 +90,24 @@
          (mapcat #(list inner % sep ))
          (apply str))))
 
+
+
+
 (defrecord InlineCss [css]
   CSS
+  (empty-rule? [_] false)
   (css-compile [this _] css))
 
 (defn inline-css [s]
   (InlineCss. s))
+
+(defrecord CssComment [css]
+  CSS
+  (empty-rule? [_] false)
+  (css-compile [this {c :comments}]
+    (if c
+      (str "/* " css " */")
+      "")))
+
+(defn css-comment [s]
+  (CssComment. s))

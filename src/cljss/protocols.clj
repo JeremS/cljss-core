@@ -25,7 +25,9 @@
 ; protocols about compilation
 (defprotocol CSS
   (css-compile [this style]
-    "Compile as a css element."))
+    "Compile as a css element.")
+  (empty-rule? [this]
+    "True if the rule can be considered empty"))
 
 (defprotocol CssSelector
   (compile-as-selector [this] [this style]

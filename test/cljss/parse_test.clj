@@ -5,8 +5,15 @@
         midje.sweet))
 
 (facts "About parse-rule"
-  (fact "It considers strings as inline css then returns it directly"
+  (fact "It considers strings as inline css then returns an inline AST node"
     (parse-rule "a {color: blue;}") => (inline-css "a {color: blue;}"))
+
+  (fact "It considers a character as inline css then returns an inline AST node"
+    (parse-rule \newline) => (inline-css "\n"))
+
+  (fact "It returns directly inline nodes"
+    (parse-rule (inline-css "inline")) => (inline-css "inline")
+    (parse-rule (css-comment "comment")) => (css-comment "comment"))
 
   (facts "it construct rules from vectors : "
     (fact "it makes a rule from a vector"
