@@ -1,3 +1,7 @@
+;; ## Selector
+;; We group here the different functions
+;; that form the 'selector API'.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors
   (:refer-clojure :exclude (rem))

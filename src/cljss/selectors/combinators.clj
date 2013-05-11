@@ -1,3 +1,7 @@
+;; ## Combinators
+;; Implementations of what we could call the verbs
+;; of the selector DSL.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.combinators
   (:require [cljss.compilation.utils :as utils]

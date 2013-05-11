@@ -1,3 +1,7 @@
+;; ## Protocols
+;; This namespace contains the protocols used throughout
+;; the library.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.protocols)
 

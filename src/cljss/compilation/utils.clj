@@ -1,3 +1,5 @@
+;; ## Compilation utils.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.compilation.utils
   (:require [clojure.string :as string]))

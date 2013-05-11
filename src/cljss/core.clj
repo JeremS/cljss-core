@@ -1,3 +1,7 @@
+;; ## Core
+;; The core namespace is used to regroup the general api
+;; proposed by the DSL.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.core
   (:refer-clojure :exclude (rem))
@@ -10,6 +14,9 @@
             [potemkin :as p])
   (:use cljss.protocols))
 
+;; Importation
+;; We import here the different helper, contructor functions
+;; that we can need when constructing css rules.
 
 (p/import-vars
  [cljss.compilation styles]
@@ -38,6 +45,7 @@
    first-letter
    before after])
 
+;; ### Helpers
 
 (def ^{:arglist '([& rules])
        :doc "Create a list of rules."}
@@ -68,11 +76,18 @@
        pre/precompile-rules
        (compi/compile-rules style)))
 
-(defn compressed-css [& rules]
+
+(defn compressed-css
+  "Compile rules with the compressed style."
+  [& rules]
   (apply css-with-style (:compressed compi/styles) rules))
 
-(defn compact-css [& rules]
+(defn compact-css
+  "Compile rules with the compact style."
+  [& rules]
   (apply css-with-style (:compact compi/styles) rules))
 
-(defn css [& rules]
+(defn css
+  "Compile rules with the classic style."
+  [& rules]
   (apply css-with-style (:classic compi/styles) rules))

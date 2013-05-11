@@ -1,3 +1,7 @@
+;; Selector types
+;; We define here different types of selectors.
+;; Its usefull for the combination part.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.types
   (:use cljss.protocols))

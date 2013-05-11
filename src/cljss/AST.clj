@@ -1,8 +1,13 @@
+;; ## AST
+;; We rules are parse, the production is an AST.
+;; We define here the different kinds of node this AST can have.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.AST
   (:require [clojure.string :as string])
   (:use cljss.protocols))
 
+;; helpers
 
 (declare compile-property-map)
 
@@ -15,6 +20,9 @@
 
 (defn make-indent [n unit]
   (apply str (repeat n unit)))
+
+;; ### Rule
+;; A Rule represent a css rule in the sense `sel {properties: val}`.
 
 (defrecord Rule [selector properties sub-rules]
   Tree
@@ -37,7 +45,7 @@
 
     (compile-css compiled-selector compiled-properties new-style))))
 
-
+;; Constructor for rules
 
 (defn rule
   ([selection ]
@@ -47,6 +55,8 @@
   ([selection properties sub-rules]
    (Rule. selection properties sub-rules)))
 
+
+;; ### Media Query
 
 (defrecord Query [selector body properties sub-rules]
   Tree
@@ -91,7 +101,9 @@
          (apply str))))
 
 
-
+;; ### Inline CSS
+;; We can use strings as inline css in the DSL,
+;; the inlined text has its own AST node.
 
 (defrecord InlineCss [css]
   CSS
@@ -101,6 +113,12 @@
 (defn inline-css [s]
   (InlineCss. s))
 
+
+;; ### Css Comments
+;; Like inline css we can have comments, the difference
+;; with the previous type is that css comment can
+;; be suppressed from the compiled result, reagarding the
+;; value of a compilation option.
 (defrecord CssComment [css]
   CSS
   (empty-rule? [_] false)

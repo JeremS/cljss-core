@@ -1,3 +1,8 @@
+;; ## Compilation
+;; We handle in this namespace the high level 'API'
+;; regarding compilation of an AST, and we also declare
+;; implementation of some protocols regarding compilation.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.compilation
   (:require cljss.AST
@@ -15,6 +20,9 @@
                          \space))
 
 
+;; ### Protocol implementations
+;; Implementation of the compilation of keywords and strings used as property names.
+
 (extend-protocol CssPropertyName
   clojure.lang.Keyword
   (compile-as-property-name [this] (name this))
@@ -22,7 +30,7 @@
   String
   (compile-as-property-name [this] this))
 
-
+;; Implementation of the compilation of clojure types when used as property values.
 
 (extend-protocol CssPropertyValue
   String
@@ -43,6 +51,9 @@
     (compile-seq-property-value this)))
 
 
+;; ### General API
+;; We handle here the compilation of an AST.
+
 (defn compile-rule [style rule]
   (css-compile rule style))
 
@@ -54,9 +65,10 @@
        (string/join sep )))
 
 
+;; ### Styles
 
 (def styles
-  "Styles used when compiling rules. A style is a map,
+  "Clasic styles used when compiling rules. A style is a map,
   keys represent output option.
 
    - :indent-unit number of character used to indent

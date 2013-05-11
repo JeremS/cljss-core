@@ -1,3 +1,5 @@
+;; ## Examples used in the README.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.examples
   (:refer-clojure :exclude [rem])

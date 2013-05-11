@@ -1,3 +1,7 @@
+;; ## Precompilation
+;; This namespace regroups the different transformation that
+;; are applied to an AST in order to ready it for compiation.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.precompilation
   (:require [cljss.selectors :refer (& combine)]
@@ -5,9 +9,26 @@
   (:use cljss.protocols)
   (:import [cljss.AST Rule Query]))
 
+;; ### Visitor implementation
+;; In order to work with the AST, an implmentation
+;; of the visitor pattern is used.
+;; This implementation uses multi method under the covers.
+
+
+;; Helper used to create unique enviromnment for combined visitors.
+
 (defn- uuid [] (java.util.UUID/randomUUID))
 
+
+;; A visitor is composed of a visit function and a
+;; default environment for the visit of a root node.
+
 (defrecord Visitor [env f])
+
+
+;; Constructor of a visitor. Here we wrap the visit function
+;; so that is sees its own environment. This way, composed visitor
+;; work with their own isolates env.
 
 (defn make-visitor
   ([f] (make-visitor {} f))
@@ -21,6 +42,13 @@
               new-general (assoc general-env id new-local)]
           (list new-v new-general)))))))
 
+;; Visit of a node given a visitor.
+;; We can see here that the visit of a node produces
+;; a new version of the node and a new environment.
+;; This new environment is used for the visits
+;; of the sub elements instead of the giben env.
+;; It is handy we a visitor needs to pass on information
+;; for the visit of sub elements.
 
 (defn visit [node {f :f env :env :as visitor}]
   (if-not (satisfies? Tree node)
@@ -30,6 +58,13 @@
           new-children (mapv #(visit % visitor)
                             (children new-node))]
       (assoc-children new-node new-children))))
+
+;; Visitor composition
+;; The goal here mimic function composition
+;; for visitors. The difference here is that
+;; the composition is done left to right.
+;; We can see here that the result of one visit (visitor v1)
+;; is passed to the visitor v2.
 
 (defn- chain-2-visitors [v1 v2]
   (let [{f1 :f env1 :env} v1
@@ -55,21 +90,35 @@
   (symbol (str "mm-" v-name)))
 
 
-(defmacro defvisitor [v-name env]
+(defmacro defvisitor
+  "Declaration of a visitor.
+  A multimethod is created for the visits and
+  the said visitor too.
+
+  Note that the created multimethod dispatches
+  on the type of the first parameter wich is an AST node."
+  [v-name env]
   (let [mm-name (multi-name v-name)]
   `(do
      (defmulti ~mm-name type-first)
      (def ~v-name (make-visitor ~env ~mm-name)))))
 
-(defmacro defvisit [v-name v-type args & body]
+(defmacro defvisit
+  "Define the behaviour of a visitior in function of
+  the first arg type."
+  [v-name v-type args & body]
   (let [mm-name (multi-name v-name)]
     `(defmethod ~mm-name ~v-type ~args ~@body)))
 
 
+;; ### Visitors definition.
 
-;; Adds the level of nesting of a rule and its
-;; subrules. The depth is used a compile time
-;; to compute indentation.
+;; Adds to rules and their sub rules
+;; their level of nesting.
+;; The depth is used when compiling the AST
+;; to compute indentation. Here the visitor's environment
+;; is the current depth.
+
 (defvisitor assoc-depth 0)
 
 (defvisit assoc-depth :default [node depth]
@@ -79,6 +128,7 @@
 
 ;; Combine selectors of a rule to its subrules
 ;; recursively.
+
 (defvisitor combine-or-replace-parent [])
 
 (defvisit combine-or-replace-parent :default
@@ -99,8 +149,10 @@
           new-sel)))
 
 
-;; Symplify, or compute the definite selector
-;; of a rule and its sub rules recursilely
+;; Symplify (or compute) the definite selector
+;; of a rule and its sub rules recursilely.
+;; We realize here the expansion of sets selectors.
+
 (defvisitor simplify-selector nil)
 
 (defvisit simplify-selector :default
@@ -114,10 +166,11 @@
         env))
 
 
-;; In the case of a media query with properties
-;; remove the properties of the media query
-;; and create a rule with those properties
+;; In the case of a media query with properties,
+;; we remove the properties of the media query
+;; and create a sub rule with those properties
 ;; and the parent selecor as selector.
+
 (defvisitor make-rule-for-media-properties nil)
 
 (defvisit make-rule-for-media-properties Rule
@@ -144,6 +197,11 @@
      simplify-selector
      make-rule-for-media-properties
      assoc-depth))
+
+;; ### Flattening
+;; When an AST is visited, we flatten it
+;; to extract rubrules from rule. It allows
+;; for a simpler algorithm to compile rules.
 
 (defmulti flatten-AST
   "Flattens a rule to ready for compilation."

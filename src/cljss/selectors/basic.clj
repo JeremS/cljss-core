@@ -1,3 +1,6 @@
+;; ## Basic
+;; Implementation of the protocols for what we could call the words of the DSL.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.basic
   (:require [cljss.compilation.utils :as utils]

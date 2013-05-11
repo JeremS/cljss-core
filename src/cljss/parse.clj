@@ -1,3 +1,7 @@
+;; Parsing
+;; This namespace regroups the necessary functions
+;; used to parse the dsl in order to produce an AST.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.parse
   (:use [cljss.AST :only (rule inline-css)])

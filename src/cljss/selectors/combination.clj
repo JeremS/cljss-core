@@ -1,3 +1,8 @@
+;; ## Combination
+;; Implementation of a generic combination of selectors.
+;; Combination is used to combine rules selectors with
+;; the ones of their sub rules.
+
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.combination
   (:use cljss.selectors.types))
