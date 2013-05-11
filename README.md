@@ -319,15 +319,14 @@ writing this code with Ligh Table !
 
 ## Changelog
 ### 0.2.1
- - FIX: Numbers can now be used as properties value.
- - FIX: Cljss behaves like hiccup in presence of lists or lazy seq.
+ - FIXED: Numbers can now be used as properties value.
+ - FIXED: Cljss behaves like hiccup in presence of lists or lazy seq.
  It basically functions as if the parenthesis weren't there.
- - FIX: The double newline in the output is fixed.
- - FIX: empty rules are no more part of the compiled output.
+ - FIXED: The double newline in the output is fixed.
+ - FIXED: empty rules are no more part of the compiled output.
 
  - ADDED: Now the key words `:> :+ :~` can be used as combinators
  inside a vector of selectors instead of the `c-> c-+ c-g+` functions.
- - ADDED: Inline css in rules as a string.
  - ADDED: Compact style.
  - ADDED: Use of key words for pseudo classes args
  - ADDED: Possible line break in the set like selectors output.
