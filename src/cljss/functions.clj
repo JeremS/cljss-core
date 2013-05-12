@@ -1,9 +1,5 @@
 (ns cljss.functions
-  (:require [clojure.string :as string]
-
-            cljss.properties
-
-            )
+  (:require [clojure.string :as string])
   (:use cljss.protocols
         [cljss.compilation :only (compile-seq-then-join)]))
 
@@ -20,6 +16,7 @@
     (compile-function name args compile-as-selector))
   (compile-as-selector [this _]
     (compile-as-selector this))
+
   CssPropertyValue
   (compile-as-property-value [_]
     (compile-function name args compile-as-property-value)))
@@ -35,9 +32,6 @@
   `(do
      ~@(for [f-name f-names]
          (list 'defcssfunction f-name))))
-
-(-> '(defcssfunctions url counter attr calc) macroexpand-1)
-
 
 (defcssfunctions
   ; css2 functions
