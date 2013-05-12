@@ -75,7 +75,7 @@
           outer (make-indent d unit)
           inner (make-indent (inc d) outer)
           new-style (assoc style :outer-indent outer :inner-indent inner)
-          sel (str "@media " selector)
+          sel (str "@media " (compile-as-selector selector))
           compiled-sub-rules (->> sub-rules
                                  (map #(css-compile % new-style))
                                  (string/join sep ))]

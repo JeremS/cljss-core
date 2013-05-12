@@ -326,6 +326,9 @@ writing this code with Ligh Table !
  - FIXED: The double newline in the output is fixed.
  - FIXED: empty rules are no more part of the compiled output.
 
+ - ADDED: Support for CSS 2 & 3 functions like `url` or `matrix3d`
+ - ADDED: vector like selector for media queries, more or less the same as
+ rules selectors
  - ADDED: Now the key words `:> :+ :~` can be used as combinators
  inside a vector of selectors instead of the `c-> c-+ c-g+` functions.
  - ADDED: Compact style.
