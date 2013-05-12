@@ -10,12 +10,12 @@
 (m/facts "We can compile combined selectors"
 
          (m/fact "Compiling a path like selector give the path of the compiled selectors"
-                 (compile-as-selector [:div "p" :.class]) => "div p .class"
-                 (compile-as-selector '(:div "p" :.class)) => "div p .class"
-                 (compile-as-selector (map identity [:div "p" :.class])) => "div p .class")
+                 (compile-as-selector [:div "p" :.class] {}) => "div p .class"
+                 (compile-as-selector '(:div "p" :.class) {}) => "div p .class"
+                 (compile-as-selector (map identity [:div "p" :.class]) {}) => "div p .class")
 
          (m/fact "Compiling a set of selectors give the set of the compiled selectors"
-                 (compile-as-selector #{:div "p"})
+                 (compile-as-selector #{:div "p"} {})
                  => (m/some-checker "div, p"
                                     "p, div"))
 

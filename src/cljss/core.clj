@@ -81,7 +81,6 @@
        pre/precompile-rules
        (compi/compile-rules style)))
 
-
 (defn compressed-css
   "Compile rules with the compressed style."
   [& rules]
@@ -96,3 +95,6 @@
   "Compile rules with the classic style."
   [& rules]
   (apply css-with-style (:classic compi/styles) rules))
+
+
+

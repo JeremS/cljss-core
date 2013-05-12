@@ -11,11 +11,16 @@
 
 (fact "We can add pseudo attribute selectors to simple selectors"
   (-> "div" (att-sel "title") compile-as-selector) => "div[title]"
-  (-> :div (att-sel "title" "alt") compile-as-selector)  => "div[title][alt]")
+  (-> "div" (att-sel "title") (compile-as-selector {})) => "div[title]"
+  (-> :div (att-sel "title" "alt") compile-as-selector)  => "div[title][alt]"
+  (-> :div (att-sel "title" "alt") (compile-as-selector {}))  => "div[title][alt]")
 
 
 (fact "We can add more than one attribute selector"
   (-> :div (att-sel "title|=somthing") (att-sel "alt~=other") compile-as-selector)
+  => "div[title|=somthing][alt~=other]"
+
+  (-> :div (att-sel "title|=somthing" "alt~=other") compile-as-selector)
   => "div[title|=somthing][alt~=other]")
 
 

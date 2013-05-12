@@ -5,7 +5,11 @@
   cljss.selectors.pseudos
   (:require [clojure.string :as string])
   (:use cljss.protocols
-        cljss.selectors.types))
+        cljss.selectors.types
+
+
+
+        ))
 
 
 (defmacro ^:private as->> [name & rst]
@@ -41,7 +45,9 @@
                (map compile-as-selector)
                (string/join \, )
                (as->> args
-                 (str \( args \))))))))
+                 (str \( args \)))))))
+  (compile-as-selector [this _]
+    (compile-as-selector this)))
 
 
 (derive Pseudo simple-t)
@@ -115,4 +121,3 @@
   first-line
   first-letter
   before after)
-

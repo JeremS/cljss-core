@@ -107,4 +107,3 @@
 (def ex10
   [[:a :a :a "inline1"]
    "inline2"])
-

@@ -37,7 +37,9 @@
     (str (compile-as-selector selector)
          (->> selections
               (map (comp add-brackets string/trim suppr-brackets))
-              (apply str )))))
+              (apply str ))))
+  (compile-as-selector [this _]
+    (compile-as-selector this)))
 
 (derive AttributeSelector simple-t)
 

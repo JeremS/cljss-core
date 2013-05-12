@@ -11,8 +11,8 @@
 
 (declare compile-property-map)
 
-(defn- compile-css [sel inner {start :start-properties
-                                 sep :rules-separator
+(defn- compile-css [sel inner { start :start-properties
+                                  sep :rules-separator
                                indent :outer-indent}]
   (str indent sel " {" start
               inner
@@ -40,10 +40,9 @@
           outer (make-indent d unit)
           inner (make-indent (inc d) unit)
           new-style (assoc style :outer-indent outer :inner-indent inner)
-          compiled-selector (compile-as-selector selector style)
+          compiled-selector (compile-as-selector selector new-style)
           compiled-properties (compile-property-map properties new-style)]
-
-    (compile-css compiled-selector compiled-properties new-style))))
+      (compile-css compiled-selector compiled-properties new-style))))
 
 ;; Constructor for rules
 
@@ -75,7 +74,7 @@
           outer (make-indent d unit)
           inner (make-indent (inc d) outer)
           new-style (assoc style :outer-indent outer :inner-indent inner)
-          sel (str "@media " (compile-as-selector selector))
+          sel (str "@media " (compile-as-selector selector new-style))
           compiled-sub-rules (->> sub-rules
                                  (map #(css-compile % new-style))
                                  (string/join sep ))]

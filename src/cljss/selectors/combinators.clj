@@ -82,14 +82,15 @@
    ([this]
     (compile-seq-then-join this compile-as-selector ", "))
    ([this style]
-    (if-let [break (:selector-break style)]
-      (->> this
-           (map compile-as-selector)
-           (interpose ", ")
-           (partition-all (* 2 break))
-           (map #(apply str %))
-           (string/join \newline))
-      (compile-as-selector this)))))
+    (let [break (:selector-break style)]
+      (if (and break (pos? break))
+        (->> this
+             (map compile-as-selector)
+             (interpose ", ")
+             (partition-all (* 2 break))
+             (map #(apply str %))
+             (string/join \newline))
+        (compile-as-selector this))))))
 
 
 (derive clojure.lang.IPersistentSet set-t)
