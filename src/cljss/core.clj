@@ -6,11 +6,15 @@
   cljss.core
   (:refer-clojure :exclude (rem))
   (:require [cljss.AST]
+            [cljss.selectors]
+            [cljss.properties]
+            [cljss.functions]
+
             [cljss.parse :as parse]
             [cljss.precompilation :as pre]
-            [cljss.selectors :as sel]
             [cljss.compilation :as compi]
             [clojure.string :as string]
+
             [potemkin :as p])
   (:use cljss.protocols))
 
@@ -43,7 +47,8 @@
 
    first-line
    first-letter
-   before after])
+   before after]
+ [cljss.functions url])
 
 ;; ### Helpers
 

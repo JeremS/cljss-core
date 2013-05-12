@@ -315,6 +315,7 @@ writing this code with Ligh Table !
 ## Todo
  - css function (url...)
  - ClojureScript version ?
+ - use dalap for precompilation ?
  - syntax checking / error reporting ?
 
 ## Changelog

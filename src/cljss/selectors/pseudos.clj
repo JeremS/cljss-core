@@ -5,10 +5,7 @@
   cljss.selectors.pseudos
   (:require [clojure.string :as string])
   (:use cljss.protocols
-        cljss.selectors.types
-
-        clojure.repl
-        ))
+        cljss.selectors.types))
 
 
 (defmacro ^:private as->> [name & rst]

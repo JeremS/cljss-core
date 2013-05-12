@@ -4,11 +4,11 @@
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.combinators
-  (:require [cljss.compilation.utils :as utils]
-            [clojure.string :as string])
+  (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types
-        cljss.selectors.combination))
+        cljss.selectors.combination
+        [cljss.compilation :only (compile-seq-then-join)]))
 
 (defn- contains-set? [sels]
   (let [set-t? #(isa? % set-t)]
@@ -42,7 +42,7 @@
   CssSelector
   (compile-as-selector
    ([this]
-    (utils/compile-seq-then-join this compile-as-selector \space))
+    (compile-seq-then-join this compile-as-selector \space))
    ([this _]
     (compile-as-selector this))))
 
@@ -79,7 +79,7 @@
   CssSelector
   (compile-as-selector
    ([this]
-    (utils/compile-seq-then-join this compile-as-selector ", "))
+    (compile-seq-then-join this compile-as-selector ", "))
    ([this style]
     (if-let [break (:selector-break style)]
       (->> this
@@ -124,7 +124,7 @@
 
        CssSelector
        (compile-as-selector [_#]
-         (utils/compile-seq-then-join ~sels-sym compile-as-selector ~c-sym))
+         (compile-seq-then-join ~sels-sym compile-as-selector ~c-sym))
        (compile-as-selector [~'this _#]
          (compile-as-selector ~'this)))
 

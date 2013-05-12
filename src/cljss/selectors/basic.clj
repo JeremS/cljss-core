@@ -1,10 +1,9 @@
 ;; ## Basic
-;; Implementation of the protocols for what we could call the words of the DSL.
+;; Implementation of the protocols for what we could call the words of the selector DSL.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.basic
-  (:require [cljss.compilation.utils :as utils]
-            [clojure.string :as string])
+  (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.types))
 

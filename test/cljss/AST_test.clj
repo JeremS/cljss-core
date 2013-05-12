@@ -1,5 +1,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.AST-test
+  (:require cljss.selectors
+            cljss.properties)
   (:use cljss.AST
         midje.sweet
         cljss.protocols

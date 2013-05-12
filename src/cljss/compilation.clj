@@ -1,54 +1,20 @@
 ;; ## Compilation
 ;; We handle in this namespace the high level 'API'
-;; regarding compilation of an AST, and we also declare
-;; implementation of some protocols regarding compilation.
+;; regarding compilation of an AST.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.compilation
-  (:require cljss.AST
-            [clojure.string :as string])
-  (:use cljss.protocols
-        cljss.compilation.utils)
-  (:import [cljss.AST InlineCss]))
+  (:require [clojure.string :as string])
+  (:use cljss.protocols))
 
 
-(defn compile-seq-property-value
-  "Compile a collection representing a property's value."
-  [s]
-  (compile-seq-then-join s
-                         compile-as-property-value
-                         \space))
-
-
-;; ### Protocol implementations
-;; Implementation of the compilation of keywords and strings used as property names.
-
-(extend-protocol CssPropertyName
-  clojure.lang.Keyword
-  (compile-as-property-name [this] (name this))
-
-  String
-  (compile-as-property-name [this] this))
-
-;; Implementation of the compilation of clojure types when used as property values.
-
-(extend-protocol CssPropertyValue
-  String
-  (compile-as-property-value [this] this)
-
-  Number
-  (compile-as-property-value [this] (str this))
-
-  clojure.lang.Keyword
-  (compile-as-property-value [this] (name this))
-
-  clojure.lang.PersistentVector
-  (compile-as-property-value [this]
-    (compile-seq-property-value this))
-
-  clojure.lang.PersistentList
-  (compile-as-property-value [this]
-    (compile-seq-property-value this)))
+(defn compile-seq-then-join
+  "Compile each value of a collection using compile-fn,
+  then join the results with the string s."
+  [values compile-fn separator]
+  (->> values
+       (map compile-fn)
+       (string/join separator)))
 
 
 ;; ### General API
