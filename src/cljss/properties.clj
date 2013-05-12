@@ -30,15 +30,11 @@
   clojure.lang.Keyword
   (compile-as-property-value [this] (name this))
 
-  clojure.lang.PersistentVector
+  clojure.lang.Sequential
   (compile-as-property-value [this]
     (compile-seq-property-value this))
 
-  clojure.lang.PersistentList
+  clojure.lang.IPersistentSet
   (compile-as-property-value [this]
-    (compile-seq-property-value this))
-
-  clojure.lang.LazySeq
-  (compile-as-property-value [this]
-    (compile-seq-property-value this)))
+    (compile-seq-then-join this compile-as-property-value ", ")))
 

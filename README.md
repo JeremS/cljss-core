@@ -326,13 +326,16 @@ writing this code with Ligh Table !
  - FIXED: The double newline in the output is fixed.
  - FIXED: empty rules are no more part of the compiled output.
 
- - ADDED: Support for CSS 2 & 3 functions like `url` or `matrix3d`
- - ADDED: vector like selector for media queries, more or less the same as
- rules selectors
- - ADDED: Now the key words `:> :+ :~` can be used as combinators
+ - ADDED: More generic desecndant selector: we can now use any sequential
+ instead of just vectors.
+ - ADDED: More generic property values sequentials give space separated values
+ sets give comma separated ones.
+ - ADDED: Support for CSS 2 & 3 functions like `url` or `matrix3d`.
+ - ADDED: rules like selector for media queries.
+ - ADDED: Now the key words `:> :+ :~` can be used as combinators.
  inside a vector of selectors instead of the `c-> c-+ c-g+` functions.
  - ADDED: Compact style.
- - ADDED: Use of key words for pseudo classes args
+ - ADDED: Use of key words for pseudo classes args.
  - ADDED: Possible line break in the set like selectors output.
  - ADDED: Helpers to have a more fluent API.
  - ADDED: We can now use inline css or css comments. There

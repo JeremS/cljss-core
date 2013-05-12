@@ -8,7 +8,10 @@
   (:use cljss.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        [cljss.compilation :only (compile-seq-then-join)]))
+        [cljss.compilation :only (compile-seq-then-join)]
+
+        clojure.set
+        ))
 
 (defn- contains-set? [sels]
   (let [set-t? #(isa? % set-t)]
@@ -17,7 +20,7 @@
          (some set-t?))))
 
 
-(extend-type clojure.lang.PersistentVector
+(extend-type clojure.lang.Sequential
   Neutral
   (neutral? [this] (-> this seq not))
 
@@ -47,9 +50,7 @@
     (compile-as-selector this))))
 
 
-(derive clojure.lang.PersistentVector  combination-t)
-
-
+(derive clojure.lang.Sequential  combination-t)
 
 
 ;; ----------------------------------------------------------------------------
