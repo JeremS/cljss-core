@@ -82,14 +82,15 @@
    ([this]
     (compile-seq-then-join this compile-as-selector ", "))
    ([this style]
-    (let [break (:selector-break style)]
+    (let [break (:selector-break style)
+          indent (:outer-indent style)]
       (if (and break (pos? break))
         (->> this
              (map compile-as-selector)
              (interpose ", ")
              (partition-all (* 2 break))
              (map #(apply str %))
-             (string/join \newline))
+             (string/join (str \newline indent)))
         (compile-as-selector this))))))
 
 
