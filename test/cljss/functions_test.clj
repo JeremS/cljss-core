@@ -68,6 +68,17 @@
    => "rotateZ(10deg)"
 
    (compile-as-property-value (perspective :17px))
-   => "perspective(17px)")
+   => "perspective(17px)"
+
+   ; from http://dev.w3.org/csswg/css-images-3/#repeating-gradients
+   (compile-as-property-value
+    (repeating-radial-gradient
+     [:circle :closest-side :at :20px :30px]
+     :red
+     :yellow
+     [:green :100%]
+     [:yellow :150%]
+     [:red :200%]))
+   => "repeating-radial-gradient(circle closest-side at 20px 30px, red, yellow, green 100%, yellow 150%, red 200%)")
 
 

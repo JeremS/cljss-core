@@ -57,4 +57,8 @@
   scale3d scaleZ
   rotate3d rotateX rotateY rotateZ
 
-  perspective)
+  perspective
+
+  ; gradient
+  linear-gradient radial-gradient
+  repeating-linear-gradient repeating-radial-gradient)
