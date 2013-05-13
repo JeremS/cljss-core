@@ -5,6 +5,13 @@ Cljss provides a DSL similar to
 More precisely the rules syntax more or less the same syntax as css-gen with
 somme tricks of my own.
 
+## Instalation
+In `project.clj`:
+```clojure
+[jeremys/cljss-core "0.2.1"]
+```
+
+
 ## Rule syntax
 ### simple rules
 Rules are represented with vectors, the first element being a selector,
