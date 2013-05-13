@@ -313,7 +313,6 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - css function (url...)
  - ClojureScript version ?
  - use dalap for precompilation ?
  - syntax checking / error reporting ?
@@ -332,11 +331,11 @@ writing this code with Ligh Table !
  sets give comma separated ones.
  - ADDED: Support for CSS 2 & 3 functions like `url` or `matrix3d`.
  - ADDED: rules like selector for media queries.
- - ADDED: Now the key words `:> :+ :~` can be used as combinators.
+ - ADDED: Now the keywords `:> :+ :~` can be used as combinators
  inside a vector of selectors instead of the `c-> c-+ c-g+` functions.
  - ADDED: Compact style.
  - ADDED: Use of key words for pseudo classes args.
- - ADDED: Possible line break in the set like selectors output.
+ - ADDED: Possible line break in the set selectors output.
  - ADDED: Helpers to have a more fluent API.
  - ADDED: We can now use inline css or css comments. There
  is a compilation option that allows the comments to be in the
