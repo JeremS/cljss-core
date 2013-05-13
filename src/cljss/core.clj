@@ -19,7 +19,7 @@
   (:use cljss.protocols))
 
 ;; Importation
-;; We import here the different helper, contructor functions
+;; We import here the different helpers, contructor functions
 ;; that we can need when constructing css rules.
 
 (p/import-vars
@@ -48,7 +48,21 @@
    first-line
    first-letter
    before after]
- [cljss.functions url])
+
+ [cljss.functions
+  ; css2 functions
+  url counter attr calc
+
+  ; css3 transform functions
+  matrix translate translateX translateY
+  scale scaleX scaleY
+  rotate skewX skewY
+
+  matrix3d translate3d translateZ
+  scale3d scaleZ
+  rotate3d rotateX rotateY rotateZ
+
+  perspective])
 
 ;; ### Helpers
 
@@ -58,7 +72,7 @@
 
 
 (def ^{:arglist '([& rules])
-       :doc "Groups a list of rules."}
+       :doc "Groups list of lists of rules."}
   group-rules concat)
 
 (defmacro defrules
@@ -68,10 +82,11 @@
      (rules ~@body)))
 
 (defn css-str
-  "Return the string wrapped inside a pair
+  "Returns the string wrapped inside a pair
   of character \".
   Useful to declare a css property as a css string."
-  [s] (str \" s \"))
+  [s]
+  (str \" s \"))
 
 (defn css-with-style
   "Compile a list of rules with a given style."

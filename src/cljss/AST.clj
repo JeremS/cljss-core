@@ -1,6 +1,6 @@
 ;; ## AST
-;; We rules are parse, the production is an AST.
-;; We define here the different kinds of node this AST can have.
+;; When rules are parsed, the result is an AST.
+;; We define here the different kinds of nodes this AST can have.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.AST
@@ -115,9 +115,10 @@
 
 ;; ### Css Comments
 ;; Like inline css we can have comments, the difference
-;; with the previous type is that css comment can
-;; be suppressed from the compiled result, reagarding the
+;; with the previous type is that css comments can
+;; be suppressed from the compiled result, in function of the
 ;; value of a compilation option.
+
 (defrecord CssComment [css]
   CSS
   (empty-rule? [_] false)

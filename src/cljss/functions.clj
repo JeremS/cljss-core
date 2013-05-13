@@ -1,7 +1,13 @@
+;; ## Functions
+;; CSS 2 then CSS 3 have brought some function
+;; in the specification.
+
 (ns cljss.functions
   (:require [clojure.string :as string])
   (:use cljss.protocols
         [cljss.compilation :only (compile-seq-then-join)]))
+
+;; generic compilation of as css function
 
 (defn compile-function [name args compile-fn]
   (str (compile-fn name)
@@ -22,16 +28,21 @@
     (compile-function name args compile-as-property-value)))
 
 
+;; Template that defines a way to define css function constructor
+
 (defmacro defcssfunction
   ([f-name]
    (list 'defcssfunction f-name (str f-name)))
   ([f-name f-str]
    `(defn ~f-name [& ~'args]
       (CssFunction. ~f-str ~'args))))
+
 (defmacro defcssfunctions [& f-names]
   `(do
      ~@(for [f-name f-names]
          (list 'defcssfunction f-name))))
+
+;; Use of the template to define the function from the spec.
 
 (defcssfunctions
   ; css2 functions

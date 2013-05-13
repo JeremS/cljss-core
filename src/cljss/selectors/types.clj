@@ -1,6 +1,6 @@
 ;; Selector types
 ;; We define here different types of selectors.
-;; Its usefull for the combination part.
+;; It is used in the combination part.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.types

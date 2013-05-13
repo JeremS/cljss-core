@@ -22,15 +22,16 @@
 
 
 ;; Generic types used for dispatch
+
 (derive clojure.lang.LazySeq ::list)
 (derive clojure.lang.PersistentList ::list)
-
-Character
 
 (derive String ::inline)
 (derive Character ::inline)
 (derive InlineCss ::inline)
 (derive CssComment ::inline)
+
+
 ;; ### Parsing of rules
 ;; A vector is considered a rule.
 

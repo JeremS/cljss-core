@@ -1,6 +1,6 @@
 ;; ## Precompilation
-;; This namespace regroups the different transformation that
-;; are applied to an AST in order to ready it for compiation.
+;; This namespace regroups the different transformations that
+;; are applied to an AST in order to ready it for compilation.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.precompilation
@@ -10,7 +10,7 @@
   (:import [cljss.AST Rule Query]))
 
 ;; ### Visitor implementation
-;; In order to work with the AST, an implmentation
+;; In order to work with the AST, an implementation
 ;; of the visitor pattern is used.
 ;; This implementation uses multi method under the covers.
 
@@ -20,8 +20,8 @@
 (defn- uuid [] (java.util.UUID/randomUUID))
 
 
-;; A visitor is composed of a visit function and a
-;; default environment for the visit of a root node.
+;; A visitor is composed of function applied to a node when visited
+;; and a default environment for the visit of a root node.
 
 (defrecord Visitor [env f])
 
@@ -46,8 +46,8 @@
 ;; We can see here that the visit of a node produces
 ;; a new version of the node and a new environment.
 ;; This new environment is used for the visits
-;; of the sub elements instead of the giben env.
-;; It is handy we a visitor needs to pass on information
+;; of the sub elements instead of the given env.
+;; It is handy when a visitor needs to pass on information
 ;; for the visit of sub elements.
 
 (defn visit [node {f :f env :env :as visitor}]
@@ -59,8 +59,9 @@
                             (children new-node))]
       (assoc-children new-node new-children))))
 
+
 ;; Visitor composition
-;; The goal here mimic function composition
+;; The goal here is to mimic function composition
 ;; for visitors. The difference here is that
 ;; the composition is done left to right.
 ;; We can see here that the result of one visit (visitor v1)
@@ -96,7 +97,8 @@
   the said visitor too.
 
   Note that the created multimethod dispatches
-  on the type of the first parameter wich is an AST node."
+  on the type of the first parameter wich should be
+  an AST node."
   [v-name env]
   (let [mm-name (multi-name v-name)]
   `(do
@@ -104,7 +106,7 @@
      (def ~v-name (make-visitor ~env ~mm-name)))))
 
 (defmacro defvisit
-  "Define the behaviour of a visitior in function of
+  "Defines the behaviour of a visitior in function of
   the first arg type."
   [v-name v-type args & body]
   (let [mm-name (multi-name v-name)]
@@ -112,6 +114,9 @@
 
 
 ;; ### Visitors definition.
+;; Here we have the different operations applied to
+;; the AST before compilation.
+
 
 ;; Adds to rules and their sub rules
 ;; their level of nesting.
@@ -204,9 +209,10 @@
      make-rule-for-media-properties
      assoc-depth))
 
-;; ### Flattening
-;; When an AST is visited, we flatten it
-;; to extract rubrules from rule. It allows
+
+;; ### AST flattening
+;; After an AST has been visited, we flatten it
+;; to extract rubrules from their parent rule. It allows
 ;; for a simpler algorithm to compile rules.
 
 (defmulti flatten-AST

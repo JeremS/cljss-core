@@ -1,5 +1,5 @@
 ;; ## Compilation
-;; We handle in this namespace the high level 'API'
+;; We handle in this namespace the 'high level API'
 ;; regarding compilation of an AST.
 
 (ns ^{:author "Jeremy Schoffen."}
