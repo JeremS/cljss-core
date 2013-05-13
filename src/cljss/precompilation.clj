@@ -125,6 +125,12 @@
   (list (assoc node :depth depth)
         (inc depth)))
 
+(defvisit assoc-depth Rule [node depth]
+  (list (assoc node :depth depth)
+        (if (-> node :properties seq)
+          (inc depth)
+          depth)))
+
 
 ;; Combine selectors of a rule to its subrules
 ;; recursively.

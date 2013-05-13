@@ -95,7 +95,6 @@
     depth5 => 2
     depth6 => 2))
 
-
 (facts "We can replace the parent selector in nested rules"
 
   (fact "Parent selector can be used in pseudo classes"
