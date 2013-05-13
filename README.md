@@ -5,7 +5,7 @@ Cljss provides a DSL similar to
 More precisely the rules syntax more or less the same syntax as css-gen with
 somme tricks of my own.
 
-## Instalation
+## Installation
 In `project.clj`:
 ```clojure
 [jeremys/cljss-core "0.2.1"]
