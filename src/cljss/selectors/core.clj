@@ -7,10 +7,7 @@
         cljss.selectors.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        [cljss.compilation :only (compile-seq-then-join)]
-
-        clojure.tools.trace
-        ))
+        [cljss.compilation :only (compile-seq-then-join)]))
 
 (derive String simple-t)
 (derive clojure.lang.Keyword        simple-t)
@@ -59,6 +56,19 @@
         values (apply concat sets)]
     (into (set simples) values)))
 
+(defn- recombine [sels]
+  (reduce #(combine %1 %2) sels))
+
+(defn- simplify-seq [s cstr combination]
+  (cond (neutral? s) nil
+        (= 1 (count s)) (simplify (first s))
+        (not (simplifyable? s)) s
+        :else
+        (let [s (clean-seq s cstr)]
+          (if (contains-set? s)
+            (simplify (combination s))
+            (simplify s)))))
+
 (extend-protocol SimplifyAble
   nil
   (simplifyable? [_] true)
@@ -85,14 +95,7 @@
     (seq-simplifyable? this))
 
   (simplify [this]
-    (cond (neutral? this)            nil
-          (= 1 (count this))         (simplify (first this))
-          (not (simplifyable? this)) this
-          :else
-           (let [this (clean-seq this vec)]
-             (if-not (contains-set? this)
-               (simplify this)
-               (simplify (reduce #(combine %1 %2) this))))))
+    (simplify-seq this vec recombine))
 
 
   clojure.lang.IPersistentSet
@@ -101,17 +104,9 @@
     (seq-simplifyable? this))
 
   (simplify [this]
-            (cond (neutral? this)            nil
-                  (= 1 (count this))         (simplify (first this))
-                  (not (simplifyable? this)) this
-                  :else
-                   (let [this (clean-seq this set)]
-                     (if-not (contains-set? this)
-                       (simplify this)
-                       (simplify (expand-sets this)))))))
+    (simplify-seq this set expand-sets)))
 
-(simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
-(simplify [#{:div :p} :> [:a]])
+
 (extend-protocol CssSelector
   nil
   (compile-as-selector
