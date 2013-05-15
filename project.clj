@@ -1,4 +1,4 @@
-(defproject jeremys/cljss-core "0.2.2"
+(defproject jeremys/cljss-core "0.2.2-SNAPSHOT"
   :description "DSL to write css rule in clojure."
   :url "https://github.com/JeremS/cljss-core"
   :license {:name "Eclipse Public License"

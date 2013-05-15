@@ -5,6 +5,13 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.protocols)
 
+
+(defprotocol Parent
+  (parent? [this]
+    "Detects if the parent selector is used.")
+  (replace-parent [this replacement]
+    "Replace any apparition of the parent selecor it contains"))
+
 (defprotocol Tree
   (children [this]
     "Each node of the AST must return the keyword to access its children.")
@@ -19,12 +26,6 @@
 (defprotocol SimplifyAble
   (simplify [this]
     "Return a simplyfied, equivalent version of a selector."))
-
-(defprotocol Parent
-  (parent? [this]
-    "Detects if the parent selector is used.")
-  (replace-parent [this replacement]
-    "Replace any apparition of the parent selecor it contains"))
 
 ; protocols about compilation
 (defprotocol CSS
