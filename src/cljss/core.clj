@@ -24,8 +24,12 @@
 
 (p/import-vars
  [cljss.compilation styles]
+
  [cljss.AST media inline-css css-comment]
- [cljss.selectors & c-> c-+ c-g+
+
+ [cljss.selectors
+
+  &
 
   att-sel
 

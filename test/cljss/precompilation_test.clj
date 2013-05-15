@@ -4,7 +4,7 @@
         cljss.protocols
         [cljss.AST :only (media)]
         [cljss.parse :only (parse-rule)]
-        [cljss.selectors :only (combine c-g+ & hover)]
+        [cljss.selectors :only (combine & hover)]
         [midje.sweet :only (fact facts future-fact)]))
 
 (def r1 [:div :bgcolor :blue])
@@ -56,12 +56,13 @@
 (fact "The simplify decorator simplifies selector in a rule and its nested rules"
   (let [r [#{[[:div :p][:a []]] [#{:div :p []}[:a]]}
            :color :black
-           [(c-g+ [:div :p][:a]) :color :blue]]
+           [[[:div :p] :+ [:a]]
+            :color :blue]]
         visited (-> r parse-rule (visit  simplify-selector))
         s1 (:selector visited)
         s2 (-> visited :sub-rules first :selector)]
     s1 => (simplify #{[[:div :p][:a []]] [#{:div :p []}[:a]]})
-    s2 => (simplify (c-g+ [:div :p][:a]))))
+    s2 => (simplify [[:div :p] :+ [:a]])))
 
 
 (fact "The default visitor works as expected."
@@ -120,7 +121,7 @@
 
   (fact "The parent selector can be used inside combined selectors"
     (let [r [:section :color :blue
-             [[:a #{& :div}] :colore :white]]
+             [[:a #{& :div}] :color :white]]
           visited (-> r parse-rule (visit  combine-or-replace-parent))
           s2 (-> visited :sub-rules first :selector)]
       s2 => [:a #{:section :div}])))

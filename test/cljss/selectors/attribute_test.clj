@@ -28,7 +28,7 @@
   (-> [:#id :a] (att-sel "title^=somthing") compile-as-selector)
   => "#id a[title^=somthing]"
 
-  (-> (c-> :#id :p :a) (att-sel "title*=somthing") compile-as-selector)
+  (-> [:#id :> :p :> :a] (att-sel "title*=somthing") compile-as-selector)
   => "#id > p > a[title*=somthing]"
 
   (-> #{:#id :a} (att-sel "href$=\"http://...\"") compile-as-selector)
