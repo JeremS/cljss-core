@@ -5,7 +5,8 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.AST
   (:require [clojure.string :as string])
-  (:use cljss.protocols))
+  (:use cljss.protocols
+        cljss.selectors.protocols))
 
 ;; helpers
 

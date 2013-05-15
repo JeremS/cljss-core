@@ -4,7 +4,7 @@
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.types
-  (:use cljss.protocols))
+  (:use cljss.selectors.protocols))
 
 (def neutral-t     ::neutral)
 (def sel-t         ::sel)
