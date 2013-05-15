@@ -16,16 +16,19 @@
     (compile-as-selector :.class) => ".class"
     (compile-as-selector :.class {}) => ".class"))
 
-(fact "Keyword are not a neutral element when in comes to combine them as selectors"
+(fact "Keywords are not a neutral element when when combining them with another selector."
   (neutral? :div) => falsey
   (neutral? :p)   => falsey)
 
-(fact "Non empty string are not neutral when it comes to combine them as selector"
+(fact "Non empty string are not neutral when combining them with another selector."
   (neutral? "div") => falsey
   (neutral? "p")   => falsey)
 
 (fact "The empty string is neutral when it comes to combine it as a selector"
   (neutral? "")   => truthy)
+
+(fact "nil is a neutral element"
+  (neutral? nil) => true)
 
 (fact "Simplifying non neutral basic selectors returns the selector"
   (simplify "div") => "div"
@@ -34,7 +37,7 @@
 (fact "Simplify a neutral simple selector (empty string) returns nil"
   (simplify "") => nil)
 
-(fact "Basic selectors arent the parent decorator"
+(fact "Basic selectors aren't the parent decorator"
   (parent? "div") => falsey
   (parent? :div)  => falsey
   (parent? nil)   => falsey)
@@ -91,14 +94,22 @@
 
 
 
-(facts "About simplification of vector selectors (descendant combinator)"
+(facts "About simplification of seq (Sequantial) of selectors"
 
   (fact "Returns nil when neutral"
-    (simplify []) => nil)
+    (simplify []) => nil
+    (simplify '()) => nil)
 
   (fact "returns the combination left to right if a set is present."
-    (simplify [[:div :p][:a]]) => [[:div :p] :a]
-    (simplify [#{:div :p}[:a]]) => #{[:div :a] [:p :a]}))
+    (simplify [[:div :p][:a]])
+    => [[:div :p] :a]
+
+    (simplify [#{:div :p}[:a]])
+    => #{[:div :a] [:p :a]}
+
+    (simplify '(:section #{:div :p}[:a]))
+    => #{[[:section :div] :a]
+         [[:section :p] :a]}))
 
 
 (facts "About simplification of sets"
@@ -107,15 +118,18 @@
     (simplify #{}) => nil)
 
   (fact "Returns the set of the simplifications"
-    (= (simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
+    (= (simplify #{[[:div :p][:a []]]
+                   [[:div :p []][:a :span]]})
        #{[[:div :p] :a] [[:div :p] [:a :span]]})
     => truthy)
 
   (fact "When sets are inside a set the inners sets a merged with the outer one"
+    (simplify #{:div #{:p :a} :span})
+    => #{:div :p :a :span}
+
     (= (simplify #{:section #{:div :p #{:span :a}} :a})
        #{:section :div :p :span :a})
     => truthy))
-
 
 
 (facts "About simplification of selectors > + ~(children, siblings, general sibilings)"
@@ -125,9 +139,6 @@
   (simplify [#{:div :p} :> [:a]])
   => #{(combine (combine :div :>) :a)
        (combine (combine :p  :>) :a)})
-
-(fact "Sets inside sets are expanded"
-  (simplify #{:div #{:p :a} :span}) => #{:div :p :a :span})
 
 (fact "We can determine if a combination of selectors contains the parent selector"
   (parent? [:div :a]) => falsey
