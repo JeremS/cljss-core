@@ -22,6 +22,8 @@
   [(combine :div :a) :color :red]"
   (fn [sel1 sel2] [(selector-type sel1)(selector-type sel2)]))
 
+(defmethod combine :default [l r]
+  (throw (ex-info "Can't combine these selectors" {:left l :right r})))
 
 (defmethod combine [sel-t neutral-t] [k _] k)
 (defmethod combine [neutral-t sel-t] [_ k] k)
