@@ -19,43 +19,47 @@ the rest can be property declarations or nested rules.
 For instance, the rules:
 
 ```clojure
-	[:section :color :black]
-		[:div :color :white]
+	(css [:section :color :black]
+		     [:div :color :white])
 ```
 
 will give the css:
 
 ```css
-section {color: black;}
-div {color: white;}
+section {
+  color: black;
+}
+div {
+  color: white;
+}
 ```
 
 The properties can be a chain of a mix and match of key values,
 maps or lists in any order.
 The rule:
 ```clojure
-[:#container :background-color :black
+(css [:#container :background-color :black
              (list :width "900px" :height "400px")
              :border ["1px" :solid :white]
              {:position :relative
               :top "30px"
               :left "30px"}
-             :color :blue]
+             :color :blue])
 ```
 
 will give css similar to:
 
 ```css
-  #container {
-    background-color: black;
-    width: 900px;
-    height: 400px;
-    border: 1px solid white;
-    position: relative;
-    top: 30px;
-    left: 30px;
-    color: blue;
-  }
+#container {
+  color: blue;
+  left: 30px;
+  top: 30px;
+  position: relative;
+  border: 1px solid white;
+  height: 400px;
+  width: 900px;
+  background-color: black;
+}
 ```
 
 This way we can create mixins directly in clojure:
@@ -68,7 +72,7 @@ This way we can create mixins directly in clojure:
   '(:padding ["0px" "20px"]
     :margin-left "10px"))
 
-[:#nav (css-float :left) default-box]
+(css [:#nav (css-float :left) default-box])
 ```
 
 generates:
@@ -115,72 +119,101 @@ gives something like:
     }
 ```
 
-## selectors
+## Selectors syntax in details
 ### simple selectors
-String or key words are used for simple selectors:
+String or keywords are used for simple selectors:
 ```clojure
 [:div.class1.class2 ...]
-=> "div.class1.class2"
+=> "div.class1.class2 {...}"
 
 ["div.class1.class2" ...]
-=> "div.class1.class2"
+=> "div.class1.class2 {...}"
 ```
 
 ### combining selectors
 Css provide 4 ways to combine selectors
- - the descendant combinator, spaced selectors in css, vector of selectors in cljss
+ - the descendant combinator, spaced selectors in css, Sequential (vector/list/lasyseq)
+   of selectors in cljss
 
  ```clojure
  [[:div :a] ...] => "div a { ... }"
  ```
 
- - the children combinator, > character in css, function c-> in cljss
+ - the children combinator, > character in css, :> or ">" between selectors in cljss
 
  ```clojure
- [(c-> :div :a) ...] => "div > a { ... }"
+ [:div :> :p ...] => "div > p { ... }"
  ```
 
- - the siblings combinator, + character in css, function c-+ in cljss
+ - the siblings combinator, + character in css, :+ or "+" between selectors in cljss
 
  ```clojure
- [(c-+ :div :a) ...] => "div + a { ... }"
+ [[:div :+ :p] ...] => "div + p { ... }"
  ```
 
- - the general siblings combinator, ~ character in css, function c-g+ in cljss
+ - the general siblings combinator, ~ character in css, "~" between selectors in cljss
 
  ```clojure
- [(c-g+:div :a) ...] => "div ~ a { ... }"
+ [:div "~" :a ...] => "div ~ a { ... }"
  ```
 
 We can of course combine them:
 
 ```clojure
-[[:section (c-> :div (c-+ :p :a)) :span] ...] => "section div > p + a span { ... }"
+[[:section :div :> :p :+ :a :span] ...] => "section div > p + a span { ... }"
 ```
 
 We can also use sets to represent list of selectors have the same properties:
 
 ```clojure
-[[:.class1 (c-> #{:ul :ol} :li)] ...] => ".class1 ul > li, .class1 ol > li"
+[[:.class1 #{:ul :ol} :> :li] ...] => ".class1 ul > li, .class1 ol > li"
 ````
 
+Note that you need to enclose your combined selectors in a 'sequential' since the first element
+of a rule is considered the selector, the being rest property declarations.
+Thus:
+
+```clojure
+; Not what we want...
+[:div :> :p :border [:1px :solid :black]]
+;=> "div {>: p; border: 1px solid black;}"
+
+; Better
+[[:div :> :p] :border [:1px :solid :black]]
+"div > p { border: 1px solid black;}"
+```
 
 ### pseudos & attribute selectors
 Pseudo classes, pseudo elements and attribute selectors are implemented as functions that you can use
 to enrich a selector. The pseudo class will appear as a suffix to the selector parameter:
 
 ```clojure
-[(hover :a) ... ] => "a:hover { ... }"
-
-[(first-letter :p) ... ] => "a::first-letter { ... }"
-
-[(-> (c-> :ul :li) hover (nth-child "even")) ... ] => "ul > li:hover:nth-child(even)  { ... }"
-[(-> :a (att-sel "href=\"http://...\"")) ...] =>  a[href="http://..."] { ... }
+[(hover :a) ... ]
+[(first-letter :p) ... ]
+[(-> [:ul :> :li] hover (nth-child :even)) ... ]
+[(-> :a (att-sel "href=\"http://...\"")) ...]
 
 ```
 
+generates:
 
-### parent selectors
+```css
+a:hover {
+  ...
+}
+p::first-letter {
+  ...
+}
+ul > li:hover:nth-child(even) {
+  ...
+}
+a[href="http://..."] {
+  ...
+}
+```
+
+
+### Parent selector
 The selector `&` is inspired by its namesake in [sass](http://sass-lang.com),
 [stylus](http://learnboost.github.io/stylus/)...
 However its semantic is different in cljss. As of now, inside nested rules,
@@ -264,8 +297,8 @@ When it is, it just replaces the selector `&` with the selector of the parent ru
  section, div { ... }
  ```
 
-### Media queries
-There is now a support for media queries similar the one in [sass](http://sass-lang.com).
+## Media queries
+There a support for media queries similar the one in [sass](http://sass-lang.com).
 
 ```clojure
 (css [#{:div :section}
@@ -320,10 +353,7 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - fix simplification, it should remove any empty sequential.
- - Compilation of numbers in selectors.
- - ClojureScript version ?
- - use dalap for precompilation ?
+ - ClojureScript adaptation ?
  - syntax checking / error reporting ?
 
 
