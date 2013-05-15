@@ -1,7 +1,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.precompilation-test
   (:use cljss.precompilation
-        cljss.protocols
+        cljss.selectors.protocols
         [cljss.AST :only (media)]
         [cljss.parse :only (parse-rule)]
         [cljss.selectors :only (combine & hover)]

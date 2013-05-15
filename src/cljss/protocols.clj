@@ -12,14 +12,6 @@
   (assoc-children [this new-children]
     "Returns a new version of the tree with the new children"))
 
-; Protocols specific to selectors
-(defprotocol Neutral
-  (neutral? [this]
-    "True if the selector is a neutral element in a composition of selectors."))
-
-(defprotocol SimplifyAble
-  (simplify [this]
-    "Return a simplyfied, equivalent version of a selector."))
 
 ; protocols about compilation
 (defprotocol CSS

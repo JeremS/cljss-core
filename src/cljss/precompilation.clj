@@ -6,8 +6,8 @@
   cljss.precompilation
   (:require [cljss.selectors :refer (& combine)]
             [cljss.AST :refer (rule)])
-  (:use cljss.protocols
-        cljss.selectors.protocols)
+  (:use cljss.selectors.protocols
+        cljss.protocols)
   (:import [cljss.AST Rule Query]))
 
 ;; ### Visitor implementation
