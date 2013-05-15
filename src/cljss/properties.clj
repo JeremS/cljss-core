@@ -2,8 +2,7 @@
 ;; We group here the necessary code to handle
 ;; css properties
 
-(ns  ^{:author "Jeremy Schoffen."}
-  cljss.properties
+(ns cljss.properties
   (:use cljss.protocols
         [cljss.compilation :only (compile-seq-then-join)]))
 
@@ -26,11 +25,11 @@
                          \space))
 
 (extend-protocol CssPropertyValue
+  Object
+  (compile-as-property-value [this] (str this))
+
   String
   (compile-as-property-value [this] this)
-
-  Number
-  (compile-as-property-value [this] (str this))
 
   clojure.lang.Keyword
   (compile-as-property-value [this] (name this))

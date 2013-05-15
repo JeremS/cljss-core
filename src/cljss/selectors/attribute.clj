@@ -1,8 +1,7 @@
 ;; ## Attribute Selectors
 ;; The support for attribute selectors is implemented here.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.attribute
+(ns cljss.selectors.attribute
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.protocols

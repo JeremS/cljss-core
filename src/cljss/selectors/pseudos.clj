@@ -1,8 +1,7 @@
 ;; ## Pseudos
 ;; Defifition of pseudo classes and pseudo elements.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.pseudos
+(ns cljss.selectors.pseudos
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.protocols

@@ -2,8 +2,7 @@
 ;; When rules are parsed, the result is an AST.
 ;; We define here the different kinds of nodes this AST can have.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.AST
+(ns cljss.AST
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.precompilation.protocols))

@@ -1,7 +1,6 @@
 ;; ## Parent selector
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.parent
+(ns cljss.selectors.parent
   (:use cljss.protocols
         cljss.selectors.protocols
         cljss.selectors.combination

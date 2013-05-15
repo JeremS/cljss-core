@@ -1,3 +1,5 @@
+;; Precompilation protocols
+
 (ns cljss.precompilation.protocols)
 
 (defprotocol Tree

@@ -1,9 +1,7 @@
 ;; ## Protocols
-;; This namespace contains the protocols used throughout
-;; the library.
+;; General protocols used to extend cljss.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.protocols)
+(ns cljss.protocols)
 
 
 (defprotocol CSS

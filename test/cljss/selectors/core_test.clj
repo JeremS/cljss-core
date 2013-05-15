@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.core-test
+(ns cljss.selectors.core-test
   (:use [cljss.selectors core protocols combination parent]
         cljss.protocols
         midje.sweet))

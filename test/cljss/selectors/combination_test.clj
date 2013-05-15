@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.combination-test
+(ns cljss.selectors.combination-test
   (:use cljss.selectors.combination
         cljss.selectors.core
         midje.sweet))

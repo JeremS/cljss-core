@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.parse-test
+(ns cljss.parse-test
   (:use cljss.parse
         cljss.AST
         midje.sweet))

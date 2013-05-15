@@ -1,8 +1,7 @@
-;; ## Basic
-;; Implementation of the protocols for what we could call the words of the selector DSL.
+;; ## Core
+;; Implementation of the protocols for the core selctor dsl.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.core
+(ns cljss.selectors.core
   (:require [clojure.string :as string])
   (:use cljss.protocols
         cljss.selectors.protocols
@@ -12,7 +11,7 @@
 
 (derive String simple-t)
 (derive clojure.lang.Keyword        simple-t)
-(derive clojure.lang.Sequential  combination-t)
+(derive clojure.lang.Sequential  simple-t)
 (derive clojure.lang.IPersistentSet set-t)
 
 

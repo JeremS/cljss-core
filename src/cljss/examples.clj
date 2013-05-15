@@ -1,7 +1,6 @@
 ;; ## Examples used in the README.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.examples
+(ns cljss.examples
   (:refer-clojure :exclude [rem])
   (:use cljss.core))
 

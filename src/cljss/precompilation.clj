@@ -1,6 +1,6 @@
 ;; ## Precompilation
 ;; This namespace regroups the different transformations that
-;; are applied to an AST in order to ready it for compilation.
+;; are applied to an AST in order to prepare it for compilation.
 
 (ns ^{:author "Jeremy Schoffen."}
   cljss.precompilation
