@@ -31,35 +31,55 @@
   clojure.lang.Seqable
   (neutral? [this] (empty? this)))
 
-(defn- set-t? [c]
-  (-> c selector-type (isa? set-t)))
 
-(defn- contains-set? [sels]
-    (some set-t? sels))
+(defn- set-t?
+  "Checks if the selector is a set"
+  [sel]
+  (-> sel selector-type (isa? set-t)))
 
+(defn- contains-set?
+  "Checks if a seq of selector contains a set."
+  [sels]
+  (some set-t? sels))
 
-(defn- seq-simplifyable? [s]
+(defn- seq-simplifyable?
+  "Determines if a seq of selector can be simplified.
+  3 cases:
+   - the seq is empty -> neutral selector
+   - the seq contains only one element -> simplified as the
+     simplification of the element.
+   - the seq contains simplifyable elements or sets ->
+     must simplify, combine the elements."
+  [s]
   (or (>= 1 (count s))
       (some #(or (simplifyable? %)
                  (set-t? %))
             s)))
 
 (defn- clean-seq [s seq-cstr]
+  "Simplify the elements of a seq, gets rid of the
+  nil/neutral element and reconstrunct with the cstr fn."
   (->> s
        (keep simplify)
        (remove neutral?)
        seq-cstr))
 
-(defn- expand-sets [s]
+(defn- expand-sets
+  "Expands removes inside sets of a set then merges the
+  removed elements. #{:a #{:b :c}} => #{:a :b :c}"
+  [s]
   (let [simples (remove set-t? s)
         sets (filter set-t? s)
         values (apply concat sets)]
     (into (set simples) values)))
 
 (defn- recombine [sels]
+  "Combines the element of a seq from left to right."
   (reduce #(combine %1 %2) sels))
 
-(defn- simplify-seq [s cstr combination]
+(defn- simplify-seq
+  "simplifies a simplifayable seq."
+  [s cstr combination]
   (cond (neutral? s) nil
         (= 1 (count s)) (simplify (first s))
         (not (simplifyable? s)) s
