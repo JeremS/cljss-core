@@ -6,6 +6,7 @@
         cljss.selectors.combination
         cljss.selectors.types))
 
+
 (defrecord ParentSelector []
   Neutral
   (neutral? [this] false)

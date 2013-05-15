@@ -320,6 +320,7 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
+ - Compilation of numbers in selectors.
  - ClojureScript version ?
  - use dalap for precompilation ?
  - syntax checking / error reporting ?
