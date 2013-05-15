@@ -41,12 +41,23 @@
     (some set-t? sels))
 
 
-(defn seq-simplifyable? [s]
+(defn- seq-simplifyable? [s]
   (or (>= 1 (count s))
       (some #(or (simplifyable? %)
                  (set-t? %))
             s)))
 
+(defn- clean-seq [s seq-cstr]
+  (->> s
+       (keep simplify)
+       (remove neutral?)
+       seq-cstr))
+
+(defn- expand-sets [s]
+  (let [simples (remove set-t? s)
+        sets (filter set-t? s)
+        values (apply concat sets)]
+    (into (set simples) values)))
 
 (extend-protocol SimplifyAble
   nil
@@ -78,10 +89,7 @@
           (= 1 (count this))         (simplify (first this))
           (not (simplifyable? this)) this
           :else
-           (let [this (->> this
-                           (keep simplify)
-                           (remove neutral?)
-                           vec)]
+           (let [this (clean-seq this vec)]
              (if-not (contains-set? this)
                (simplify this)
                (simplify (reduce #(combine %1 %2) this))))))
@@ -97,13 +105,10 @@
                   (= 1 (count this))         (simplify (first this))
                   (not (simplifyable? this)) this
                   :else
-                   (let [this (keep simplify this)]
+                   (let [this (clean-seq this set)]
                      (if-not (contains-set? this)
-                       (simplify (set this))
-                       (let [simples (remove set-t? this)
-                             sets (filter set-t? this)
-                             values (apply concat sets)]
-                         (simplify (into (set simples) values))))))))
+                       (simplify this)
+                       (simplify (expand-sets this)))))))
 
 (simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
 (simplify [#{:div :p} :> [:a]])
