@@ -320,9 +320,7 @@ A thanks to [Kodowa](http://www.kodowa.com) too, I'm having a very good time
 writing this code with Ligh Table !
 
 ## Todo
- - Refactor the parent selector protocol, it shouldnt be a general one
- - Refactor the simplify protocol, it shouldn't be general.
- - fix simplification, it sholud remove any empty sequential.
+ - fix simplification, it should remove any empty sequential.
  - Compilation of numbers in selectors.
  - ClojureScript version ?
  - use dalap for precompilation ?

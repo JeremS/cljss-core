@@ -20,7 +20,7 @@
   (neutral? :div) => falsey
   (neutral? :p)   => falsey)
 
-(fact "Non empty string are not neitral when it comes to combine them as selector"
+(fact "Non empty string are not neutral when it comes to combine them as selector"
   (neutral? "div") => falsey
   (neutral? "p")   => falsey)
 
@@ -90,14 +90,15 @@
   (neutral? #{})    => truthy)
 
 
+
 (facts "About simplification of vector selectors (descendant combinator)"
 
   (fact "Returns nil when neutral"
     (simplify []) => nil)
 
   (fact "returns the combination left to right if a set is present."
-    (simplify [[:div :p][:a]]) => [[:div :p][:a]]
-    (simplify [#{:div :p}[:a]]) => #{[:div [:a]] [:p [:a]]}))
+    (simplify [[:div :p][:a]]) => [[:div :p] :a]
+    (simplify [#{:div :p}[:a]]) => #{[:div :a] [:p :a]}))
 
 
 (facts "About simplification of sets"
@@ -106,20 +107,24 @@
     (simplify #{}) => nil)
 
   (fact "Returns the set of the simplifications"
-    (simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
-    => #{(simplify [[:div :p][:a []]])
-         (simplify [[:div :p []][:a :span]])})
+    (= (simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
+       #{[[:div :p] :a] [[:div :p] [:a :span]]})
+    => truthy)
+
   (fact "When sets are inside a set the inners sets a merged with the outer one"
-    (simplify #{:section #{:div :p #{:span :a}} :a})
-    => #{:section :div :p :span :a}))
+    (= (simplify #{:section #{:div :p #{:span :a}} :a})
+       #{:section :div :p :span :a})
+    => truthy))
+
+
 
 (facts "About simplification of selectors > + ~(children, siblings, general sibilings)"
   (simplify [:div :> :p :> :a])
   => [:div :> :p :> :a]
 
   (simplify [#{:div :p} :> [:a]])
-  => #{(combine (combine :div :>) [:a])
-       (combine (combine :p  :>) [:a])})
+  => #{(combine (combine :div :>) :a)
+       (combine (combine :p  :>) :a)})
 
 (fact "Sets inside sets are expanded"
   (simplify #{:div #{:p :a} :span}) => #{:div :p :a :span})

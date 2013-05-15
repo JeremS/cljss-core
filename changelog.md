@@ -2,6 +2,7 @@
 ### 0.3.0
  - CHANGED: Suppression of the combinators function use of infix combinator
  is more natural.
+ - internal refactoring.
 
 ### 0.2.1
  - FIXED: Numbers can now be used as properties value.

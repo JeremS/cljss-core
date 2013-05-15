@@ -21,6 +21,8 @@
   (neutral? [_] false)
 
   SimplifyAble
+  (simplifyable? [_]
+    (simplifyable? selector))
   (simplify [_]
     (apply att-sel (simplify selector) selections))
 

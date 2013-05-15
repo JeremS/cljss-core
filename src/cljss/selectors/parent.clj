@@ -12,6 +12,7 @@
   (neutral? [this] false)
 
   SimplifyAble
+  (simplifyable? [_] false)
   (simplify [this] this)
 
   Parent
