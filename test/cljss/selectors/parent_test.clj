@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.parent-test
+(ns cljss.selectors.parent-test
   (:use cljss.selectors.parent
         cljss.selectors.protocols
         cljss.protocols

@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.attribute-test
+(ns cljss.selectors.attribute-test
   (:require [clojure.string :as string])
   (:use cljss.selectors.attribute
         cljss.protocols

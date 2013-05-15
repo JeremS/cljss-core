@@ -2,8 +2,7 @@
 ;; We handle in this namespace the 'high level API'
 ;; regarding compilation of an AST.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.compilation
+(ns cljss.compilation
   (:require [clojure.string :as string])
   (:use cljss.protocols))
 

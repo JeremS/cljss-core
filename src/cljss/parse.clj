@@ -1,4 +1,4 @@
-;; Parsing
+;; ## Parsing
 ;; This namespace regroups the necessary functions
 ;; used to parse the dsl in order to produce an AST.
 

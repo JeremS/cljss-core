@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.properties-test
+(ns cljss.properties-test
   (:use cljss.properties
         cljss.protocols
         midje.sweet))

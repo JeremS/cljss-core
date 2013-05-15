@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.AST-test
+(ns cljss.AST-test
   (:require cljss.selectors
             cljss.properties)
   (:use cljss.AST

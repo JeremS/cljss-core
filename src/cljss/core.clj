@@ -2,8 +2,7 @@
 ;; The core namespace is used to regroup the general api
 ;; proposed by the DSL.
 
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.core
+(ns cljss.core
   (:refer-clojure :exclude (rem))
   (:require [cljss.AST]
             [cljss.selectors]

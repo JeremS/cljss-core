@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.selectors.pseudos-test
+(ns cljss.selectors.pseudos-test
   (:use cljss.selectors.pseudos
         cljss.selectors.core
         cljss.protocols

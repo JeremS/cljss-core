@@ -1,5 +1,4 @@
-(ns ^{:author "Jeremy Schoffen."}
-  cljss.precompilation-test
+(ns cljss.precompilation-test
   (:use cljss.precompilation
         cljss.precompilation.visitor
         cljss.selectors.protocols
