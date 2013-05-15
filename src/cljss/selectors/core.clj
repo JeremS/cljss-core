@@ -20,6 +20,9 @@
   nil
   (neutral? [_] true)
 
+  Object
+  (neutral? [this] false)
+
   String
   (neutral? [this] (-> this seq not))
 
@@ -40,6 +43,9 @@
 (extend-protocol SimplifyAble
   nil
   (simplify [_] nil)
+
+  Object
+  (simplify [this] this)
 
   String
   (simplify [this]
@@ -74,6 +80,12 @@
   (compile-as-selector
    ([this] "")
    ([this _] (compile-as-selector this)))
+
+  Number
+  (compile-as-selector
+   ([this] (str this))
+   ([this _]
+    (compile-as-selector this)))
 
   String
   (compile-as-selector
