@@ -1,6 +1,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.precompilation-test
   (:use cljss.precompilation
+        cljss.precompilation.visitor
         cljss.selectors.protocols
         [cljss.AST :only (media)]
         [cljss.parse :only (parse-rule)]
