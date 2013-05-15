@@ -8,10 +8,7 @@
   (:use cljss.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        [cljss.compilation :only (compile-seq-then-join)]
-
-        clojure.set
-        ))
+        [cljss.compilation :only (compile-seq-then-join)]))
 
 (defn- contains-set? [sels]
   (let [set-t? #(isa? % set-t)]
@@ -95,52 +92,3 @@
 
 
 (derive clojure.lang.IPersistentSet set-t)
-
-;; ----------------------------------------------------------------------------
-
-(defmacro defcombinator [c-name c-cstr c-sym]
-  (let [cstr-sym (-> c-name (str ".") symbol)
-        c-sym (str \space c-sym \space)
-        sels-sym 'sels]
-  `(do
-
-     (declare ~c-cstr)
-
-     (defrecord ~c-name [~sels-sym]
-       Neutral
-       (neutral? [_#] (-> ~sels-sym seq not))
-
-       SimplifyAble
-       (simplify [_#]
-         (let [simplification# (simplify ~sels-sym)]
-           (if-not (-> simplification# selector-type (isa? set-t))
-             (apply ~c-cstr simplification#)
-             (->> simplification#
-                  (map #(apply ~c-cstr %))
-                  (into #{})))))
-
-       Parent
-       (parent? [_#] (some parent? ~sels-sym))
-
-       (replace-parent [_# replacement#]
-         (~cstr-sym (replace-parent ~sels-sym replacement#)))
-
-       CssSelector
-       (compile-as-selector [_#]
-         (compile-seq-then-join ~sels-sym compile-as-selector ~c-sym))
-       (compile-as-selector [~'this _#]
-         (compile-as-selector ~'this)))
-
-     (defn ~c-cstr [& sels#]
-       (case (count sels#)
-         0 []
-         1 (first sels#)
-         (~cstr-sym (vec sels#))))
-
-     (derive ~c-name combination-t))))
-
-
-
-(defcombinator Children  c->  \>)
-(defcombinator Siblings  c-+  \+)
-(defcombinator GSiblings c-g+ \~)

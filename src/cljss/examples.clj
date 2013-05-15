@@ -62,22 +62,22 @@
   [
    [[:div :a] ...]
 
-   [(c-> :div :a) ...]
+   [[:div :> :a] ...]
 
-   [(c-+ :div :a) ...]
+   [[:div :+ :a] ...]
 
-   [(c-g+ :div :a) ...]
+   [[:div "~" :a] ...]
 
-   [[:section (c-> :div (c-+ :p :a)) :span] ...]
+   [[:section :div :> :p :+ :a :span] ...]
 
-   [[:.class1 (c-> #{:ul :ol} :li)] ...]
+   [[:.class1 #{:ul :ol} :> :li] ...]
   ])
 
 
 (def ex7
   [[(hover :a) ... ]
    [(first-letter :p) ... ]
-   [(-> (c-> :ul :li) hover (nth-child "even")) ... ]
+   [(-> [:ul :> :li] hover (nth-child "even")) ... ]
    [(-> :a (att-sel "href=\"http://...\"")) ...]])
 
 

@@ -18,8 +18,6 @@
 (p/import-vars
  [cljss.selectors.parent &]
 
- [cljss.selectors.combinators c-> c-+ c-g+ ]
-
  [cljss.selectors.attribute att-sel]
 
  [cljss.selectors.pseudos

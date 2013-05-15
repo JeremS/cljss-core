@@ -19,7 +19,7 @@
 
 (fact "We can use pseudo classes on combined selectors"
   (-> [:#id :a] hover compile-as-selector) => "#id a:hover"
-  (-> (c-> :#id :p :a) hover compile-as-selector) => "#id > p > a:hover"
+  (-> [:#id :> :p :> :a] hover compile-as-selector) => "#id > p > a:hover"
   (-> #{:#id :a} hover compile-as-selector) => (some-checker "#id:hover, a:hover"
                                                                      "a:hover, #id:hover"))
 
