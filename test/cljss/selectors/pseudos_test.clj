@@ -1,9 +1,9 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.pseudos-test
   (:use cljss.selectors.pseudos
-        cljss.selectors.basic
-        cljss.selectors.combinators
+        cljss.selectors.core
         cljss.protocols
+        cljss.selectors.protocols
         [midje.sweet :only (fact facts some-checker falsey truthy)]
         [cljss.selectors.parent :only (&)]))
 

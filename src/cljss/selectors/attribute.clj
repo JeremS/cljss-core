@@ -5,6 +5,7 @@
   cljss.selectors.attribute
   (:require [clojure.string :as string])
   (:use cljss.protocols
+        cljss.selectors.protocols
         cljss.selectors.types))
 
 (declare att-sel)
