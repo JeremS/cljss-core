@@ -7,7 +7,10 @@
         cljss.selectors.protocols
         cljss.selectors.types
         cljss.selectors.combination
-        [cljss.compilation :only (compile-seq-then-join)]))
+        [cljss.compilation :only (compile-seq-then-join)]
+
+        clojure.tools.trace
+        ))
 
 (derive String simple-t)
 (derive clojure.lang.Keyword        simple-t)
@@ -31,49 +34,79 @@
   clojure.lang.Seqable
   (neutral? [this] (empty? this)))
 
+(defn- set-t? [c]
+  (-> c selector-type (isa? set-t)))
 
 (defn- contains-set? [sels]
-  (let [set-t? #(isa? % set-t)]
-    (->> sels
-         (map selector-type)
-         (some set-t?))))
+    (some set-t? sels))
+
+
+(defn seq-simplifyable? [s]
+  (or (>= 1 (count s))
+      (some #(or (simplifyable? %)
+                 (set-t? %))
+            s)))
 
 
 (extend-protocol SimplifyAble
   nil
+  (simplifyable? [_] true)
   (simplify [_] nil)
 
   Object
+  (simplifyable? [_] false)
   (simplify [this] this)
 
   String
+  (simplifyable? [this]
+    (neutral? this))
   (simplify [this]
     (if (neutral? this) nil this))
 
   clojure.lang.Keyword
+  (simplifyable? [_] false)
   (simplify [this] this)
 
+
   clojure.lang.Sequential
+
+  (simplifyable? [this]
+    (seq-simplifyable? this))
+
   (simplify [this]
-    (if (neutral? this) nil
-      (let [this (->> this
-                      (keep simplify)
-                      (remove neutral?)
-                      (vec))] ; simplify internals
-        (if-not (contains-set? this)            ; combine left to right if possible
-          this
-          (reduce #(combine %1 %2) this)))))
+    (cond (neutral? this)            nil
+          (= 1 (count this))         (simplify (first this))
+          (not (simplifyable? this)) this
+          :else
+           (let [this (->> this
+                           (keep simplify)
+                           (remove neutral?)
+                           vec)]
+             (if-not (contains-set? this)
+               (simplify this)
+               (simplify (reduce #(combine %1 %2) this))))))
+
 
   clojure.lang.IPersistentSet
-  (simplify [this]
-   (if (neutral? this) nil
-     (let [this (set (keep simplify this))]
-       (if-not (contains-set? this)
-         this
-         (let [simples (remove #(-> % selector-type (isa? set-t)) this)
-               sets (apply concat (filter #(-> % selector-type (isa? set-t)) this))]
-           (into (set simples) sets)))))))
 
+  (simplifyable? [this]
+    (seq-simplifyable? this))
+
+  (simplify [this]
+            (cond (neutral? this)            nil
+                  (= 1 (count this))         (simplify (first this))
+                  (not (simplifyable? this)) this
+                  :else
+                   (let [this (keep simplify this)]
+                     (if-not (contains-set? this)
+                       (simplify (set this))
+                       (let [simples (remove set-t? this)
+                             sets (filter set-t? this)
+                             values (apply concat sets)]
+                         (simplify (into (set simples) values))))))))
+
+(simplify #{[[:div :p][:a []]] [[:div :p []][:a :span]]})
+(simplify [#{:div :p} :> [:a]])
 (extend-protocol CssSelector
   nil
   (compile-as-selector

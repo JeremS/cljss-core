@@ -6,6 +6,8 @@
     "True if the selector is a neutral element in a composition of selectors."))
 
 (defprotocol SimplifyAble
+  (simplifyable? [this]
+    "True if `this` can be simplified")
   (simplify [this]
     "Returns a simplyfied, equivalent version of a selector."))
 

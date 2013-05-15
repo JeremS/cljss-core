@@ -21,6 +21,8 @@
   (neutral? [_] false)
 
   SimplifyAble
+  (simplifyable? [_]
+    (simplifyable? selector))
   (simplify [_]
    (pseudo (simplify selector) name args))
 
