@@ -3,6 +3,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.parent
   (:use cljss.protocols
+        cljss.selectors.protocols
         cljss.selectors.combination
         cljss.selectors.types))
 
@@ -16,13 +17,7 @@
 
   Parent
   (parent? [this] true)
-  (replace-parent [this replacement] replacement)
-
-  CssSelector
-  (compile-as-selector [this]
-    (throw (Exception. (str "Parent selector can't be compiled. "
-                            "Theres a bug, it should have been eliminated "
-                            "during precompilation. Report issue.")))))
+  (replace-parent [this replacement] replacement))
 
 (def & (ParentSelector.))
 

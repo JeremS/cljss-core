@@ -1,8 +1,7 @@
 (ns ^{:author "Jeremy Schoffen."}
   cljss.selectors.combination-test
   (:use cljss.selectors.combination
-        cljss.selectors.basic
-        cljss.selectors.combinators
+        cljss.selectors.core
         midje.sweet))
 
 

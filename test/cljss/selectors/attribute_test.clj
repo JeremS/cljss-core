@@ -3,8 +3,8 @@
   (:require [clojure.string :as string])
   (:use cljss.selectors.attribute
         cljss.protocols
-        cljss.selectors.basic
-        cljss.selectors.combinators
+        cljss.selectors.protocols
+        cljss.selectors.core
         [cljss.selectors.parent :only (&)]
         midje.sweet))
 

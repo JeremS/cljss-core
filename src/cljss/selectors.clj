@@ -6,8 +6,7 @@
   cljss.selectors
   (:refer-clojure :exclude (rem))
   (:require [cljss.selectors
-               basic
-               combinators
+               core
                parent
                pseudos
                attribute
