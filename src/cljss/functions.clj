@@ -5,6 +5,7 @@
 (ns cljss.functions
   (:require [clojure.string :as string])
   (:use cljss.protocols
+        cljss.selectors.protocols
         [cljss.compilation :only (compile-seq-then-join)]))
 
 ;; generic compilation of as css function
