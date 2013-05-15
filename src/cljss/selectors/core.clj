@@ -110,7 +110,6 @@
 
 
   clojure.lang.Sequential
-
   (simplifyable? [this]
     (seq-simplifyable? this))
 
@@ -119,7 +118,6 @@
 
 
   clojure.lang.IPersistentSet
-
   (simplifyable? [this]
     (seq-simplifyable? this))
 
