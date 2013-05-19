@@ -1,5 +1,5 @@
 ;; ## Functions
-;; CSS 2 then CSS 3 have brought some function
+;; CSS 2 then CSS 3 have brought some functions
 ;; in the specification.
 
 (ns cljss.functions
@@ -8,7 +8,7 @@
         cljss.selectors.protocols
         [cljss.compilation :only (compile-seq-then-join)]))
 
-;; generic compilation of as css function
+;; Generic compilation of as css function.
 
 (defn compile-function [name args compile-fn]
   (str (compile-fn name)
@@ -29,7 +29,7 @@
     (compile-function name args compile-as-property-value)))
 
 
-;; Template that defines a way to define css function constructor
+;; Template to define css function constructors.
 
 (defmacro defcssfunction
   ([f-name]
@@ -43,7 +43,7 @@
      ~@(for [f-name f-names]
          (list 'defcssfunction f-name))))
 
-;; Use of the template to define the function from the spec.
+;; Use of the template to define the functions from the spec.
 
 (defcssfunctions
   ; css2 functions

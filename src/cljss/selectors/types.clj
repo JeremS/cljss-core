@@ -1,4 +1,4 @@
-;; Selector types
+;; ## Selector types
 ;; We define here different types of selectors.
 ;; It is used in the combination part.
 
