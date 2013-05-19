@@ -7,6 +7,12 @@
                  [org.clojure/algo.generic "0.1.1"]
                  [potemkin "0.2.2"]]
 
+  :plugins [[codox "0.6.4"]]
+  :codox {:include [cljss.core cljss.protocols cljss.AST
+      cljss.compilation
+      cljss.selectors
+      cljss.functions]}
+
   :profiles {:dev
              {:dependencies [[org.clojure/tools.trace "0.7.5"]
                              [midje "1.5.1"]]}})

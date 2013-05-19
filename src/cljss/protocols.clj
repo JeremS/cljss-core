@@ -1,7 +1,8 @@
 ;; ## Protocols
 ;; General protocols used to extend cljss.
 
-(ns cljss.protocols)
+(ns ^{:doc "Protocols that can be used to extend cljss."}
+  cljss.protocols)
 
 
 (defprotocol CSS

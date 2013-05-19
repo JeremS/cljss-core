@@ -21,7 +21,7 @@
   type)
 
 
-;; Generic types used for dispatch
+;; Generic types used for dispatch.
 
 (derive clojure.lang.LazySeq ::list)
 (derive clojure.lang.PersistentList ::list)
@@ -45,14 +45,14 @@
   (consume-properties body (assoc query :body nil)))
 
 
-;; Parsing of a list of rules
+;; Parsing of a list of rules.
 
 (defmethod parse-rule ::list [rules]
   (map parse-rule rules))
 
 
 
-;; A string is considered inline css
+;; A string is considered inline css.
 
 (defmethod parse-rule ::inline [i] i)
 (defmethod parse-rule String [s] (inline-css s))
@@ -68,7 +68,7 @@
   (throw
    (ex-info
     (str (type (first stream))
-         " can't be a css property name/value.")
+         " isn't be a css property name/value.")
     {:properties stream
      :rule rule})))
 
@@ -111,12 +111,6 @@
   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
     (consume-properties rst node)))
 
-
-;; Inline stuff
-
-;; (defmethod consume-properties ::inline [[fst & rst] node]
-;;   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
-;;     (consume-properties rst node)))
 
 
 (defn parse-rules [rules]

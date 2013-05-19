@@ -17,7 +17,7 @@
             [potemkin :as p])
   (:use cljss.protocols))
 
-;; Importation
+;; ### Importation
 ;; We import here the different helpers, contructor functions
 ;; that we can need when constructing css rules.
 
