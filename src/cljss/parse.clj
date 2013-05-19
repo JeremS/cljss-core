@@ -114,9 +114,9 @@
 
 ;; Inline stuff
 
-(defmethod consume-properties ::inline [[fst & rst] node]
-  (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
-    (consume-properties rst node)))
+;; (defmethod consume-properties ::inline [[fst & rst] node]
+;;   (let [node (update-in node [:sub-rules] conj (parse-rule fst))]
+;;     (consume-properties rst node)))
 
 
 (defn parse-rules [rules]
