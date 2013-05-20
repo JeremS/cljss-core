@@ -11,10 +11,21 @@ Quick example:
 (use 'cljss.core)
 
 (css [[:section :div]
-        :width :900px])
-; => "section div { width: 900px; }"
-
+        :width :900px
+        :transform #{(rotate )}])
 ```
+generates:
+```css
+section div#someid {
+  border: 1px solid black;
+  transform: translate(20px, 30px), rotate(90deg);
+  width: 900px;
+}
+  section div#someid:hover {
+    color: blue;
+  }
+```
+
 
 ## Installation
 In `project.clj`:
