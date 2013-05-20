@@ -3,7 +3,7 @@
  - CHANGED: Suppression of the combinators function, the use of infix combinators
  is more natural.
  - internal refactoring.
- - removed inline css inside rules, the behaviour isn't well thought right now.
+ - removed inline css inside rules, the behaviour wasn't well thought right now.
 
 ### 0.2.1
  - FIXED: Numbers can now be used as properties value.
