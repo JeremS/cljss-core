@@ -10,9 +10,14 @@ Quick example:
 ```clojure
 (use 'cljss.core)
 
-(css [[:section :div]
+(css [[:section :div#someid]
         :width :900px
-        :transform #{(rotate )}])
+        :transform #{(rotate :90deg)
+                     (translate :20px :30px)}
+        :border [:1px :solid :black]
+      [(-> & hover)
+       :color :blue]])
+
 ```
 generates:
 ```css
