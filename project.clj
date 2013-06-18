@@ -1,17 +1,10 @@
-(defproject jeremys/cljss-core "0.3.0-alpha1"
+(defproject jeremys/cljss-core "0.3.0"
   :description "DSL to write css rules in clojure."
   :url "https://github.com/JeremS/cljss-core"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/algo.generic "0.1.1"]
                  [potemkin "0.2.2"]]
-
-  :plugins [[codox "0.6.4"]]
-  :codox {:include [cljss.core cljss.protocols cljss.AST
-      cljss.compilation
-      cljss.selectors
-      cljss.functions]}
 
   :profiles {:dev
              {:dependencies [[org.clojure/tools.trace "0.7.5"]

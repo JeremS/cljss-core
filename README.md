@@ -37,7 +37,7 @@ section div#someid {
 ## Installation
 In `project.clj`:
 ```clojure
-[jeremys/cljss-core "0.3.0-alpha1"]
+[jeremys/cljss-core "0.3.0"]
 ```
 
 ## Documentation
