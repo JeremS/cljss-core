@@ -10,11 +10,29 @@ Quick example:
 ```clojure
 (use 'cljss.core)
 
-(css [[:section :div]
-        :width :900px])
-; => "section div { width: 900px; }"
+(css [[:section :div#someid]
+        :width :900px
+        :transform #{(rotate :90deg)
+                     (translate :20px :30px)}
+        :transform-origin [:bottom :left]
+        :border [:1px :solid :black]
+      [(-> & hover)
+       :color :blue]])
 
 ```
+generates:
+```css
+section div#someid {
+  border: 1px solid black;
+  transform: translate(20px, 30px), rotate(90deg);
+  transform-origin: bottom left;
+  width: 900px;
+}
+  section div#someid:hover {
+    color: blue;
+  }
+```
+
 
 ## Installation
 In `project.clj`:
